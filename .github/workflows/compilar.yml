@@ -39,8 +39,16 @@ jobs:
         with:
           workspaces: escritorio/src-tauri
 
-      - name: Instalar tauri-cli
-        run: cargo install tauri-cli --version "^2.0.0" --locked
+      # Se DESCARGA el binario ya compilado en vez de compilarlo con `cargo install`, que tarda
+      # unos 10 minutos por ejecucion. Se usa la MISMA version que en local, para que lo
+      # compilado aqui y lo compilado a mano coincidan.
+      - name: Instalar tauri-cli (binario ya compilado)
+        run: |
+          curl -sSL -o /tmp/cargo-tauri.tgz \
+            https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v2.12.0/cargo-tauri-x86_64-unknown-linux-gnu.tgz
+          tar -xzf /tmp/cargo-tauri.tgz -C /usr/local/bin
+          chmod +x /usr/local/bin/cargo-tauri
+          cargo-tauri --version
 
       - name: Preparar el frontend (copia la app a escritorio/app)
         working-directory: escritorio
@@ -72,8 +80,13 @@ jobs:
         with:
           workspaces: escritorio/src-tauri
 
-      - name: Instalar tauri-cli
-        run: cargo install tauri-cli --version "^2.0.0" --locked
+      # Se descarga el binario ya compilado (por lo mismo que en el trabajo de Linux).
+      - name: Instalar tauri-cli (binario ya compilado)
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/tauri-apps/tauri/releases/download/tauri-cli-v2.12.0/cargo-tauri-x86_64-pc-windows-msvc.zip" -OutFile "$env:TEMP\cargo-tauri.zip"
+          Expand-Archive -Path "$env:TEMP\cargo-tauri.zip" -DestinationPath "$env:USERPROFILE\.cargo\bin" -Force
+          cargo-tauri --version
 
       # En Windows el script es .sh; `sh` viene con Git for Windows, que ya esta en el runner.
       - name: Preparar el frontend

@@ -10,54 +10,69 @@ on your machine.
 
 ## Installation
 
-Pick your system. In every case, **your data is kept on your machine** and you can take it with
-you using the backup in **Settings**.
+Start here: **[the latest release](https://github.com/billibu-n/mimo-app/releases/latest)**. Its
+files are under a collapsible section called **Assets** — if you only see a long text and no
+files, click *Assets* to unfold them.
+
+Pick the file for your system:
+
+| Your system | Download this file | Then |
+|---|---|---|
+| **Fedora**, openSUSE, RHEL | `mimo-academics-1.0.0-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
+| **Debian**, Ubuntu, Mint | `mimo-academics_1.0.0-desktop_amd64.deb` | `sudo apt install ./<file>` |
+| **Any Linux**, no install | `mimo-academics_1.0.0-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
+| **Windows 10 / 11** | `mimo-academics_1.0.0-desktop_x64-setup.exe` | double-click it |
+| **Any system**, web version | `mimo-v1.0.0-desktop.zip` | unzip and open `mimo/index.html` |
+
+**Your data is kept on your machine** in every case, and you can take it with you using the backup
+in **Settings**. Nothing is uploaded anywhere.
 
 ### Linux
 
-The desktop version is tested on **Fedora** (and works on any distribution with WebKitGTK 4.1:
-Debian, Ubuntu, Arch, openSUSE...). Download the installer from
-**[Releases](https://github.com/billibu-n/mimo-app/releases)** and run:
+The desktop version is tested on **Fedora**, and works on any distribution with WebKitGTK 4.1
+(Debian, Ubuntu, Arch, openSUSE...).
+
+**With an installer** (it appears in your applications menu under *Education*):
 
 ```bash
-# Fedora, openSUSE and derivatives (.rpm)
+# Fedora, openSUSE and derivatives
 sudo dnf install mimo-academics-1.0.0-desktop-1.x86_64.rpm
 
-# Debian, Ubuntu and derivatives (.deb)
+# Debian, Ubuntu and derivatives
 sudo apt install ./mimo-academics_1.0.0-desktop_amd64.deb
 ```
 
-Then look for **Mimo Academics** in your applications menu (it appears under *Education*). If you
-do not see it right away, log out and back in: the menu is cached.
+If the app does not show up in the menu right away, log out and back in: the menu is cached.
 
-The file names have **no spaces**, so nothing needs quoting. The `-desktop` suffix is not
-decoration: with the previous `1.0.0` the package managers answered "already installed" even after
-the contents changed, because they compare numbers. With the suffix they update properly.
-
-**No installation: the AppImage.** If you would rather not install anything, download the
-`.AppImage`, give it permission to run and open it:
+**Without installing anything** (the AppImage):
 
 ```bash
 chmod +x mimo-academics_1.0.0-desktop_amd64.AppImage
 ./mimo-academics_1.0.0-desktop_amd64.AppImage
 ```
 
-The AppImage is bigger (about 100 MB) because it carries its own runtime; the `.rpm` and `.deb`
-are about 4 MB. It needs FUSE, which Fedora, Ubuntu and Debian include by default. Your data is
-the same either way: it is not stored inside the package, so switching between them loses
-nothing.
+The AppImage is about **100 MB** (it carries its own runtime) against about **4 MB** for the
+`.rpm` and `.deb`. It needs FUSE, which Fedora, Ubuntu and Debian include by default.
+
+> **About the file names.** They have no spaces, so nothing needs quoting. The `-desktop` suffix
+> is not decoration: with the previous `1.0.0` the package managers answered *"already installed"*
+> even after the contents changed, because they compare numbers, not contents. With the suffix
+> they update properly.
 
 ### Windows
 
-Download the `.exe` installer from
-**[Releases](https://github.com/billibu-n/mimo-app/releases)** and run it.
+Download **`mimo-academics_1.0.0-desktop_x64-setup.exe`** and double-click it. It installs for
+your user and creates a Start Menu entry, so you do not need administrator rights.
 
-> Windows will warn that the publisher is unknown (SmartScreen) because the installer **is not
-> digitally signed**: signing costs money every year. To continue: *More info* -> *Run anyway*.
+> **Windows will warn you** that the publisher is unknown (SmartScreen), because the installer
+> **is not digitally signed**: signing costs money every year. To continue: click *More info* and
+> then *Run anyway*.
 
-> The `.exe` is built by GitHub Actions on a Windows machine when a release is published, so it
-> appears in the release a few minutes after the Linux packages. If you are reading this and only
-> the Linux files are there, give it a moment and reload the page.
+> **The `.exe` is built after the Linux files.** A Tauri application links against the system's
+> graphics libraries, so a Windows installer **cannot be built from Linux**: GitHub Actions builds
+> it on a real Windows machine when the release is published, and attaches it here a few minutes
+> later. Compiling it takes around ten minutes. If you only see the Linux files, reload the page
+> in a little while. You can watch the progress under the *Actions* tab.
 
 ### macOS
 
