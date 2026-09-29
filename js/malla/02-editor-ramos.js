@@ -109,7 +109,7 @@ function modalRamo(cod){
     };
   });
 
-  document.getElementById('r-guardar').onclick = () => {
+  document.getElementById('r-guardar').onclick = async () => {
     const nuevo = !cod;
     const clave = (cod || document.getElementById('r-cod').value || '').trim().toUpperCase();
     const nombre = document.getElementById('r-nombre').value.trim();
@@ -156,8 +156,10 @@ function modalRamo(cod){
     cerrarEditor(); resetFiltros(); arranque();
   };
   const bB = document.getElementById('r-borrar');
-  if (bB) bB.onclick = () => {
-    if (!confirm('¿Borrar ' + cod + ' de tu malla? Los ramos que lo tenían de prerrequisito se quedan sin él.')) return;
+  if (bB) bB.onclick = async () => {
+    if (!await confirmar('Se borrara ' + cod + ' de tu malla.\n\nLos ramos que lo tenian de '
+        + 'prerrequisito se quedan sin el.',
+        { titulo: 'Borrar ramo', aceptar: 'Borrar', peligro: true })) return;
     borrarRamo(cod);
     guardar('Ramo ' + cod + ' borrado'); cerrarEditor(); resetFiltros(); arranque();
   };
@@ -376,7 +378,7 @@ function modalNuevoSemestre(){
       el.style.display = sinTildes(el.textContent).includes(q) ? '' : 'none';
     });
   };
-  document.getElementById('ns-crear').onclick = () => {
+  document.getElementById('ns-crear').onclick = async () => {
     const nombre = document.getElementById('ns-nombre').value.trim() || 'Semestre nuevo';
     const inicio = document.getElementById('ns-inicio').value;
     const nClases = Math.max(1, Number(document.getElementById('ns-clases').value) || 15);
@@ -386,10 +388,12 @@ function modalNuevoSemestre(){
     // OJO: [].concat(nodeList) mete la lista entera como un solo elemento; hay que recorrerla.
     const marcados = document.querySelectorAll('#ns-lista input:checked');
     const codigos = Array.prototype.map.call(marcados, i => i.dataset.ramo);
-    if (!inicio) { alert('Falta el primer lunes de clases.'); return; }
+    if (!inicio) { await avisar('Falta el primer lunes de clases.',
+        { titulo: 'No se puede guardar' }); return; }
     // En la version limpia el catalogo puede estar vacio: ahi no hay nada que elegir y el
     // semestre se crea igual, para ir agregando los ramos despues desde la Malla.
-    if (!codigos.length && Object.keys(CAT()).length) { alert('Elige al menos un ramo.'); return; }
+    if (!codigos.length && Object.keys(CAT()).length) { await avisar('Elige al menos un ramo.',
+        { titulo: 'Falta un dato' }); return; }
     const id = 's' + Date.now();
     const sem = {id:id, nombre:nombre, inicio:inicio, semanas:[], ramos:[], eventos:[], semanas_estudio:[]};
     let cursor = inicio;

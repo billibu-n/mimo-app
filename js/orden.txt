@@ -36,6 +36,7 @@ comun/07-select.js
 ajustes/06-actualizar.js
 ajustes/07-ical.js
 comun/09-pwa.js
+comun/11-avisos.js
 comun/06-arranque.js
 comun/10a-carpeta-tauri.js
 comun/10b-migracion-tauri.js

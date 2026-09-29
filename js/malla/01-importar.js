@@ -269,11 +269,13 @@ function cargarMalla(leido){
   return puestos;
 }
 /* Saca del catalogo y de los semestres todo lo que trajo la ultima importacion. */
-function deshacerImportacion(){
+async function deshacerImportacion(){
   const imp = E.importado;
   if (!imp || !imp.codigos.length) { mostrarAviso('No hay ninguna importación que deshacer'); return; }
-  if (!confirm('¿Sacar los ' + imp.codigos.length + ' ramos que trajo la importación del ' +
-               imp.cuando + '?\n\nSi ya corregiste alguno a mano, también se va.')) return;
+  // Ventana propia: en la aplicacion de escritorio los dialogos del navegador no se muestran.
+  if (!await confirmar('Se sacaran los ' + imp.codigos.length + ' ramos que trajo la importacion del '
+      + imp.cuando + '.\n\nSi ya corregiste alguno a mano, tambien se va.',
+      { titulo: 'Deshacer la importacion', aceptar: 'Sacar los ramos', peligro: true })) return;
   const n = imp.codigos.length;
   imp.codigos.forEach(cod => { borrarRamo(cod); quitarRamo(cod); });
   E.importado = null;

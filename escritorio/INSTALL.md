@@ -55,7 +55,7 @@ the Education section of the menu.
 ## Installing it on your Fedora
 
 ```bash
-sudo dnf install ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/'Mimo Academics-1.0.0-1.x86_64.rpm'
+sudo dnf install ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/mimo-academics-1.0.0-desktop-1.x86_64.rpm
 ```
 
 Then look for **Mimo Academics** in the applications menu. If it does not show up right away, log
@@ -63,8 +63,7 @@ out and back in (GNOME caches the menu).
 
 ### Careful with the quotes
 
-The file name **contains a space** (`Mimo Academics-1.0.0-1.x86_64.rpm`). It has to be quoted, or
-`sudo` will try to install two things.
+The file name has **no spaces** (`mimo-academics-1.0.0-desktop-1.x86_64.rpm`): write it straight, without quotes.
 
 ## Uninstalling
 

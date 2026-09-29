@@ -5,10 +5,11 @@
    navegador la pueda INSTALAR (PWA).
 
    ESTE FICHERO NO SE EDITA A MANO. Es la salida de `plantilla-sw.js`: lo escribe el armador
-   (mimo_config/construir/index.py), que sustituye 1.0.0 por la version, 10de2e8d80 por un
+   (mimo_config/construir/index.py), que sustituye 1.0.0-desktop por la version, d2cd468ffc por un
    sello del contenido y [
   "./index.html",
   "./manifest.json",
+  "./css/aviso.css",
   "./css/general.css",
   "./css/tema-alto-contraste.css",
   "./css/tema-bosque.css",
@@ -48,6 +49,7 @@
   "./js/comun/10-respaldo-carpeta.js",
   "./js/comun/10a-carpeta-tauri.js",
   "./js/comun/10b-migracion-tauri.js",
+  "./js/comun/11-avisos.js",
   "./js/estudio/01-estudio.js",
   "./js/malla/01-importar.js",
   "./js/malla/02-editor-ramos.js",
@@ -87,14 +89,15 @@
    OJO: un service worker SOLO se registra en http(s), NUNCA en file:// (medido: "origin 'null'
    is not supported"). Al abrir el index.html con doble clic este fichero ni se usa.
  */
-const VERSION = '1.0.0';
-const HUELLA = '10de2e8d80';
+const VERSION = '1.0.0-desktop';
+const HUELLA = 'd2cd468ffc';
 const CACHE = 'mimo-' + VERSION + '-' + HUELLA;
 
 // La aplicacion COMPLETA, la escribio el armador al construir.
 const ARCHIVOS = [
   "./index.html",
   "./manifest.json",
+  "./css/aviso.css",
   "./css/general.css",
   "./css/tema-alto-contraste.css",
   "./css/tema-bosque.css",
@@ -134,6 +137,7 @@ const ARCHIVOS = [
   "./js/comun/10-respaldo-carpeta.js",
   "./js/comun/10a-carpeta-tauri.js",
   "./js/comun/10b-migracion-tauri.js",
+  "./js/comun/11-avisos.js",
   "./js/estudio/01-estudio.js",
   "./js/malla/01-importar.js",
   "./js/malla/02-editor-ramos.js",

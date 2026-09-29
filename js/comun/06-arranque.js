@@ -242,11 +242,23 @@ function restaurarTipos(datos){
   return Object.keys(E.tipos).length !== era;     // true si se rescato algun tipo nuevo
 }
 
-document.getElementById('restablecer').onclick = () => {
-  if (!confirm('Se borrara TODO lo que hiciste: semestres, eventos, notas, colores, tiempos y ' +
-               'ajustes. Antes se descargara un respaldo por si fue un error.\n\n' +
-               'No se borra la malla que trae la aplicacion (eso es parte del archivo).\n\n' +
-               '¿Seguir?')) return;
+document.getElementById('restablecer').onclick = async () => {
+  // Se pregunta SIEMPRE con la ventana propia de la aplicacion. Antes era `confirm()`, y en la
+  // aplicacion de escritorio ese dialogo no se muestra: el borrado seguia adelante sin que el
+  // usuario viera nada. Medido: con el webview de Tauri (WebKitGTK), `confirm()` deja la pagina
+  // bloqueada y la accion ya se ejecuto.
+  const nSem = (typeof semestres === 'function' ? semestres().length : 0);
+  const resumen = nSem ? ('Se borraran ' + nSem + ' semestre(s) con su calendario, notas y horas.')
+                       : 'Se borrara todo tu progreso.';
+  const seguir = await confirmar(
+    'Esto devuelve Mimo al estado de fabrica: semestres, eventos, notas, colores, tiempos y ' +
+    'ajustes.\n' +
+    resumen + '\n' +
+    'Antes se descargara un respaldo, por si fue un error. Se guarda en tu carpeta de descargas.\n\n' +
+    'No se borra la malla que trae la aplicacion: eso es parte del archivo.\n\n' +
+    'Esta accion no se puede deshacer.',
+    { titulo: 'Restablecer todo', aceptar: 'Si, restablecer', cancelar: 'Cancelar', peligro: true });
+  if (!seguir) return;
   // 1. respaldo de seguridad ANTES de borrar, por si el clic fue un error
   descargarRespaldo('respaldo-antes-de-restablecer-' + new Date().toISOString().slice(0, 10) + '.json');
   // 2. limpiar la cache de verdad (no solo en memoria): se borra la clave del localStorage
@@ -272,10 +284,11 @@ document.getElementById('archivo').onchange = ev => {
   const f = ev.target.files[0];
   if (!f) return;
   const lector = new FileReader();
-  lector.onload = () => {
+  lector.onload = async () => {
     try {
       const datos = JSON.parse(lector.result);
-      if (!datos || typeof datos !== 'object') { alert('Ese archivo no es un respaldo de tu Mimo.'); return; }
+      if (!datos || typeof datos !== 'object') { await avisar('Ese archivo no es un respaldo de Mimo.',
+        { titulo: 'No se pudo importar' }); return; }
 
       // FORMATO 2 (respaldo autosuficiente): trae 'estado' (la capa E) mas la capa estructural
       // (catalogo, niveles, semestres). Se fusiona para que un respaldo del ejemplo de Minas se
@@ -320,9 +333,9 @@ document.getElementById('archivo').onchange = ev => {
         return;
       }
 
-      alert('Ese archivo no es un respaldo de tu Mimo.');
+      await avisar('Ese archivo no es un respaldo de Mimo.', { titulo: 'No se pudo importar' });
     }
-    catch (err) { alert('No pude leer ese archivo.'); }
+    catch (err) { await avisar('No se pudo leer ese archivo.', { titulo: 'No se pudo importar' }); }
     ev.target.value = '';   // permite volver a elegir el mismo archivo mas tarde
   };
   lector.readAsText(f);

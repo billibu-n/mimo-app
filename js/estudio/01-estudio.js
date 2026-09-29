@@ -222,12 +222,13 @@ function abrirMenuSuma(ev, inp){
   m.style.left = Math.max(8, Math.min(ev.clientX, window.innerWidth - r.width - 8)) + 'px';
   m.style.top = Math.max(8, Math.min(ev.clientY, window.innerHeight - r.height - 8)) + 'px';
 
-  m.querySelectorAll('[data-suma]').forEach(b => b.onclick = () => {
+  m.querySelectorAll('[data-suma]').forEach(b => b.onclick = async () => {
     const v = b.dataset.suma;
     cerrarMenuSuma();
     if (v === 'otra') {
-      const txt = prompt('¿Cuánto tiempo sumar a ' + aliasDe(ramo) + '?\n' +
-                         'Por ejemplo: 25m, 1h 30m, 0:45');
+      // Ventana propia en vez de prompt(): en el escritorio no se muestra.
+      const txt = await pedir('Cuanto tiempo quieres sumar a ' + aliasDe(ramo) + '?',
+        { titulo: 'Sumar tiempo', aceptar: 'Sumar', valor: '30m', marcador: 'por ejemplo: 25m, 1h 30m' });
       if (txt === null) return;
       const min = parseHM(txt);
       if (min > 0) sumarTiempo(lu, ramo, min);

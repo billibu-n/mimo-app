@@ -299,7 +299,7 @@ function enlazarDetalle(cod, r){
   // La fecha de un componente puede reflejarse como evento en el calendario. Se pregunta ANTES de
   // crear/vincular: el usuario decide si quiere el evento o no. Si ya habia un evento con el mismo
   // nombre, se sincroniza (le cambia la fecha); si no, se crea uno nuevo.
-  on('[data-comp-fecha]','onchange', el => {
+  on('[data-comp-fecha]','onchange', async el => {
     const c = compsDe(cod)[+el.dataset.compFecha];
     const fecha = el.value;                       // '' si se borro, 'AAAA-MM-DD' si se puso
     c.fecha = fecha || null;
@@ -311,7 +311,10 @@ function enlazarDetalle(cod, r){
         // no se toca un evento ajeno: se avisa y se deja la fecha solo en Notas
         mostrarAviso('Ya hay "' + c.nombre + '" en el calendario (no viene de Notas); no lo cambié.');
       } else {                                    // no hay evento: se propone crearlo
-        if (confirm('¿Crear el evento "' + c.nombre + '" en el calendario con la fecha ' + fecha + '?')) {
+        // Ventana propia en vez de confirm(): en el escritorio los dialogos del navegador
+        // no se muestran, y el evento se creaba (o no) sin que el usuario viera nada.
+        if (await confirmar('Se creara el evento "' + c.nombre + '" en el calendario con la fecha '
+            + fecha + '.', { titulo: 'Crear el evento', aceptar: 'Crear' })) {
           crearEventoDesdeComponente(c, cod, fecha);
           mostrarAviso('Evento creado en el calendario.');
         }

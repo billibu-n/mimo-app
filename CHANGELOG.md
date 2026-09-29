@@ -66,5 +66,5 @@ First **official** release, and the first one with a **desktop application**. Th
 
 The earlier history (1.0.2, 1.0.4 and 1.0.5) and the versions published under the project's
 previous name are documented in the **old repository**:
-[`billibu-n/Mimo-Academics`](https://github.com/billibu-n/Mimo-Academics). This repository starts
+[`billibu-n/Mimo-Academics`](https://github.com/billibu-n/Mimo-Academics) (QUIROFANO). This repository starts
 clean, with a single initial commit, so the detailed history is not duplicated here.

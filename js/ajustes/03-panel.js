@@ -129,8 +129,12 @@ function renderAjustes(){
       '</div></details>';
   }).join('');
   document.querySelectorAll('[data-usar]').forEach(el => el.onclick = () => cambiarSemestre(el.dataset.usar));
-  document.querySelectorAll('[data-borrar-sem]').forEach(el => el.onclick = () => {
-    if (!confirm('¿Eliminar este semestre y todo lo que tiene dentro?')) return;
+  document.querySelectorAll('[data-borrar-sem]').forEach(el => el.onclick = async () => {
+    // Ventana propia: en la aplicacion de escritorio `confirm()` no se muestra y el borrado
+    // seguia adelante sin preguntar.
+    if (!await confirmar('Se eliminara este semestre y todo lo que tiene dentro: su calendario, ' +
+        'sus notas y sus horas.\n\nEl resto de tus datos (malla, catalogo y ajustes) no se toca.',
+        { titulo: 'Eliminar semestre', aceptar: 'Eliminar', peligro: true })) return;
     E.extras = (E.extras || []).filter(s => s.id !== el.dataset.borrarSem);
     delete E.sem[el.dataset.borrarSem];
     if (E.activo === el.dataset.borrarSem) {

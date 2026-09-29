@@ -1,6 +1,6 @@
 # Mimo Academics
 
-![Version](https://img.shields.io/badge/version-1.0.0-16a34a)
+![Version](https://img.shields.io/badge/version-1.0.0%2Ddesktop-16a34a)
 ![Platform](https://img.shields.io/badge/desktop-Linux%20%7C%20Windows-2563eb)
 ![License](https://img.shields.io/badge/license-MIT-3da639)
 
@@ -21,13 +21,11 @@ Debian, Ubuntu, Arch, openSUSE...). Download the installer from
 
 ```bash
 # Fedora, openSUSE and derivatives (.rpm)
-sudo dnf install 'Mimo Academics-1.0.0-1.x86_64.rpm'
+sudo dnf install mimo-academics-1.0.0-desktop-1.x86_64.rpm
 
 # Debian, Ubuntu and derivatives (.deb)
-sudo apt install './Mimo Academics_1.0.0_amd64.deb'
+sudo apt install ./mimo-academics_1.0.0-desktop_amd64.deb
 ```
-
-> **Careful**: the file name **contains a space**, which is why it goes in quotes.
 
 Then look for **Mimo Academics** in your applications menu (it appears under *Education*). If you
 do not see it right away, log out and back in: the menu is cached.
@@ -97,7 +95,7 @@ Use *Settings -> Backup* to take your data to another machine.
 
 ## Project status
 
-Version 1.0.0, and the first one with a **desktop application**. It is **usable and stable**, and
+Version 1.0.0-desktop, and the first one with a **desktop application**. It is **usable and stable**, and
 it keeps growing: synchronisation, mobile and languages are on the list. **Bug reports and ideas
 are welcome** — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -131,7 +129,7 @@ before trusting it with your grades.
 
 ## Version
 
-1.0.0 — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
+1.0.0-desktop — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Credits
 

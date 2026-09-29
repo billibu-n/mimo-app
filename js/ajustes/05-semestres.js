@@ -56,14 +56,15 @@ function modalEditarSemestre(){
   document.getElementById('cerrar').onclick = cerrarEditor;
   document.getElementById('es-cancelar').onclick = cerrarEditor;
 
-  document.getElementById('es-guardar').onclick = () => {
+  document.getElementById('es-guardar').onclick = async () => {
     const nombre = document.getElementById('es-nombre').value.trim() || sem.nombre;
     const inicio = document.getElementById('es-inicio').value;
     const nCl = Math.max(1, Number(document.getElementById('es-clases').value) || 15);
     const recesosN = (document.getElementById('es-recesos').value || '').split(',')
       .map(x => parseInt(x.trim(), 10)).filter(x => x > 0);
     const nEx = Math.max(0, Number(document.getElementById('es-examen').value) || 0);
-    if (!inicio) { alert('Falta el primer lunes de clases.'); return; }
+    if (!inicio) { await avisar('Falta el primer lunes de clases.',
+        { titulo: 'No se puede guardar' }); return; }
 
     // se regenera el calendario de semanas, conservando ramos y eventos
     const semanas = [];
@@ -90,15 +91,17 @@ function modalEditarSemestre(){
   };
 }
 
-function borrarSemestre(){
+async function borrarSemestre(){
   const sem = semestreActual();
   if (!sem) { mostrarAviso('No hay ningún semestre activo que borrar.'); return; }
   if (!semEsEditable(sem.id)) {
     mostrarAviso('Este semestre es parte de la malla de ejemplo y no se puede borrar.');
     return;
   }
-  if (!confirm('¿Borrar el semestre "' + sem.nombre + '"?\n\nSe pierde su calendario, pero el resto de tus datos (malla, ramos del catálogo, ajustes) quedan intactos. ' +
-               'Esta acción no se puede deshacer.')) return;
+  if (!await confirmar('Se borrara el semestre "' + sem.nombre + '".\n\nSe pierde su calendario, '
+      + 'pero el resto de tus datos (malla, ramos del catalogo, ajustes) quedan intactos.\n\n'
+      + 'Esta accion no se puede deshacer.',
+      { titulo: 'Borrar semestre', aceptar: 'Borrar', peligro: true })) return;
   const activoEra = (E.activo === sem.id);
   E.extras = (E.extras || []).filter(x => x.id !== sem.id);
   delete E.sem[sem.id];
