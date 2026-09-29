@@ -38,6 +38,14 @@
     "longDescription": "Mimo Academics es un panel de semestre universitario que funciona sin conexion: malla de ramos, calendario, notas, estudio y tiempo. Los datos se guardan en tu equipo y no se envian a ningun sitio.",
     "homepage": "https://github.com/billibu-n/mimo-app",
     "license": "MIT",
-    "publisher": "Billibu"
+    "publisher": "Billibu",
+    "linux": {
+      "deb": {
+        "desktopTemplate": "linux/mimo.desktop"
+      },
+      "rpm": {
+        "desktopTemplate": "linux/mimo.desktop"
+      }
+    }
   }
 }

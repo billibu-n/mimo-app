@@ -89,7 +89,16 @@ table.sem tr.pasada{opacity:.5}
 table.sem tr.oculta{display:none}
 .sm{font-size:.68rem;color:var(--muted);display:block}
 .chip{border-radius:var(--r-sm);padding:3px 6px;margin:2px 0;font-size:.72rem;line-height:1.25;cursor:pointer;
-      position:relative;overflow-wrap:anywhere}
+      position:relative;overflow-wrap:anywhere;overflow:hidden}
+/* ---- el TEXTO del evento, RECORTADO por defecto ----
+   Reportado con datos reales: en un dia con varios eventos, cada uno se veia entero y la celda
+   quedaba apilada e ilegible (por ejemplo el dia 28). El texto son dos lineas como maximo y
+   termina en puntos suspensivos: se entiende de que es, y el titulo completo sale al apuntarlo
+   (title) o al abrir el evento.
+   Se recorta por defecto a proposito: que el usuario NO tenga que buscar la opcion.
+   Minimo alto del chip en dos lineas de texto para que las celdas queden parejas. */
+.chip .txt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+           overflow:hidden;min-width:0}
 .chip:hover{filter:brightness(.96)}
 .chip .tipo{display:block;font-size:.58rem;letter-spacing:.05em;color:var(--muted2)}
 .chip.hecha{opacity:.45}
@@ -1422,7 +1431,11 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 .cal-cab{font-size:.68rem;text-align:center;text-transform:uppercase;letter-spacing:.05em;
   color:var(--muted2);padding:6px 2px;font-weight:600}
 .cal-dia{background:var(--sup);border:1px solid var(--line);border-radius:var(--r-sm);
-  min-height:92px;padding:4px 6px;position:relative;display:flex;flex-direction:column;gap:2px}
+  min-height:92px;padding:4px 6px;position:relative;display:flex;flex-direction:column;gap:2px;
+  /* La celda NO crece sin limite: con muchos eventos, la grilla se desalineaba y el mes se
+     volvia ilegible. Con un alto maximo, los eventos que no caben quedan recortados aqui y se
+     ven en el detalle del dia. `align-self:start` evita que la celda estire a sus vecinas. */
+  max-height:168px;overflow:hidden}
 .cal-dia.fuera{background:var(--sup2);opacity:.55}
 .cal-dia.hoy{border-color:var(--ac);box-shadow:inset 0 0 0 1px var(--ac)}
 .cal-num{font-size:.78rem;font-weight:650;font-variant-numeric:tabular-nums;color:var(--fg)}

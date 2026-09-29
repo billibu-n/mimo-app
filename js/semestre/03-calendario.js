@@ -40,7 +40,12 @@ function eventosDelDia(fecha){
 function chipDia(ev){
   const s = est();
   const c = ev.ramo ? colorDe(ev.ramo) : '#94a3b8';
+  // El texto se RECORTA a dos lineas (ver .chip .txt en general.css). Como el recorte esconde el
+  // resto, el titulo completo se deja en el atributo `title`: al apuntar con el raton se lee
+  // entero, y el dato no se pierde. Se escapa dos veces porque va dentro de un atributo.
+  const completo = esc(String(ev.texto || '')) + (ev.hora ? ' · ' + esc(ev.hora) : '');
   return '<div class="chip' + (s.hechas[ev.id] ? ' hecha' : '') + '" data-id="' + ev.id + '"' +
+    ' title="' + completo + '"' +
     ' style="background:' + tinte(c, .88) + ';border-left:3px solid ' + c + '">' +
     (s.prioridades[ev.id] ? '<span class="pri pri-' + s.prioridades[ev.id] + '">' +
       (s.prioridades[ev.id] === 'alta' ? 'A' : s.prioridades[ev.id] === 'media' ? 'M' : 'B') + '</span>' : '') +
