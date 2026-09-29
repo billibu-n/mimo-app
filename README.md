@@ -65,8 +65,8 @@ Download **`mimo-academics_1.0.0-desktop_x64-setup.exe`** and double-click it. I
 your user and creates a Start Menu entry, so you do not need administrator rights.
 
 > **Windows will warn you** that the publisher is unknown (SmartScreen), because the installer
-> **is not digitally signed**: signing costs money every year. To continue: click *More info* and
-> then *Run anyway*.
+> **is not digitally signed**: signing costs money every year, so... To continue: click *More info* and
+> then *Run anyway*. It's clearly safe btw -_-
 
 > **The `.exe` is built after the Linux files.** A Tauri application links against the system's
 > graphics libraries, so a Windows installer **cannot be built from Linux**: GitHub Actions builds
@@ -76,14 +76,13 @@ your user and creates a Start Menu entry, so you do not need administrator right
 
 ### macOS
 
-Pending. Building for macOS requires a Mac; it cannot be done from Linux. It will be announced
-here when it is.
+Pending. Building for macOS requires a Mac... Maybe you already know the issue.
 
 ### Android, iPhone and tablets
 
 Pending, and it is last on the list **on purpose**: the current interface is designed for a large
 screen and needs a redesign before it fits on a phone. A tablet is the same as a phone: it runs
-Android or iOS.
+Android or iOS... But I'm working on it as fast as I can.
 
 ### From the source code (for development)
 
@@ -97,7 +96,7 @@ cargo tauri build           # the packages end up in target/release/bundle/
 ```
 
 The web version needs nothing at all: open `index.html` by double-clicking it, or run
-`./abrir.sh`.
+`./abrir.sh`. 
 
 ## How to use it
 
