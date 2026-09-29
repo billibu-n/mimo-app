@@ -7,6 +7,30 @@ This document describes **what changed**, in words. Downloads are in
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Downloadable
 versions start at 1.0.2; 1.0.0 is the first official release, with the desktop application.
 
+## [Unreleased]
+
+### Changed
+
+- **Settings is a set of buttons.** Each entry is a small card — icon, bold title and a single
+  line underneath, next to the icon — and opens its own window, following the approved sketch.
+  The backup entry is highlighted the same way (2-px border), with the same shape.
+- **Appearance works in two steps**: first light / dark / system, then the theme of that kind.
+- **"System" shows only the themes of the current system setting**, instead of both lists at
+  once. In light mode it offers the four light themes; in dark mode, the four dark ones.
+- **The theme cards carry a colour bar** with the theme's own background and accent, plus its
+  name and a one-line description.
+- **"Vino" is out of the Appearance view** (4 light + 4 dark, as approved); the theme itself is
+  untouched, so a saved selection is not lost.
+- The **version/update block left the Appearance window** — it has nothing to do with looks. Its
+  controls stay for the app to work, and the version notice lives in the header tag.
+
+### Fixed
+
+- **The "System" icon was invisible.** Its monitor rectangle had lost its width and height, so
+  only the stand was drawn (7×3 px inside a 20-px box). The value is restored from the healthy
+  copy of the same icon. The sprite has **31 more symbols with the same missing-geometry
+  defect**; they are not used by the app yet, and are pending a full cleanup.
+
 ## [1.0.0-desktop] — 2026-09-29
 
 The first release with the **desktop application** on all three platforms, and the first with a

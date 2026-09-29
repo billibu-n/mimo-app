@@ -1179,23 +1179,41 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 .encabezado h1 { font-size: 1.35rem; font-weight: 650; letter-spacing: -.02em; }
 .encabezado .apoyo { font-size: .82rem; color: var(--muted); }
 
-/* --- la rejilla: columnas segun el ancho (agil al entorno) --------------
-   Antes eran 3 columnas fijas; al angostar la ventana, las tarjetas se
-   apretaban. Con auto-fit el numero de columnas baja solo (3 -> 2 -> 1) y
-   agregar o quitar una tarjeta no deja huecos ni aprieta el resto. */
-.rejilla { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+/* --- la rejilla: SIMETRICA, como el boceto v5 aprobado ------------------
+   Tres columnas PAREJAS (antes auto-fit: daba 4 columnas en pantalla ancha y las 7
+   tarjetas quedaban en 4+3, descuadradas). Con 3, las 6 de la aplicación caen en
+   3+3 y la séptima (Respaldo) ocupa la fila entera. Baja a 2 y a 1 al estrechar. */
+.rejilla { display: grid; gap: 14px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.rejilla > .grupo { grid-column: auto; }   /* las tarjetas caen por parejo en las 3 columnas */
 .rejilla > .grupo.ancho { grid-column: 1 / -1; }
 
-/* --- cada grupo es una tarjeta ------------------------------------------ */
-.grupo { background: var(--sup); border: 1px solid var(--line); border-radius: 12px;
-         overflow: hidden; transition: border-color 140ms ease-out; }
-.grupo:hover { border-color: var(--ac); }
-.g-cab { display: flex; align-items: center; gap: 9px; padding: 13px 16px 11px; }
-.g-cab .ic { color: var(--muted); }
-.g-cab h2 { font-size: .93rem; font-weight: 650; letter-spacing: -.01em; margin: 0; }
-.g-conteo { margin-left: auto; font-size: .68rem; font-weight: 700; color: var(--muted2);
-            background: var(--sup3); padding: 2px 8px; border-radius: 999px; }
-.g-cuerpo { padding: 0 16px 14px; }
+/* --- cada grupo es una tarjeta (y ademas un boton que abre su ventana) ---- */
+.grupo { background: var(--sup); border: 1px solid var(--line); border-radius: var(--r-lg);
+         overflow: hidden; transition: border-color 140ms ease-out;
+         /* reset de boton: la tarjeta se pulsa y abre su ventana */
+         display: block; width: 100%; text-align: left; font: inherit; color: inherit;
+         padding: 0; cursor: pointer; }
+.grupo:hover { border-color: var(--ac); box-shadow: 0 2px 10px rgba(37,99,235,.10); }
+.grupo:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
+/* Alineado ARRIBA (no al centro): las tarjetas de seccion llevan chip a la derecha y
+   con 'center' el icono y el titulo quedaban a media altura y el chip descuadrado. */
+.g-cab { display: flex; align-items: flex-start; gap: 9px; padding: 13px 16px 11px; }
+.g-cab h2, .g-cab .g-tit { font-size: .93rem; font-weight: 650; letter-spacing: -.01em; margin: 0; }
+/* el chip de la ficha va a la derecha, alineado con el titulo */
+.g-cab .g-chip { margin-left: auto; }
+/* el bloque de texto de la tarjeta: titulo y, DEBAJO, su linea. Va al lado del icono. */
+.g-txt { flex: 1 1 auto; min-width: 0; }
+/* la ficha de la TARJETA: la descripcion va dentro de .g-cab. OJO: los paneles (.aj-panel)
+   tambien usan .g-cuerpo; por eso el recorte se acota solo a las tarjetas de la rejilla. */
+.rejilla > .grupo .g-cuerpo { display: none; }
+
+/* --- la baldosa del icono: cuadro con el acento detras del icono ----------
+   Es la firma visual del boceto v5 aprobado: .tarjeta .t-ic (40x40, radio 11,
+   fondo acento al 10%, icono 22). Aqui se reproduce con los mismos numeros. */
+.grupo .g-cab .ic { width: 22px; height: 22px; }
+.grupo .g-cab { position: relative; }
+.t-ic { width: 40px; height: 40px; border-radius: 11px; flex: none; display: grid;
+        place-content: center; background: color-mix(in srgb, var(--ac) 10%, var(--sup)); color: var(--ac); }
 
 /* --- un ajuste = un renglon --------------------------------------------- */
 .ren { display: flex; align-items: center; gap: 14px; padding: 11px 0; border-top: 1px solid var(--line2); }
@@ -1206,20 +1224,23 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 .ren-ctl { flex: 0 0 auto; }
 
 /* --- la galeria de temas (cara del boceto) ------------------------------ */
-.temas { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
-.tema { position: relative; display: flex; align-items: center; gap: 10px; text-align: left;
-  border: 1px solid var(--line);
-  background: var(--sup); font: inherit; cursor: pointer; font-size: .8rem; padding: 8px 11px;
-  border-radius: 10px; transition: border-color 140ms ease-out, background 140ms ease-out; }
+.temas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.tema { position: relative; display: block; text-align: left; border: 1px solid var(--line);
+  background: var(--sup); font: inherit; cursor: pointer; padding: 9px;
+  border-radius: var(--r-md); transition: border-color 140ms ease-out, background 140ms ease-out; }
 .tema:hover { border-color: var(--ac); }
-.tema .tm-muestra { width: 22px; height: 22px; border-radius: 7px; flex: 0 0 auto;
-  border: 1px solid var(--line); display: block; }
-.tema .tm-nom { flex: 1 1 auto; min-width: 0; }
+/* la muestra: una barra ancha con el fondo y el acento del tema, con su punto a la derecha */
+.tema .tm-muestra { display: flex; align-items: center; justify-content: flex-end; height: 34px;
+  border-radius: 6px; border: 1px solid rgba(0,0,0,.10); padding-right: 8px; }
+.tema .tm-muestra::after { content: ""; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--tm-ac, var(--ac)); border: 1px solid rgba(0,0,0,.15); }
+.tema .tm-nom { display: block; font-weight: 600; font-size: .9rem; margin-top: 7px; }
+.tema .tm-ds { display: block; font-size: .76rem; color: var(--muted); }
 /* El distintivo vivia DENTRO del flujo del flex: sus 44px se reservaban siempre (aunque
    estuviera a opacidad 0) y con "Medianoche", "Deepsea" o "Alto contraste" el nombre no cabia
    y el texto se salia del recuadro (medido: clientWidth 156 < scrollWidth 180). Ahora va fuera
    del flujo, en la esquina, y como icono: un visto discreto en vez de la palabra "elegido". */
-.tema .tm-marca { position: absolute; top: 50%; right: 9px; transform: translateY(-50%);
+.tema .tm-marca { position: absolute; top: 16px; right: 12px; transform: translateY(-50%);
   box-sizing: border-box; width: 16px; height: 16px; border-radius: 50%;
   background: var(--ac); opacity: 0; pointer-events: none; }
 .tema.on { border-color: var(--ac); background: var(--sup2); font-weight: 600; }
@@ -1298,11 +1319,98 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 .filtros.apilados { flex-direction: column; align-items: stretch; gap: 7px; }
 .filtros.apilados .btn { width: 100%; }
 
+/* --- el rotulo de cada bloque (como el .seccion-titulo del boceto v5) ---- */
+.seccion-titulo { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted); margin: 22px 2px 10px; }
+
+/* --- la banda de nota bajo un rotulo ------------------------------------ */
+.nota-band { background: var(--sup); border: 1px dashed var(--line); border-radius: var(--r-md);
+  padding: 11px 13px; font-size: .83rem; color: var(--muted2); margin: 0 0 14px; }
+
+/* --- la ficha del recuadro: describe, en una linea por opcion, lo que trae ---
+   Se apoya en .g-cab (que ya existe) y anade esta ficha. Todo con variables del tema. */
+.g-des { display: block; font-size: .78rem; color: var(--muted); line-height: 1.45; margin: 2px 0 0; }
+.g-ficha { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.g-ficha .lin { display: flex; gap: 8px; align-items: center; font-size: .77rem; color: var(--muted2); line-height: 1.4; }
+.g-ficha .lin .ic { color: var(--muted); flex: none; }
+.g-ficha .lin .txt { flex: 1; min-width: 0; }
+/* --- las fichas (pastillas de estado del boceto). NO se usa .chip: ese nombre ya lo ocupan las
+   tareas. Se usa .g-chip, con su propia forma, para no pisar nada. ------------------------------ */
+.g-chip { font-size: .7rem; background: var(--sup2); color: var(--muted2); border-radius: 999px;
+  padding: 2px 9px; border: 1px solid var(--line2); white-space: nowrap; }
+.g-chip.mueve { background: var(--pill-warn-bg); color: var(--pill-warn-fg); border-color: var(--line); }
+.g-ficha .lin .g-chip { margin-left: auto; flex: none; }
+/* --- el selector de modo de color (paso 1 de Apariencia): tres botones anchos con su icono --- */
+.seg.anchos { display: flex; width: 100%; }
+.seg.anchos button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 11px 8px; font-size: .82rem; }
+.seg.anchos button .ic { width: 20px; height: 20px; }
+.seg.anchos button .lb { display: block; }
+/* rotulo de grupo dentro de la rejilla de temas (modo "segun el sistema") */
+.temas-lb { grid-column: 1 / -1; font-size: .72rem; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--muted); margin: 6px 2px 0; }
+/* el recuadro destacado (Respaldo): ocupa la fila entera y tiene MAS aire, pero la MISMA
+   forma que los demas (icono a la izquierda; titulo y descripcion a su lado). */
+.grupo.ancho { border-width: 2px; }
+.grupo.ancho .g-cab { padding: 16px 18px; gap: 14px; }
+.grupo.ancho .tilde { margin-left: 6px; }
+.tilde { display: inline-flex; align-items: center; gap: 5px; font-size: .72rem; font-weight: 700;
+  color: var(--pill-ok-fg); background: var(--pill-ok-bg); border: 1px solid var(--line);
+  border-radius: 999px; padding: 2px 9px; white-space: nowrap; margin-left: 4px; }
+/* el icono de la tilde es pequeño: esta regla va MAS especifica que la generica
+   `.grupo .g-cab .ic`, que si no lo dejaba a 22px (medido). */
+.grupo .g-cab .tilde .ic { width: 13px; height: 13px; color: var(--pill-ok-fg); }
+
+/* --- rotulos de bloque (entre rejillas) --------------------------------- */
+.grupo-tit { display: flex; align-items: baseline; gap: 9px; margin: 24px 2px 10px;
+  font-weight: 700; font-size: .98rem; }
+
+/* --- la ventana emergente de un recuadro (mismo patron que .modal) -------
+   El velo cubre todo y centra el panel elegido. Cada panel es el mismo DOM
+   siempre (no se reescribe), para que los controles que el motor escucha por
+   id sigan vivos: por eso NO se usa innerHTML, se muestra y se oculta. */
+.aj-velo { position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 60; display: none;
+  align-items: flex-start; justify-content: center; padding: 46px 16px; overflow-y: auto; }
+.aj-velo.on { display: flex; }
+.aj-panel { position: relative; background: var(--sup); border-radius: var(--r-lg); max-width: 640px;
+  width: 100%; padding: 20px 22px 22px; box-shadow: 0 18px 50px rgba(15,23,42,.35); display: none; }
+.aj-panel.on { display: block; }
+.aj-panel .aj-cab { display: flex; align-items: flex-start; gap: 12px; padding-right: 44px; margin-bottom: 8px; }
+.aj-panel .aj-cab .t-ic { width: 38px; height: 38px; border-radius: 10px; background: var(--sup2);
+  color: var(--ac); display: grid; place-items: center; flex: none; }
+.aj-panel .aj-cab h2 { margin: 0; font-size: 1.1rem; }
+.aj-panel .aj-cab .sub { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+/* la X, anclada a la esquina: respeta el margen del panel y no pisa el titulo */
+.aj-x { position: absolute; top: 13px; right: 13px; width: 32px; height: 32px; display: grid;
+  place-items: center; border: 0; background: transparent; border-radius: 8px; cursor: pointer;
+  color: var(--muted); padding: 0; }
+.aj-x:hover { background: var(--sup2); color: var(--fg); }
+.aj-x:focus-visible { outline: 2px solid var(--ac); outline-offset: 2px; }
+.aj-x .ic { width: 17px; height: 17px; }
+.aj-panel .aj-pie { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;
+  padding-top: 13px; border-top: 1px solid var(--line2); }
+
+/* --- el boton de apoyo (Buy Me a Coffee), con sus colores de marca ------- */
+.bmc { display: inline-flex; align-items: center; gap: 10px; background: #FFDD00; color: #222222;
+  text-decoration: none; font-weight: 700; font-size: .92rem; padding: 11px 18px; border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+.bmc:hover { background: #FFE533; }
+.bmc .taza { flex: none; }
+.aj-panel .ayuda { color: var(--fg); }
+
 /* --- lo que el motor necesita pero no se ve ----------------------------- */
 .oculto-para-el-motor { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
 /* --- barras extraibles del resto de la app (las de Ajustes ya no pliegan) --
    Ajustes usa .plegable solo para "Ajustes avanzados" y "Mis datos". */
+
+/* --- responsive: 3 -> 2 -> 1 columnas (parejas, como el boceto v5) -------- */
+@media (max-width: 960px) {
+  .rejilla { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .rejilla { grid-template-columns: 1fr; }
+}
 
 /* --- responsive: una columna en movil ------------------------------------ */
 @media (max-width: 900px) {

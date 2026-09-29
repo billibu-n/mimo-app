@@ -208,48 +208,120 @@
     bvBuscar.onclick = () => btnActualizar.click();
   }
 
-  /* ---- la galeria de temas del boceto aplica el tema real -----------------
-     El motor dibuja el tema en #av-tema (oculto). La cara visible son las
-     tarjetas .tema[data-val] del boceto. Al pulsar una, se aplica el tema por el
-     mismo camino que avSeg (borrador + aplicarAvanzado + repintar), y se marca
-     "elegido" en esa tarjeta.
-     OJO: aqui hubo una tarjeta "Segun el sistema" que NO hacia nada (mimo tiene
-     temas fijos y el CSS no trae ninguna regla prefers-color-scheme). Se quito de
-     la galeria en vez de dejar un boton que prometia algo que no hacia. */
-  var tarjetas = document.querySelectorAll('#p-ajustes .tema[data-val]');
-  function pintarTemaElegido() {
-    var actual = 'clasico';
-    try {
-      if (typeof avVista === 'function' && avVista()) actual = avVista().tema || 'clasico';
-      else if (typeof av === 'function' && av()) actual = av().tema || 'clasico';
-    } catch (e) {}
-    // SOLO la clase .on manda; el CSS (.tema .tm-marca{opacity:0},
-    // .tema.on .tm-marca{opacity:1}) muestra "elegido" en el activo. No se toca
-    // style inline, que fue lo que dejo "elegido" pegado en todos los temas.
-    document.querySelectorAll('#p-ajustes .tema[data-val]').forEach(function (t) {
-      var activo = t.dataset.val === actual;
-      t.classList.toggle('on', activo);
-      // El visto es decorativo: el estado tiene que ir tambien en el boton, o el lector de
-      // pantalla no sabe cual esta elegido (antes lo decia la palabra "elegido").
-      t.setAttribute('aria-pressed', activo ? 'true' : 'false');
-      var marca = t.querySelector('.tm-marca');
-      if (marca) marca.style.opacity = '';
+  /* ---- Apariencia: modo de color (paso 1) y temas por naturaleza (paso 2) ----
+     El motor guarda en E.ajustes.av: tModo ('claro'/'oscuro'/'sistema'), tema (el ultimo elegido)
+     y temaClaro/temaOscuro (los del modo sistema). Aqui se pinta la cara: #av-modo (tres botones)
+     y #av-temas (la rejilla que cambia segun el modo). Todo por el BORRADOR, como el resto. */
+  // La muestra de cada tema y su DESCRIPCION de una linea, como el boceto aprobado.
+  var MUESTRA = {clasico:['#fff','#2563eb'], negro:['#1e1e1e','#3584e4'],
+                 medianoche:['#131314','#8ab4f8'], deepsea:['#071a2b','#22d3ee'],
+                 bosque:['#eef4ee','#1f7a4d'], sepia:['#f4ecd8','#8a4b2a'],
+                 vino:['#fbf3f4','#8e2f43'], pinky:['#ffffff','#b5226b'],
+                 'alto-contraste':['#000000','#ffff00']};
+  var DESCRIPCION = {clasico:'Claro y azul. El de fábrica.', bosque:'Claro, con verde.',
+                     sepia:'Como papel envejecido.', pinky:'Claro, con rosa.',
+                     negro:'Oscuro sobrio, con azul.', medianoche:'Casi negro, azul claro.',
+                     deepsea:'Oscuro azulado, con cian.', 'alto-contraste':'Negro y amarillo, para ver mejor.',
+                     vino:'Granate oscuro, cálido.'};
+  function nombreTema(v){
+    try { var t = TEMAS.find(function(x){ return x[0] === v; }); return t ? t[1] : v; } catch (e) { return v; }
+  }
+  function esClaroTema(v){ return (typeof esClaro === 'function') ? esClaro(v) : true; }
+
+  function pintarColorModo() {
+    var modo = 'claro';
+    try { if (typeof avVista === 'function' && avVista()) modo = avVista().tModo || 'claro'; } catch (e) {}
+    document.querySelectorAll('#av-modo button').forEach(function (b) {
+      var on = b.dataset.val === modo;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    return modo;
+  }
+  function tarjetaTema(v) {
+    var m = MUESTRA[v] || ['#fff','#2563eb'];
+    var ds = DESCRIPCION[v] || '';
+    return '<button type="button" class="tema" aria-pressed="false" data-val="' + v + '">' +
+      '<span class="tm-muestra" style="background:' + m[0] + ';--tm-ac:' + m[1] + '"></span>' +
+      '<span class="tm-nom">' + nombreTema(v) + '</span>' +
+      '<span class="tm-ds">' + ds + '</span>' +
+      '<span class="tm-marca" aria-hidden="true"></span></button>';
+  }
+  // Vino NO sale en la vista de Apariencia (el boceto aprobado trae 4 claros y 4 oscuros).
+  // Se quita de la VISTA, no del motor: el tema sigue existiendo por si venia guardado.
+  function sinVino(lista) { return lista.filter(function (v) { return v !== 'vino'; }); }
+  function pintarTemasGrid() {
+    var caja = document.getElementById('av-temas');
+    if (!caja) return;
+    var a = (typeof avVista === 'function' && avVista()) ? avVista() : {};
+    var modo = a.tModo || 'claro';
+    var tit = document.getElementById('av-paso2-tit');
+    var nota = document.getElementById('av-paso2-nota');
+    var claros = sinVino((typeof TEMAS_CLAROS !== 'undefined') ? TEMAS_CLAROS : ['clasico','bosque','sepia','pinky']);
+    var oscuros = sinVino((typeof TEMAS_OSCUROS !== 'undefined') ? TEMAS_OSCUROS : ['negro','medianoche','deepsea','alto-contraste']);
+    if (modo === 'sistema') {
+      // "Segun el sistema" NO inventa un paso 2: la app usa el tema claro u OSCURO del sistema.
+      // Se muestra solo el grupo que toca AHORA (el que el sistema pide), no los dos: el dueno
+      // pidio que ofrezca "lo que ofrece el oscuro o el claro segun el sistema".
+      var sisOscuro = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      var lista = sisOscuro ? oscuros : claros;
+      caja.innerHTML = lista.map(tarjetaTema).join('');
+      if (tit) tit.textContent = 'Paso 2 · Tu tema ' + (sisOscuro ? 'oscuro' : 'claro');
+      if (nota) nota.textContent = 'La app sigue al sistema: ahora en ' + (sisOscuro ? 'oscuro' : 'claro') +
+        '. Elige el tema de cada uno y cambia sola cuando cambie el sistema.';
+    } else {
+      var lista = (modo === 'oscuro') ? oscuros : claros;
+      caja.innerHTML = lista.map(tarjetaTema).join('');
+      if (tit) tit.textContent = 'Paso 2 · Tu tema ' + (modo === 'oscuro' ? 'oscuro' : 'claro');
+      if (nota) nota.textContent = 'El que elijas sustituye al tema actual.';
+    }
+    // marcar los elegidos
+    var elegidos = [];
+    if (modo === 'sistema') {
+      var so2 = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      elegidos = [so2 ? (a.temaOscuro || 'negro') : (a.temaClaro || 'clasico')];
+    } else { elegidos = [a.tema || 'clasico']; }
+    caja.querySelectorAll('.tema[data-val]').forEach(function (t) {
+      var on = elegidos.indexOf(t.dataset.val) >= 0;
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
-  tarjetas.forEach(function (t) {
-    t.onclick = function () {
-      // El MISMO camino que el motor: escribir en el BORRADOR, no aplicar directo.
-      // Asi el tema se previsualiza y aparece la barra "N cambios sin guardar"
-      // con Descartar/Guardar. Nada se guarda hasta aceptar.
+  document.querySelectorAll('#av-modo button').forEach(function (b) {
+    b.onclick = function () {
+      var val = b.dataset.val;
       if (typeof abrirBorrador === 'function') abrirBorrador();
-      if (avBorrador) avBorrador.tema = t.dataset.val;
+      if (!avBorrador) return;
+      avBorrador.tModo = val;
+      // Al cambiar de clase, el "tema" de turno tiene que ser de esa clase: si no, elegir "claro"
+      // mostraria el oscuro que hubiera antes.
+      if (val === 'claro' && !esClaroTema(avBorrador.tema)) avBorrador.tema = avBorrador.temaClaro || 'clasico';
+      if (val === 'oscuro' && esClaroTema(avBorrador.tema)) avBorrador.tema = avBorrador.temaOscuro || 'negro';
       if (typeof aplicarAvanzado === 'function') aplicarAvanzado();
       if (typeof renderTodo === 'function') renderTodo(true);
       if (typeof pintarBarraAjustes === 'function') pintarBarraAjustes();
-      pintarTemaElegido();
+      pintarColorModo(); pintarTemasGrid();
     };
   });
-  pintarTemaElegido();
+  // delegacion: la rejilla se rehace cada vez, asi que el clic se escucha en el contenedor
+  var cajaTemas = document.getElementById('av-temas');
+  if (cajaTemas) cajaTemas.addEventListener('click', function (ev) {
+    var t = ev.target.closest('.tema[data-val]');
+    if (!t) return;
+    var val = t.dataset.val;
+    if (typeof abrirBorrador === 'function') abrirBorrador();
+    if (!avBorrador) return;
+    if ((avBorrador.tModo || 'claro') === 'sistema') {
+      if (esClaroTema(val)) avBorrador.temaClaro = val; else avBorrador.temaOscuro = val;
+    } else {
+      avBorrador.tema = val;
+    }
+    if (typeof aplicarAvanzado === 'function') aplicarAvanzado();
+    if (typeof renderTodo === 'function') renderTodo(true);
+    if (typeof pintarBarraAjustes === 'function') pintarBarraAjustes();
+    pintarColorModo(); pintarTemasGrid();
+  });
+  pintarColorModo(); pintarTemasGrid();
 
   /* ---- engancharse a lo que ya corre -------------------------------------- */
   // renderAjustes() pinta la pestana; el semaforo pinta el aviso. En los dos casos
@@ -260,6 +332,7 @@
       original.apply(this, arguments);
       sincronizarTodo();
       sincronizarVersion();
+      pintarColorModo(); pintarTemasGrid();
     };
   }
   // 06-actualizar.js corre al cargar y escribe el semaforo cuando termina: se

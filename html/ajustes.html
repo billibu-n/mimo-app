@@ -1,7 +1,14 @@
 <!-- ==========================================================================
-     ajustes.html - pestana Ajustes. CARA = propuesta G2 (boceto aprobado).
-     LOGICA = motor de mimo, oculto detras; el puente (08-g2-puente.js) copia
-     el estado en las dos direcciones. No se reescribe la cara.
+     ajustes.html - pestana Ajustes. CARA = reordenada (boceto v5 aprobado).
+     LOGICA = el motor de mimo, intacto. Cada RECUADRO de la pantalla abre una
+     VENTANA EMERGENTE que contiene los controles REALES de siempre, con sus
+     mismos ids y ganchos: el puente (08-g2-puente.js) y el motor siguen
+     buscandolos por id dentro de #p-ajustes y no se entera de nada.
+
+     REGLA: los paneles NO se reescriben con innerHTML; son el mismo DOM que se
+     muestra y se oculta. Un control que se reescribiera perderia las escuchas
+     que 02-avanzados.js engancha al cargar (#avanzado) y el motor quedaria
+     desconectado.
      ========================================================================== -->
   <section class="seccion ajustes" data-seccion="ajustes" id="p-ajustes">
 <div class="zona-g2">
@@ -11,324 +18,355 @@
         <span class="apoyo">lo que cambies acá se guarda solo, en este navegador</span>
       </div>
 
+      <!-- ==================================================================
+           AJUSTES DE LA APLICACION
+           ================================================================== -->
+      <div class="seccion-titulo">Ajustes de la aplicación</div>
       <div class="rejilla">
 
-        <!-- ============ APARIENCIA (ancho completo) ============
-             Antes esta categoria era "Tema de color" y nada mas, y arriba de
-             todo iba suelto el semaforo de version. El semaforo ES un ajuste
-             de apariencia (te dice de que version sos y te ofrece el cambio),
-             asi que se mudo adentro, como tarjeta de estado. -->
-        <section class="grupo ancho">
-          <div class="g-cab">
-            <svg class="ic"><use href="#EDI-10"></use></svg>
-            <h2>Apariencia</h2>
-            <span class="g-conteo">6 opciones</span>
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="av-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#EDI-10"></use></svg></span><div class="g-txt"><h2 class="g-tit">Apariencia</h2><div class="g-des">Tema y color.</div></div></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="gen-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#ACC-03"></use></svg></span><div class="g-txt"><h2 class="g-tit">General</h2><div class="g-des">Lo que vale para toda la aplicación.</div></div></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="nav-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#INT-25"></use></svg></span><div class="g-txt"><h2 class="g-tit">Navegación</h2><div class="g-des">La barra de secciones, como la dejes.</div></div></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="idio-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#LUG-04"></use></svg></span><div class="g-txt"><h2 class="g-tit">Idioma</h2><div class="g-des">El idioma de la interfaz.</div></div></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="colab-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#EST-09"></use></svg></span><div class="g-txt"><h2 class="g-tit">Colaborar</h2><div class="g-des">Apoyar el proyecto con un café.</div></div></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="sem-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#EDI-07"></use></svg></span><div class="g-txt"><h2 class="g-tit">Semestre</h2><div class="g-des">Los semestres guardados y sus metas.</div></div></div>
+        </section>
+
+      </div>
+
+      <!-- ==================================================================
+           EL IMPORTANTE: Respaldo, con su propia fila, a lo ancho y con tilde
+           ================================================================== -->
+      <div class="rejilla" style="margin-top:14px">
+        <section class="grupo ancho" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="resp-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#ARQ-10"></use></svg></span><div class="g-txt"><h2 class="g-tit">Respaldo</h2><div class="g-des">Tus datos viven en este navegador: esto es lo que los pone a salvo. Descárgalos, cárgalos en otro equipo o vuelve al principio.</div></div><div class="tilde"><svg class="ic"><use href="#EST-02"></use></svg>lo más importante</div></div>
+        </section>
+      </div>
+
+      <!-- ==================================================================
+           AJUSTES DE CADA SECCION (tarjetas del boceto v5)
+           ================================================================== -->
+      <div class="seccion-titulo">Ajustes de cada sección</div>
+      <div class="nota-band">Estos ajustes <b>no son generales</b>: pertenecen a una sola sección y se abren
+        desde su propia pantalla. Es el cambio principal frente a la mezcla actual.</div>
+      <div class="rejilla">
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="sec-calendario-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#TIE-27"></use></svg></span><div class="g-txt"><h2 class="g-tit">Calendario</h2><div class="g-des">Cómo se muestran las horas y los eventos.</div></div><span class="g-chip mueve">formato de horas</span></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="sec-notas-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#EDI-04"></use></svg></span><div class="g-txt"><h2 class="g-tit">Notas</h2><div class="g-des">Tildes y abreviación en los apuntes.</div></div><span class="g-chip mueve">tildes · títulos</span></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="sec-tareas-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#INT-02"></use></svg></span><div class="g-txt"><h2 class="g-tit">Tareas</h2><div class="g-des">Qué se ve en «Por hacer».</div></div><span class="g-chip mueve">lo ya hecho</span></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="sec-estudio-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#EDI-07"></use></svg></span><div class="g-txt"><h2 class="g-tit">Estudio</h2><div class="g-des">Metas de horas, nota objetivo y pesos.</div></div><span class="g-chip mueve">metas · pesos</span></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="malla-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#INT-18"></use></svg></span><div class="g-txt"><h2 class="g-tit">Malla</h2><div class="g-des">Colores de estado, relleno, densidad y esquinas. (Eran los «Ajustes avanzados».)</div></div><span class="g-chip mueve">ajustes avanzados</span></div>
+        </section>
+
+        <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="sec-tiempo-panel">
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#TIE-03"></use></svg></span><div class="g-txt"><h2 class="g-tit">Tiempo</h2><div class="g-des">Sonido del temporizador.</div></div><span class="g-chip mueve">sonido</span></div>
+        </section>
+
+      </div>
+
+      <!-- ==================================================================
+           LAS VENTANAS EMERGENTES
+           Cada panel contiene los controles REALES (mismos ids de siempre).
+           ================================================================== -->
+      <div class="aj-velo" id="aj-velo">
+
+        <!-- ---------- APARIENCIA ---------- -->
+        <div class="aj-panel" id="av-panel" role="dialog" aria-modal="true" aria-labelledby="av-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#EDI-10"></use></svg></span>
+            <div><h2 id="av-titulo">Apariencia</h2>
+              <div class="sub">Tema, color y contraste</div></div>
           </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
 
             <div class="ren">
               <div class="ren-txt">
-                <div class="ren-tit">Tema de color</div>
-                <div class="ren-nota">El tema cambia los colores, las medidas y el movimiento a la vez. El elegido queda marcado.</div>
+                <div class="ren-tit">Paso 1 · ¿Cómo la quieres?</div>
+                <div class="ren-nota">Elige primero la clase de tema. En «según el sistema», la app sigue al sistema y cambia sola cuando cambie él.</div>
               </div>
             </div>
-
-            <div class="temas" data-av="tema" style="padding-bottom:4px">
-              <button class="tema on" aria-pressed="true" data-val="clasico">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#fff 55%,#2563eb)"></span>
-                <span class="tm-nom">Clásico</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="negro">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#1e1e1e 55%,#3584e4)"></span>
-                <span class="tm-nom">Negro</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="medianoche">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#131314 55%,#8ab4f8)"></span>
-                <span class="tm-nom">Medianoche</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="deepsea">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#071a2b 55%,#22d3ee)"></span>
-                <span class="tm-nom">Deepsea</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="bosque">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#eef4ee 55%,#1f7a4d)"></span>
-                <span class="tm-nom">Bosque</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="sepia">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#f6efe2 55%,#a1683a)"></span>
-                <span class="tm-nom">Sepia</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="vino">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#fbf3f4 55%,#8e2f43)"></span>
-                <span class="tm-nom">Vino</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="pinky">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#ffffff 55%,#b5226b)"></span>
-                <span class="tm-nom">Pinky</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
-              <button class="tema" aria-pressed="false" data-val="alto-contraste">
-                <span class="tm-muestra" style="background:linear-gradient(135deg,#fff 50%,#000 50%)"></span>
-                <span class="tm-nom">Alto contraste</span><span class="tm-marca" aria-hidden="true"></span>
-              </button>
+            <div class="seg anchos" id="av-modo">
+              <button type="button" data-val="claro">
+                <svg class="ic"><use href="#NAT-01"></use></svg><span class="lb">Claro</span></button>
+              <button type="button" data-val="oscuro">
+                <svg class="ic"><use href="#NAT-02"></use></svg><span class="lb">Oscuro</span></button>
+              <button type="button" data-val="sistema">
+                <svg class="ic"><use href="#INT-14"></use></svg><span class="lb">Según el sistema</span></button>
             </div>
 
-            <div class="ren" style="margin-top:14px;border-top:1px solid #f2f4f7">
+            <div class="ren" style="margin-top:16px">
               <div class="ren-txt">
-                <div class="ren-tit">Ajustes avanzados</div>
-                <div class="ren-nota">Colores de los estados de la malla, relleno, densidad y detalles de las tarjetas. Nada de esto toca tus datos.</div>
-              </div>
-              <div class="ren-ctl"><span class="av-abrir"></span></div>
-            </div>
-            <details class="plegable" id="det-avanzados">
-              <summary><span class="pl-izq">Ajustes avanzados                <span class="pl-cuenta">relleno, colores de estado, densidad y más</span></span>                <span class="pl-flecha">▸</span></summary>
-              <div class="pl-cuerpo"><div id="avanzado"></div></div>
-            </details>
-            <div id="av-tema" style="display:none"></div>
-
-            <!-- El semaforo, mudado aqui: es una tarjeta de estado, no una barra.
-                 Los ID de estado (bv-punto, bv-etq, bv-nota, bv-buscar, bv-bajar,
-                 bv-ver-cambios, bv-cambios) los usa ajustes.js: el motor no se toca,
-                 solo cambia donde vive y como se ve. OJO: esta lista decia antes que
-                 bv-ver tambien se usaba, y es falso: nadie lee bv-ver (el tag del header
-                 tiene su propio id, bv-tag). Se deja vacio mas abajo.
-                 data-local lleva el MARCADOR, no un numero: lo sustituye el armador desde
-                 su unica VERSION, y de ahi lo lee el semaforo (06-actualizar.js). -->
-            <div id="datos-version" data-local="__VERSION__" data-repo="billibu-n/mimo-app"
-                 style="display:none"></div>
-
-            <div class="ren">
-              <div class="ren-txt">
-                <div class="ren-tit">Versión de la aplicación</div>
-                <div class="ren-nota">Se comprueba contra GitHub. Solo avisa: no descarga ni reemplaza nada.</div>
+                <div class="ren-tit" id="av-paso2-tit">Paso 2 · Tu tema claro</div>
+                <div class="ren-nota" id="av-paso2-nota">El que elijas sustituye al tema actual.</div>
               </div>
             </div>
-            <div class="semaforo" id="barra-version">
-              <span class="sf-punto" id="bv-punto" title="estado"></span>
-              <span class="sf-txt">
-                <span class="sf-tit" id="bv-etq">comprobando</span>
-                <span class="sf-sub" id="bv-nota">se comprueba contra GitHub</span>
-              </span>
-              <!-- vacio a proposito: nadie lee bv-ver; se limpia el numero fijo que estaba -->
-              <span class="sf-ver" id="bv-ver"></span>
-            </div>
-            <div class="sf-acciones">
-              <button class="mini" id="bv-buscar">Buscar actualización</button>
-              <a class="mini" id="bv-bajar" href="#" target="_blank" rel="noopener"
-                 style="display:none">Descargar</a>
+            <div class="temas" id="av-temas"></div>
+
+            <!-- Los controles de VERSION no tienen nada que ver con la apariencia: se quitan de
+                 esta ventana. Quedan aqui, ocultos, porque el motor los usa: 06-actualizar.js lee
+                 #datos-version y escribe en #bv-etq, y 06-arranque.js engancha #btn-actualizar. El
+                 aviso de version vive en el tag de la cabecera (#bv-tag). PENDIENTE: decidir donde. -->
+            <div id="av-version-oculta" hidden>
+              <div id="datos-version" data-local="__VERSION__" data-repo="billibu-n/mimo-app"
+                   data-version="__VERSION__" hidden></div>
+              <div class="semaforo" id="barra-version">
+                <span class="sf-punto" id="bv-punto" title="estado"></span>
+                <span class="sf-txt">
+                  <span class="sf-tit" id="bv-etq">comprobando</span>
+                  <span class="sf-sub" id="bv-nota">se comprueba contra GitHub</span>
+                </span>
+                <span class="sf-ver" id="bv-ver"></span>
+              </div>
+              <div class="sf-acciones">
+                <button type="button" class="mini" id="bv-buscar">Buscar actualización</button>
+                <a class="mini" id="bv-bajar" href="#" target="_blank" rel="noopener"
+                   style="display:none">Descargar la nueva</a>
                 <button class="btn" id="btn-actualizar" style="display:none">Buscar actualización</button>
                 <a id="enlace-actualizar" href="#" target="_blank" rel="noopener" style="display:none">Descargar</a>
                 <p class="ayuda" id="caja-actualizar"></p>
-            </div>
-
-          </div>
-        </section>
-
-        <!-- ============ GENERAL ============
-             Antes: dos tarjetas de cuatro casillas y dos filas de filtros, todo
-             en renglones de una linea sin explicacion. Ahora cada ajuste dice
-             que hace, y el estado se lee en la pastilla. -->
-        <section class="grupo">
-          <div class="g-cab">
-            <svg class="ic"><use href="#ACC-03"></use></svg>
-            <h2>General</h2>
-            <span class="g-conteo">7 ajustes</span>
-          </div>
-          <div class="g-cuerpo">
-
-            <div class="ren">
-              <div class="ren-txt">
-                <div class="ren-tit">Tildes en los títulos</div>
-                <div class="ren-nota">Si lo apagas, los nombres se escriben sin acento.</div>
               </div>
-              <button class="pastilla ren-ctl" id="aj-tildes-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
+            </div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
+
+        <!-- ---------- GENERAL ---------- -->
+        <div class="aj-panel" id="gen-panel" role="dialog" aria-modal="true" aria-labelledby="gen-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#ACC-03"></use></svg></span>
+            <div><h2 id="gen-titulo">General</h2>
+              <div class="sub">Formato de las horas, títulos y sonido.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div class="ren">
+              <div class="ren-txt"><div class="ren-tit">Tildes en los títulos</div>
+                <div class="ren-nota">Si lo apagas, los nombres se escriben sin acento.</div></div>
+              <button type="button" class="pastilla ren-ctl" id="aj-tildes-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
             </div>
             <div class="oculto-para-el-motor"><input type="checkbox" id="aj-tildes" checked></div>
 
             <div class="ren">
-              <div class="ren-txt">
-                <div class="ren-tit">Modo compacto</div>
-                <div class="ren-nota">Menos aire entre filas: entra más en pantalla.</div>
-              </div>
-              <button class="pastilla ren-ctl" id="aj-compacto-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
+              <div class="ren-txt"><div class="ren-tit">Modo compacto</div>
+                <div class="ren-nota">Menos aire entre filas: entra más en pantalla.</div></div>
+              <button type="button" class="pastilla ren-ctl" id="aj-compacto-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
             </div>
             <div class="oculto-para-el-motor"><input type="checkbox" id="aj-compacto"></div>
 
             <div class="ren">
-              <div class="ren-txt">
-                <div class="ren-tit">En "Por hacer", mostrar lo ya hecho</div>
-                <div class="ren-nota">Deja a la vista las tareas terminadas en vez de esconderlas.</div>
-              </div>
-              <button class="pastilla ren-ctl" id="aj-hechas-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
+              <div class="ren-txt"><div class="ren-tit">En "Por hacer", mostrar lo ya hecho</div>
+                <div class="ren-nota">Deja a la vista las tareas terminadas en vez de esconderlas.</div></div>
+              <button type="button" class="pastilla ren-ctl" id="aj-hechas-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
             </div>
             <div class="oculto-para-el-motor"><input type="checkbox" id="aj-ver-hechas"></div>
 
             <div class="ren">
-              <div class="ren-txt">
-                <div class="ren-tit">Sonido al terminar el tiempo</div>
-                <div class="ren-nota">Suena una vez cuando el temporizador llega a cero.</div>
-              </div>
-              <button class="pastilla ren-ctl" id="aj-sonido-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
+              <div class="ren-txt"><div class="ren-tit">Sonido al terminar el tiempo</div>
+                <div class="ren-nota">Suena una vez cuando el temporizador llega a cero.</div></div>
+              <button type="button" class="pastilla ren-ctl" id="aj-sonido-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
             </div>
             <div class="oculto-para-el-motor"><input type="checkbox" id="aj-sonido"></div>
 
             <div class="ren">
-              <div class="ren-txt">
-                <div class="ren-tit">Formato de las horas</div>
-                <div class="ren-nota">Puedes encender más de uno: se muestran juntos, separados por un punto.</div>
-              </div>
+              <div class="ren-txt"><div class="ren-tit">Formato de las horas</div>
+                <div class="ren-nota">Puedes encender más de uno: se muestran juntos, separados por un punto.</div></div>
             </div>
             <div class="ren" style="border-top:0;padding-top:0">
               <div class="ren-txt"></div>
               <div class="ren-ctl filtros">
-                <button class="mini" data-formato="hm">1h 30m</button>
-                <button class="mini" data-formato="hdec">1,5 h</button>
-                <button class="mini" data-formato="min">90 min</button>
+                <button type="button" class="mini" data-formato="hm">1h 30m</button>
+                <button type="button" class="mini" data-formato="hdec">1,5 h</button>
+                <button type="button" class="mini" data-formato="min">90 min</button>
               </div>
+            </div>
             <div id="formatos-hora" style="display:none"></div>
-            </div>
 
-            <!-- Abreviacion de los titulos: es formato, como las horas, asi que
-                 vive en General y no en Apariencia (que es color y temas). -->
             <div class="ren">
-              <div class="ren-txt">
-                <div class="ren-tit">Cómo se abrevian los títulos</div>
-                <div class="ren-nota">En la tabla de horas el nombre comparte columna con su casilla. El completo está siempre en el globito.</div>
-              </div>
+              <div class="ren-txt"><div class="ren-tit">Cómo se abrevian los títulos</div>
+                <div class="ren-nota">En la tabla de horas el nombre comparte columna con su casilla. El completo está siempre en el globito.</div></div>
               <div class="ren-ctl filtros">
-                <button class="mini" data-titulo="envuelto">Completo</button>
-                <button class="mini" data-titulo="puntos">Recortado</button>
-                <button class="mini" data-titulo="iniciales">Iniciales</button>
+                <button type="button" class="mini" data-titulo="envuelto">Completo</button>
+                <button type="button" class="mini" data-titulo="puntos">Recortado</button>
+                <button type="button" class="mini" data-titulo="iniciales">Iniciales</button>
               </div>
+            </div>
             <div id="titulos-modo" style="display:none"></div>
-            </div>
-
           </div>
-        </section>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
 
-        <!-- ============ NAVEGACIÓN ============
-             Antes: un desplegable propio para elegir el modo. Habia que abrirlo
-             para recordar cual estaba puesto. Ahora los tres modos se ven a la
-             vez y el elegido se marca. -->
-        <section class="grupo">
-          <div class="g-cab">
-            <svg class="ic"><use href="#INT-25"></use></svg>
-            <h2>Navegación</h2>
-            <span class="g-conteo">4 ajustes</span>
+        <!-- ---------- NAVEGACION ---------- -->
+        <div class="aj-panel" id="nav-panel" role="dialog" aria-modal="true" aria-labelledby="nav-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#INT-25"></use></svg></span>
+            <div><h2 id="nav-titulo">Navegación</h2>
+              <div class="sub">La barra de secciones: modo, posición y estilo.</div></div>
           </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
-
-            <div class="ren" style="border-top:0">
-              <div class="ren-txt">
-                <div class="ren-tit">Barra de secciones</div>
-                <div class="ren-nota">Dónde va el menú de secciones y cómo se abre.</div>
-              </div>
+            <div class="ren">
+              <div class="ren-txt"><div class="ren-tit">Barra de secciones</div>
+                <div class="ren-nota">Dónde va el menú de secciones y cómo se abre.</div></div>
             </div>
-
             <div class="modos">
-              <button class="modo on" data-barra="manual"><span class="md-visto"></span>
-                <span class="md-nom">Manual</span>
-                <span class="md-nota">se abre con el botón ☰</span></button>
-              <button class="modo" data-barra="automatico"><span class="md-visto"></span>
-                <span class="md-nom">Automática</span>
-                <span class="md-nota">sale al acercar el cursor al borde</span></button>
-              <button class="modo" data-barra="fijo"><span class="md-visto"></span>
-                <span class="md-nom">Fija</span>
-                <span class="md-nota">siempre visible</span></button>
+              <button type="button" class="modo on" data-barra="manual"><span class="md-visto"></span>
+                <span class="md-nom">Manual</span><span class="md-nota">se abre con el botón ☰</span></button>
+              <button type="button" class="modo" data-barra="automatico"><span class="md-visto"></span>
+                <span class="md-nom">Automática</span><span class="md-nota">sale al acercar el cursor al borde</span></button>
+              <button type="button" class="modo" data-barra="fijo"><span class="md-visto"></span>
+                <span class="md-nom">Fija</span><span class="md-nota">siempre visible</span></button>
             </div>
 
             <div class="ren" style="margin-top:12px">
-              <div class="ren-txt">
-                <div class="ren-tit">Posición del menú</div>
-                <div class="ren-nota">Dónde colocas la barra de secciones.</div>
-              </div>
+              <div class="ren-txt"><div class="ren-tit">Posición del menú</div>
+                <div class="ren-nota">Dónde colocas la barra de secciones.</div></div>
             </div>
             <div class="modos">
-              <button class="modo on" data-pos="izquierda"><span class="md-visto"></span>
-                <span class="md-nom">Izquierda</span>
-                <span class="md-nota">columna a la izquierda</span></button>
-              <button class="modo" data-pos="derecha"><span class="md-visto"></span>
-                <span class="md-nom">Derecha</span>
-                <span class="md-nota">columna a la derecha</span></button>
-              <button class="modo" data-pos="arriba"><span class="md-visto"></span>
-                <span class="md-nom">Arriba</span>
-                <span class="md-nota">barra horizontal, como la 1.0.0</span></button>
+              <button type="button" class="modo on" data-pos="izquierda"><span class="md-visto"></span>
+                <span class="md-nom">Izquierda</span><span class="md-nota">columna a la izquierda</span></button>
+              <button type="button" class="modo" data-pos="derecha"><span class="md-visto"></span>
+                <span class="md-nom">Derecha</span><span class="md-nota">columna a la derecha</span></button>
+              <button type="button" class="modo" data-pos="arriba"><span class="md-visto"></span>
+                <span class="md-nom">Arriba</span><span class="md-nota">barra horizontal, como la 1.0.0</span></button>
             </div>
 
             <div class="ren" style="margin-top:12px">
-              <div class="ren-txt">
-                <div class="ren-tit">Estilo del menú</div>
-                <div class="ren-nota">La forma de los botones de sección.</div>
-              </div>
+              <div class="ren-txt"><div class="ren-tit">Estilo del menú</div>
+                <div class="ren-nota">La forma de los botones de sección.</div></div>
             </div>
             <div class="modos">
-              <button class="modo on" data-estilo="clasica"><span class="md-visto"></span>
-                <span class="md-nom">Clásica</span>
-                <span class="md-nota">el fondo del tema</span></button>
-              <button class="modo" data-estilo="compacta"><span class="md-visto"></span>
-                <span class="md-nom">Compacta</span>
-                <span class="md-nota">más pequeña</span></button>
-              <button class="modo" data-estilo="pastillas"><span class="md-visto"></span>
-                <span class="md-nom">Pastillas</span>
-                <span class="md-nota">redondeada, resalta la activa</span></button>
+              <button type="button" class="modo on" data-estilo="clasica"><span class="md-visto"></span>
+                <span class="md-nom">Clásica</span><span class="md-nota">el fondo del tema</span></button>
+              <button type="button" class="modo" data-estilo="compacta"><span class="md-visto"></span>
+                <span class="md-nom">Compacta</span><span class="md-nota">más pequeña</span></button>
+              <button type="button" class="modo" data-estilo="pastillas"><span class="md-visto"></span>
+                <span class="md-nom">Pastillas</span><span class="md-nota">redondeada, resalta la activa</span></button>
             </div>
 
             <div class="ren" style="margin-top:12px">
-              <div class="ren-txt">
-                <div class="ren-tit">Recordar cómo la dejé</div>
-                <div class="ren-nota">Al volver a abrir, la barra aparece como la dejaste.</div>
-              </div>
-              <button class="pastilla ren-ctl" id="aj-recordar-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
+              <div class="ren-txt"><div class="ren-tit">Recordar cómo la dejé</div>
+                <div class="ren-nota">Al volver a abrir, la barra aparece como la dejaste.</div></div>
+              <button type="button" class="pastilla ren-ctl" id="aj-recordar-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
             </div>
             <div class="oculto-para-el-motor"><input type="checkbox" id="aj-recordar" checked></div>
-
           </div>
-        </section>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
 
-        <!-- ============ MIS DATOS ============
-             Tercera carta de la fila, junto a General y Navegacion. Son pocos
-             botones, asi que caben sin apretar y la fila queda pareja en vez de
-             dejar un hueco al lado. Los dos bloques siguen plegables: nadie
-             respalda todos los dias, pero escondidos no estorban. -->
-        <section class="grupo">
-          <div class="g-cab">
-            <svg class="ic"><use href="#INT-06"></use></svg>
-            <h2>Mis datos</h2>
-            <span class="g-conteo">2 bloques</span>
+        <!-- ---------- IDIOMA ---------- -->
+        <div class="aj-panel" id="idio-panel" role="dialog" aria-modal="true" aria-labelledby="idio-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#LUG-04"></use></svg></span>
+            <div><h2 id="idio-titulo">Idioma</h2>
+              <div class="sub">El idioma de los textos de la interfaz.</div></div>
           </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
+            <div class="ren">
+              <div class="ren-txt"><div class="ren-tit">Idioma de la interfaz</div>
+                <div class="ren-nota">Hoy la aplicación está en español. El selector de idioma y su
+                  traducción son un bloque aparte: acá queda el sitio, sin botones que no hagan nada.</div></div>
+            </div>
+            <div class="modos">
+              <button type="button" class="modo on"><span class="md-visto"></span>
+                <span class="md-nom">Español</span><span class="md-nota">completo</span></button>
+              <button type="button" class="modo" disabled style="opacity:.6;cursor:default"><span class="md-visto"></span>
+                <span class="md-nom">English</span><span class="md-nota">próximamente</span></button>
+              <button type="button" class="modo" disabled style="opacity:.6;cursor:default"><span class="md-visto"></span>
+                <span class="md-nom">Português</span><span class="md-nota">próximamente</span></button>
+              <button type="button" class="modo" disabled style="opacity:.6;cursor:default"><span class="md-visto"></span>
+                <span class="md-nom">Français</span><span class="md-nota">próximamente</span></button>
+            </div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
 
-            <details class="plegable" open>
-              <summary>
-                <svg class="ic"><use href="#ARQ-07"></use></svg>
-                <span class="pl-izq">Respaldo
-                  <span class="pl-cuenta">llevarte todo a otro navegador o a otro computador</span></span>
-                <span class="pl-flecha">▸</span>
-              </summary>
-              <div class="pl-cuerpo">
-                <p class="ayuda">Todo se guarda en este navegador, no en un servidor. Usa estos botones
-                  para respaldar o para llevar tus datos a otro computador.</p>
-                <div class="filtros apilados" style="padding-top:10px">
-                  <button class="btn" id="exportar">Descargar mis datos (.json)</button>
-                  <button class="btn suave" id="importar">Cargar un archivo</button>
-                  <button class="btn suave" id="restablecer"><svg class="ic"><use href="#ACC-07"></use></svg>Restablecer todo</button>
-                </div>
-                <input type="file" id="archivo" accept=".json" style="display:none">
-                <p class="ayuda" id="estado-guardado"></p>
-              </div>
-            </details>
+        <!-- ---------- COLABORAR ---------- -->
+        <div class="aj-panel" id="colab-panel" role="dialog" aria-modal="true" aria-labelledby="colab-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#EST-09"></use></svg></span>
+            <div><h2 id="colab-titulo">Colaborar</h2>
+              <div class="sub">Apoyar el proyecto.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <p class="ayuda">Mimo es <b>gratis y sin anuncios</b>, y se mantiene con el tiempo de quien lo
+              hace. Si te sirve, puedes invitarme un café. Se abre en tu navegador; <b>no se cobra nada
+              dentro de la aplicación</b>.</p>
+            <div style="margin:16px 0">
+              <a class="bmc" href="https://www.buymeacoffee.com/billibu" target="_blank" rel="noopener">
+                <svg class="taza" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="22" height="22">
+                  <path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="#222"/>
+                  <path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17" stroke="#222" stroke-width="1.6"/>
+                  <path d="M8 3.5c-.6.8-.6 1.6 0 2.4M11.5 3c-.6.8-.6 1.6 0 2.4" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+                Invítame un café
+              </a>
+            </div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
 
+        <!-- ---------- RESPALDO (el importante) ---------- -->
+        <div class="aj-panel" id="resp-panel" role="dialog" aria-modal="true" aria-labelledby="resp-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#ARQ-10"></use></svg></span>
+            <div><h2 id="resp-titulo">Respaldo</h2>
+              <div class="sub">Tus datos, a salvo.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <p class="ayuda">Todo se guarda en este navegador, no en un servidor. Usa estos botones
+              para respaldar o para llevar tus datos a otro computador.</p>
+            <div class="filtros apilados" style="padding-top:12px">
+              <button class="btn" id="exportar">Descargar mis datos (.json)</button>
+              <button class="btn suave" id="importar">Cargar un archivo</button>
+            </div>
+            <input type="file" id="archivo" accept=".json" style="display:none">
+            <p class="ayuda" id="estado-guardado"></p>
+
+            <div class="ren" style="margin-top:14px">
+              <div class="ren-txt"><div class="ren-tit">Copia automática en una carpeta</div>
+                <div class="ren-nota">Para que no se pierda si borras la aplicación.</div></div>
+            </div>
             <details class="plegable" id="plegable-respaldo-carpeta" hidden>
-              <summary>
-                <svg class="ic"><use href="#ARQ-07"></use></svg>
-                <span class="pl-izq">Copia automatica en una carpeta
-                  <span class="pl-cuenta">para que no se pierda si borras la aplicacion</span></span>
-                <span class="pl-flecha">▸</span>
-              </summary>
+              <summary><svg class="ic"><use href="#ARQ-02"></use></svg>
+                <span class="pl-izq">Elegir una carpeta
+                  <span class="pl-cuenta">Mimo guarda ahí una copia con cada cambio y conserva las 3 últimas</span></span>
+                <span class="pl-flecha">▸</span></summary>
               <div class="pl-cuerpo">
                 <p class="ayuda">Elige una carpeta de tu computador (por ejemplo, una dentro de
-                  Documentos). Mimo guardara ahi una copia de tus datos con cada cambio y conservara
-                  las 3 ultimas. Asi tu progreso no se pierde aunque desinstales o borres la
-                  aplicacion.</p>
+                  Documentos). Así tu progreso no se pierde aunque desinstales o borres la aplicación.</p>
                 <div class="filtros apilados" style="padding-top:10px">
                   <button class="btn" id="resp-carpeta-elegir">Elegir carpeta&hellip;</button>
                   <button class="btn suave" id="resp-carpeta-ahora" disabled>Guardar copia ahora</button>
@@ -339,13 +377,15 @@
               </div>
             </details>
 
+            <div class="ren" style="margin-top:14px">
+              <div class="ren-txt"><div class="ren-tit">Calendario</div>
+                <div class="ren-nota">Llevar tus eventos a Google o Apple Calendar.</div></div>
+            </div>
             <details class="plegable">
-              <summary>
-                <svg class="ic"><use href="#TIE-28"></use></svg>
-                <span class="pl-izq">Calendario
-                  <span class="pl-cuenta">llevar tus eventos a Google o Apple Calendar</span></span>
-                <span class="pl-flecha">▸</span>
-              </summary>
+              <summary><svg class="ic"><use href="#TIE-28"></use></svg>
+                <span class="pl-izq">Exportar o importar .ics
+                  <span class="pl-cuenta">formato estándar de calendario</span></span>
+                <span class="pl-flecha">▸</span></summary>
               <div class="pl-cuerpo">
                 <p class="ayuda">Exporta tus eventos en formato .ics e impórtalos en Google Calendar o
                   Apple Calendar, o trae a mimo un calendario .ics que ya tengas.</p>
@@ -358,46 +398,124 @@
               </div>
             </details>
 
-          </div>
-        </section>
-
-        <!-- ============ SEMESTRE (ancho completo) ============
-             Las dos tarjetas van lado a lado: antes ya estaban en dos columnas,
-             pero dentro de una caja que las apretaba contra el borde. -->
-        <section class="grupo ancho">
-          <div class="g-cab">
-            <svg class="ic"><use href="#EDI-07"></use></svg>
-            <h2>Semestre</h2>
-            <span class="g-conteo">2 semestres · 5 metas</span>
-          </div>
-          <div class="g-cuerpo">
-            <div class="rejilla" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
-
-              <div>
-                <div class="ren" style="border-top:0">
-                  <div class="ren-txt">
-                    <div class="ren-tit">Semestres guardados</div>
-                    <div class="ren-nota">Cada semestre guarda sus ramos, calendario, notas y horas. Para agregar ramos, anda a Malla.</div>
-                  </div>
-                </div>
-                <div id="lista-semestres"></div>
-              </div>
-
-              <div>
-                <div class="ren" style="border-top:0">
-                  <div class="ren-txt">
-                    <div class="ren-tit">Metas por ramo</div>
-                    <div class="ren-nota">Horas semanales que quieres dedicarle a cada ramo.</div>
-                  </div>
-                </div>
-                <div class="env-tabla"><table class="comp" id="tabla-metas-ramo"></table></div>
-              </div>
-
+            <div class="ren" style="margin-top:14px">
+              <div class="ren-txt"><div class="ren-tit">Volver al principio</div>
+                <div class="ren-nota">Borra todo y deja la aplicación como recién instalada. Pide confirmación.</div></div>
+              <button type="button" class="btn peligro" id="restablecer"><svg class="ic"><use href="#ACC-07"></use></svg>Restablecer todo</button>
             </div>
           </div>
-        </section>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
 
+        <!-- ---------- SEMESTRE ---------- -->
+        <div class="aj-panel" id="sem-panel" role="dialog" aria-modal="true" aria-labelledby="sem-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#EDI-07"></use></svg></span>
+            <div><h2 id="sem-titulo">Semestre</h2>
+              <div class="sub">Los semestres guardados y sus metas.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div class="ren">
+              <div class="ren-txt"><div class="ren-tit">Semestres guardados</div>
+                <div class="ren-nota">Cada semestre guarda sus ramos, calendario, notas y horas. Para agregar ramos, anda a Malla.</div></div>
+            </div>
+            <div id="lista-semestres"></div>
 
-      </div>
+            <div class="ren" style="margin-top:14px">
+              <div class="ren-txt"><div class="ren-tit">Metas por ramo</div>
+                <div class="ren-nota">Horas semanales que quieres dedicarle a cada ramo.</div></div>
+            </div>
+            <div class="env-tabla"><table class="comp" id="tabla-metas-ramo"></table></div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
+
+        <div class="aj-panel" id="sec-calendario-panel" role="dialog" aria-modal="true" aria-labelledby="sec-calendario-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#TIE-27"></use></svg></span>
+            <div><h2 id="sec-calendario-titulo">Calendario</h2><div class="sub">Cómo se muestran las horas y los eventos.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div class="g-ficha">
+            <div class="lin"><svg class="ic"><use href="#TIE-03"></use></svg><div class="txt"><b>Formato de las horas</b> · Cómo se escriben las horas aquí.</div><span class="chip">1h 30m · 1,5 h</span></div>
+            </div>
+            <p class="ayuda" style="margin-top:10px">El <b>.ics</b> (Google o Apple Calendar) está en <b>Respaldo</b>, junto a tus datos.</p>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Entendido</button></div>
+        </div>
+        <div class="aj-panel" id="sec-notas-panel" role="dialog" aria-modal="true" aria-labelledby="sec-notas-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#EDI-04"></use></svg></span>
+            <div><h2 id="sec-notas-titulo">Notas</h2><div class="sub">Tildes y abreviación en los apuntes.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div class="g-ficha">
+            <div class="lin"><svg class="ic"><use href="#EDI-04"></use></svg><div class="txt"><b>Tildes en los títulos</b> · Nombres con o sin acento.</div><span class="chip">Sí</span></div>
+            <div class="lin"><svg class="ic"><use href="#EDI-04"></use></svg><div class="txt"><b>Cómo se abrevian los títulos</b> · Completo, recortado o iniciales.</div><span class="chip">Completo</span></div>
+            </div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Entendido</button></div>
+        </div>
+        <div class="aj-panel" id="sec-tareas-panel" role="dialog" aria-modal="true" aria-labelledby="sec-tareas-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#INT-02"></use></svg></span>
+            <div><h2 id="sec-tareas-titulo">Tareas</h2><div class="sub">Qué se ve en «Por hacer».</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div class="g-ficha">
+            <div class="lin"><svg class="ic"><use href="#INT-02"></use></svg><div class="txt"><b>Mostrar lo ya hecho</b> · Deja a la vista las tareas terminadas.</div><span class="chip">No</span></div>
+            </div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Entendido</button></div>
+        </div>
+        <div class="aj-panel" id="sec-estudio-panel" role="dialog" aria-modal="true" aria-labelledby="sec-estudio-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#EDI-07"></use></svg></span>
+            <div><h2 id="sec-estudio-titulo">Estudio</h2><div class="sub">Metas y pesos.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div class="g-ficha">
+            <div class="lin"><svg class="ic"><use href="#EDI-07"></use></svg><div class="txt"><b>Meta de horas por ramo</b> · Horas semanales objetivo.</div><span class="chip">5,5 h</span></div>
+            <div class="lin"><svg class="ic"><use href="#ACC-03"></use></svg><div class="txt"><b>Nota objetivo y pesos</b> · Cómo se combinan las notas.</div><span class="chip">editar</span></div>
+            </div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Entendido</button></div>
+        </div>
+        <div class="aj-panel" id="sec-tiempo-panel" role="dialog" aria-modal="true" aria-labelledby="sec-tiempo-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#TIE-03"></use></svg></span>
+            <div><h2 id="sec-tiempo-titulo">Tiempo</h2><div class="sub">Cronómetro y temporizador.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div class="g-ficha">
+            <div class="lin"><svg class="ic"><use href="#INT-11"></use></svg><div class="txt"><b>Sonido al terminar</b> · Suena cuando el temporizador llega a cero.</div><span class="chip">Sí</span></div>
+            <div class="lin"><svg class="ic"><use href="#TIE-03"></use></svg><div class="txt"><b>Formato de las horas</b> · También en Calendario.</div><span class="chip">1h 30m</span></div>
+            </div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Entendido</button></div>
+        </div>
+
+        <!-- ---------- MALLA (los ajustes de forma y color de la malla) ---------- -->
+        <div class="aj-panel" id="malla-panel" role="dialog" aria-modal="true" aria-labelledby="malla-panel-titulo">
+          <div class="aj-cab">
+            <span class="t-ic"><svg class="ic"><use href="#INT-18"></use></svg></span>
+            <div><h2 id="malla-panel-titulo">Malla</h2>
+              <div class="sub">Colores, relleno, densidad y detalles de las tarjetas de la malla.</div></div>
+          </div>
+          <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
+          <div class="g-cuerpo">
+            <div id="avanzado"></div>
+          </div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
+        </div>
+
+      </div><!-- /aj-velo -->
+
     </div>
   </section>

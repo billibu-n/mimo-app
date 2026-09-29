@@ -3,10 +3,23 @@
    fuerte que elige el usuario: el fondo suave, el borde y el texto se calculan mezclando. Asi con un
    solo selector por estado queda coherente en los dos temas. */
 const AV_FABRICA = {
-  tema:'clasico', relleno:'suave', densidad:'normal', grosor:'normal', esquinas:'redondeadas',
+  tema:'clasico', tModo:'claro', relleno:'suave', densidad:'normal', grosor:'normal', esquinas:'redondeadas',
   candado:true, creditos:true, barra:'manual',
+  // tema: el ULTIMO tema elegido (el que se ve si tModo no es 'sistema').
+  // tModo: 'claro' / 'oscuro' / 'sistema'. En 'sistema' manda el sistema: claro u oscuro.
+  // temaClaro / temaOscuro: que tema usar en cada caso. Solo se usan en 'sistema'.
+  temaClaro:'clasico', temaOscuro:'negro',
   colores:{aprobado:'#16a34a', curso:'#eab308', disponible:'#2563eb', bloqueado:'#94a3b8'}
 };
+/* El tema EFECTIVO: el que toca pintar ahora mismo. En modo claro/oscuro es el tema elegido; en
+   'sistema' es el claro o el oscuro segun lo que diga el sistema en este momento. */
+function temaEfectivo(){
+  const a = avVista();
+  if (a.tModo === 'claro' || a.tModo === 'oscuro') return a.tema;
+  // modo 'sistema' (o desconocido): sigue al sistema.
+  const oscuroSis = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  return oscuroSis ? (a.temaOscuro || TEMA_OSCURO_POR_DEFECTO) : (a.temaClaro || TEMA_CLARO_POR_DEFECTO);
+}
 /* Los temas que existen, en el orden en que salen en Ajustes.
 
    PARA AGREGAR UN TEMA HACEN FALTA CINCO COSAS, no dos. Tres de ellas no dan error: el tema
@@ -22,18 +35,29 @@ const AV_FABRICA = {
         <button class="tema" data-val="<nombre>"> en index.html y html/ajustes.html.
    La clase del <body> SI se recorre desde esta lista: eso ya no se puede olvidar. */
 
-/* Esto es una limitacion de fondo, no un olvido de quien anadio el tema: hay cuatro listas
-   paralelas del mismo concepto. Candidato a unificar en la rama de normalizacion. */
-const TEMAS = [['clasico', 'Clásico'], ['negro', 'Negro'],
-               ['medianoche', 'Medianoche'], ['deepsea', 'DeepSea'], ['bosque', 'Bosque'],
-               ['sepia', 'Sepia'], ['vino', 'Vino'], ['pinky', 'Pinky'], ['alto-contraste', 'Alto contraste']];
+/* La NATURALEZA de cada tema (claro u oscuro) es un DATO, no una deduccion. Antes estaba escrita a
+   mano DOS VECES (en aplicarAvanzado y en renderAvanzado) y un tema claro que faltara ahi se trataba
+   como oscuro, con sus textos ilegibles y SIN error. Ahora vive aqui, una sola vez. */
+const TEMAS = [['clasico', 'Clásico', 'claro'], ['negro', 'Negro', 'oscuro'],
+               ['medianoche', 'Medianoche', 'oscuro'], ['deepsea', 'DeepSea', 'oscuro'],
+               ['bosque', 'Bosque', 'claro'], ['sepia', 'Sepia', 'claro'],
+               ['vino', 'Vino', 'oscuro'], ['pinky', 'Pinky', 'claro'],
+               ['alto-contraste', 'Alto contraste', 'oscuro']];
 const NOMBRES_TEMA = TEMAS.map(t => t[0]);
+const NATURALEZA_TEMA = {}; TEMAS.forEach(t => NATURALEZA_TEMA[t[0]] = t[2]);
+function esClaro(nombre){ return NATURALEZA_TEMA[nombre] === 'claro'; }
+const TEMAS_CLAROS = TEMAS.filter(t => t[2] === 'claro').map(t => t[0]);
+const TEMAS_OSCUROS = TEMAS.filter(t => t[2] === 'oscuro').map(t => t[0]);
+// El tema CLARO y el OSCURO con los que trabaja el modo "segun el sistema". Se recuerdan por
+// separado para que al volver a "segun el sistema" no se pierda cual elige en cada caso.
+const TEMA_CLARO_POR_DEFECTO = 'clasico';
+const TEMA_OSCURO_POR_DEFECTO = 'negro';
 
 // El fondo de cada tema. El resto de los colores se calculan mezclando contra este.
 const FONDO_TEMA = {clasico:'#ffffff', negro:'#1e1e1e', medianoche:'#131314',
                     deepsea:'#071a2b', bosque:'#eef4ee', sepia:'#f4ecd8',
                     vino:'#150a0c', pinky:'#ffffff', 'alto-contraste':'#000000'};
-function fondoTema(a){ return FONDO_TEMA[a.tema] || '#ffffff'; }
+function fondoTema(nombre){ return FONDO_TEMA[nombre] || '#ffffff'; }
 const AV_DENSIDAD = {
   compacta:{pad:'4px 7px',  fuente:'.72rem', mgap:'26px', cgap:'6px'},
   normal:  {pad:'7px 9px',  fuente:'.78rem', mgap:'40px', cgap:'8px'},
@@ -57,7 +81,8 @@ function abrirBorrador(){
   if (!avBorrador) avBorrador = JSON.parse(JSON.stringify(av()));
   if (!coloresBorrador) coloresBorrador = JSON.parse(JSON.stringify(est().colores || {}));
 }
-const AV_ETIQUETAS = {tema:'Tema', relleno:'Relleno de los estados', densidad:'Densidad',
+const AV_ETIQUETAS = {tema:'Tema', tModo:'Modo de color', temaClaro:'Tema claro', temaOscuro:'Tema oscuro',
+                      relleno:'Relleno de los estados', densidad:'Densidad',
                       grosor:'Grosor de las líneas', esquinas:'Esquinas',
                       candado:'Candado en la malla', creditos:'Créditos en la malla',
                       // barra/barraPos/barraEstilo faltaban aqui. AV_ETIQUETAS es la lista que
@@ -144,9 +169,9 @@ function aContraste(c1, c2){
   return (Math.max(l1,l2) + .05) / (Math.min(l1,l2) + .05);
 }
 function aplicarAvanzado(){
-  const a = avVista(), d = AV_DENSIDAD[a.densidad] || AV_DENSIDAD.normal;
-  const oscuro = (a.tema !== 'clasico' && a.tema !== 'bosque' && a.tema !== 'sepia' && a.tema !== 'pinky');   // Clasico, Bosque, Sepia y Pinky son claros
-  const base = fondoTema(a);
+  const a = avVista(), efecto = temaEfectivo(), d = AV_DENSIDAD[a.densidad] || AV_DENSIDAD.normal;
+  const oscuro = !esClaro(efecto);   // la naturaleza sale de TEMAS, no de una lista copiada aqui
+  const base = fondoTema(efecto);
   const suave = (c, t) => aMezcla(c, base, t);
   const vars = ['--nodo-pad:' + d.pad, '--nodo-fuente:' + d.fuente, '--malla-gap:' + d.mgap,
                 '--col-gap:' + d.cgap, '--linea:' + (AV_GROSOR[a.grosor] || 1.6),
@@ -166,7 +191,7 @@ function aplicarAvanzado(){
     // verdad se lee (3.0 es el piso de la WCAG para texto grande); si no, va oscuro.
     vars.push(v + '-sol:' + (aContraste(c, '#ffffff') >= 3.0 ? '#ffffff' : '#101828'));
   });
-  NOMBRES_TEMA.forEach(n => document.body.classList.toggle('tema-' + n, a.tema === n));
+  NOMBRES_TEMA.forEach(n => document.body.classList.toggle('tema-' + n, efecto === n));
   document.body.classList.toggle('relleno-solido', a.relleno === 'solido');
   // El modo de la barra lateral lo aplica el motor de la barra (comun/08-barra.js),
   // que vive en window.mimoBarra. Se le pasa el valor elegido en Ajustes.
@@ -190,8 +215,17 @@ function aplicarAvanzado(){
   const hoja = document.getElementById('av-vars');
   if (hoja) {
     hoja.textContent = ':root{' + vars.join(';') + '}' +
-      (colorTocado ? 'body.tema-' + a.tema + '{' + deColor.join(';') + '}' : '');
+      (colorTocado ? 'body.tema-' + efecto + '{' + deColor.join(';') + '}' : '');
   }
+}
+/* "Segun el sistema": si cambia el sistema (de claro a oscuro o al reves), la app tiene que
+   repintarse sola. matchMedia es la via: no hay otra forma de enterarse sin sondear. */
+if (window.matchMedia) {
+  try {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+      if (avVista().tModo === 'sistema') { aplicarAvanzado(); renderTodo(); }
+    });
+  } catch (e) { /* navegadores viejos: sin addEventListener en matchMedia, no pasa nada grave */ }
 }
 function avSeg(clave, opciones){
   const a = avVista();
@@ -200,12 +234,12 @@ function avSeg(clave, opciones){
     '</button>').join('') + '</div>';
 }
 function renderAvanzado(){
-  const a = avVista();
-  const oscuro = (a.tema !== 'clasico' && a.tema !== 'bosque' && a.tema !== 'sepia' && a.tema !== 'pinky');   // mismo criterio que aplicarAvanzado
+  const a = avVista(), efecto = temaEfectivo();
+  const oscuro = !esClaro(efecto);            // la misma fuente unica que aplicarAvanzado
   const muestra = (estado) => {
     const c = a.colores[estado];
-    const fondo = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(a), .86);
-    const borde = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(a), .45);
+    const fondo = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .86);
+    const borde = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .45);
     const texto = a.relleno === 'solido'
       ? (aLuminancia(c) > .5 ? '#101828' : '#ffffff')
       : (oscuro ? aMezcla(c, '#ffffff', .58) : aMezcla(c, '#000000', .5));
@@ -214,7 +248,7 @@ function renderAvanzado(){
   };
   const contra = (estado) => {
     const c = a.colores[estado];
-    const fondo = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(a), .86);
+    const fondo = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .86);
     const texto = a.relleno === 'solido'
       ? (aLuminancia(c) > .5 ? '#101828' : '#ffffff')
       : (oscuro ? aMezcla(c, '#ffffff', .58) : aMezcla(c, '#000000', .5));
