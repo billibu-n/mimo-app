@@ -1,8 +1,8 @@
 # Mimo Academics
 
-![Version](https://img.shields.io/badge/version-1.0.0%2Ddesktop-16a34a)
-![Platform](https://img.shields.io/badge/desktop-Linux%20%7C%20Windows-2563eb)
-![License](https://img.shields.io/badge/license-MIT-3da639)
+[![Version](https://img.shields.io/github/v/release/billibu-n/mimo-app?label=version&color=16a34a)](https://github.com/billibu-n/mimo-app/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows-2563eb)](#installation)
+[![License](https://img.shields.io/badge/license-MIT-3da639)](LICENSE)
 
 **A university semester panel that works offline.** It brings your course map, calendar, grades,
 study time and timer into one application, and **it does not send your data anywhere**: it stays
