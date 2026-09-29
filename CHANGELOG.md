@@ -11,6 +11,12 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ### Added
 
+- **Eight languages listed in *Language***, each written in its own language and with its flag:
+  Español · English · Deutsch · Français · Italiano · Português · 简体中文 · 繁體中文. French,
+  Italian and Portuguese share the row of the Romance languages; the two Chinese close the grid,
+  so it is a clean four-by-two. **Only Spanish is complete for now**: the other seven are shown
+  switched off, marked *"en preparación"* — a button that translates nothing would be a lie. The
+  flags are drawn inside the app (the project has no country flags in its icon set).
 - **Keyboard shortcuts** to move between sections, in *Navigation*. Seven come from the factory
   (`Ctrl + 1` … `Ctrl + 7`, in the order of the bar) and can be **changed or turned off**. The
   list lives inside a **collapsible entry** — "Customise the shortcuts" — so the window does not
