@@ -11,6 +11,12 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ### Added
 
+- **Keyboard shortcuts** to move between sections, in *Navigation*. Seven come from the factory
+  (`Ctrl + 1` … `Ctrl + 7`, in the order of the bar) and can be **changed or turned off**. The
+  list lives inside a **collapsible entry** — "Customise the shortcuts" — so the window does not
+  grow unless you want to go through it. While a text field has the focus, or a window is open,
+  the shortcuts stay out of the way. A combination already in use is refused with a warning, and
+  so are the ones the browser or the system already take (`Ctrl + T`, `Ctrl + W`, `F5`…).
 - **Font size**, in *General*: small / normal / large / very large. It is **global** and scales
   the whole app — letters, spacing, blocks and the header — not just the text. It was checked on
   the app engine itself (WebKitGTK), where the sidebar goes from 155 to 202 px: the text alone
@@ -26,6 +32,10 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
   on the right, always starting at the same point, so more options never push into the title. It
   is alignment, not a dividing line. Applied to **all** the windows, so the view does not jump
   from one to another.
+- **The Navigation texts were cleaned up.** The description now says *"Ubicación y navegación de
+  las secciones"*, and no line explains a choice by referring to an old version ("like 1.0.0") or
+  to a symbol with no context (the ☰). Whoever reads them has not lived through the project's
+  history.
 - **Settings is a set of buttons.** Each entry is a small card — icon, bold title and a single
   line underneath, next to the icon — and opens its own window, following the approved sketch.
   The backup entry is highlighted the same way (2-px border), with the same shape.

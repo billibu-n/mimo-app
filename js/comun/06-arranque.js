@@ -347,6 +347,60 @@ document.getElementById('banner-cerrar').onclick = () =>
 let tResize = null;
 window.addEventListener('resize', () => { clearTimeout(tResize); tResize = setTimeout(renderPuntos, 200); });
 
+/* ============================================================================
+   ATAJOS DE SECCION (Navegación)
+   Ctrl+1..7 viajan entre las siete secciones. Los valores los pone el usuario en la ventana de
+   Navegación; aquí solo se LEE la configuración y se actúa. El mismo motor sirve para la lista
+   que se pinta en esa ventana (window.mimoAtajos), y así la captura de una tecla nueva valida
+   con las MISMAS reglas que el motor.
+   ============================================================================ */
+var ATAJOS_FIJOS = {'ctrl+t':1, 'ctrl+w':1, 'ctrl+n':1, 'ctrl+shift+t':1, 'ctrl+shift+w':1, 'f5':1,
+                    'f11':1, 'f12':1, 'ctrl+r':1, 'ctrl+p':1, 'ctrl+s':1, 'ctrl+o':1, 'ctrl+d':1};
+function normalizarTecla(ev){
+  var partes = [];
+  if (ev.ctrlKey) partes.push('ctrl');
+  if (ev.altKey) partes.push('alt');
+  if (ev.shiftKey) partes.push('shift');
+  var k = ev.key;
+  if (!k || ['Control','Alt','Shift','Meta','CapsLock','Dead'].indexOf(k) >= 0) return '';
+  if (k === ' ') k = 'espacio';
+  if (k.length === 1) { if (!/[a-z0-9]/i.test(k)) return ''; k = k.toLowerCase(); }
+  partes.push(k);
+  return partes.join('+');
+}
+function atajosVigentes(){
+  try { return (typeof av === 'function' && av().atajos) ? av().atajos : {}; } catch (e) { return {}; }
+}
+function atajosEncendidos(){
+  try { return (typeof av === 'function') ? (av().atajosOn !== false) : true; } catch (e) { return true; }
+}
+/* Que seccion, si la hay, corresponde a esta combinacion. */
+function seccionParaTecla(comb){
+  if (!comb) return null;
+  const map = atajosVigentes();
+  for (const sec in map) if (map[sec] === comb) return sec;
+  return null;
+}
+function enlazarAtajosSeccion(){
+  document.addEventListener('keydown', function (ev) {
+    if (!atajosEncendidos()) return;
+    // 1) no molestar mientras se escribe en un campo (ni con Ctrl: Ctrl+C/V/A son de copiar/pegar)
+    const t = ev.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+    // 2) no pisar una ventana abierta (sus propias teclas mandan)
+    if (document.querySelector('.aj-velo.on')) return;
+    const comb = normalizarTecla(ev);
+    if (!comb) return;
+    const sec = seccionParaTecla(comb);
+    if (!sec || SECCIONES.indexOf(sec) === -1) return;
+    ev.preventDefault();
+    mostrarSeccion(sec, true);
+  });
+}
+// La ventana de Navegación (08-g2-puente.js) y el motor comparten estas funciones.
+window.mimoAtajos = { normalizar: normalizarTecla, seccion: seccionParaTecla, vigentes: atajosVigentes,
+                      encendidos: atajosEncendidos, fijos: ATAJOS_FIJOS, fabrica: AV_ATAJOS_FABRICA };
+
 /* ---------------------------------------------------------------- barras extraibles
    El <details> no anima el cierre: al quitarle 'open' el navegador esconde el contenido en el mismo
    cuadro, y ninguna transicion del hijo alcanza a verse. Para que abrir y cerrar se vean igual hay
@@ -406,3 +460,4 @@ inicializarBarras();             // y las barras extraibles quedan animando en l
 enlazarCalendario();             // los controles Mes/Año/Semestre y la navegación del calendario
 renderCalendario();              // pinta la vista de calendario activa (por defecto, el mes)
 conectarServidor();              // y si esto viene del servidor local, manda lo suyo al responder
+enlazarAtajosSeccion();          // Ctrl+1..7 para viajar entre secciones (personalizables en Navegación)

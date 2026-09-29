@@ -33,7 +33,7 @@
         </section>
 
         <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="nav-panel">
-          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#INT-25"></use></svg></span><div class="g-txt"><h2 class="g-tit">Navegación</h2><div class="g-des">La barra de secciones, como la dejes.</div></div></div>
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#INT-25"></use></svg></span><div class="g-txt"><h2 class="g-tit">Navegación</h2><div class="g-des">Ubicación y navegación de las secciones.</div></div></div>
         </section>
 
         <section class="grupo" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="idio-panel">
@@ -221,26 +221,26 @@
           <div class="aj-cab">
             <span class="t-ic"><svg class="ic"><use href="#INT-25"></use></svg></span>
             <div><h2 id="nav-titulo">Navegación</h2>
-              <div class="sub">La barra de secciones: modo, posición y estilo.</div></div>
+              <div class="sub">Ubicación y navegación de las secciones</div></div>
           </div>
           <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
             <div class="ren">
               <div class="ren-txt"><div class="ren-tit">Barra de secciones</div>
-                <div class="ren-nota">Dónde va el menú de secciones y cómo se abre.</div></div>
+                <div class="ren-nota">Dónde aparece el menú de secciones y cómo se abre.</div></div>
             </div>
             <div class="modos">
               <button type="button" class="modo on" data-barra="manual"><span class="md-visto"></span>
-                <span class="md-nom">Manual</span><span class="md-nota">se abre con el botón ☰</span></button>
+                <span class="md-nom">Manual</span><span class="md-nota">se abre al pulsar el botón del menú</span></button>
               <button type="button" class="modo" data-barra="automatico"><span class="md-visto"></span>
-                <span class="md-nom">Automática</span><span class="md-nota">sale al acercar el cursor al borde</span></button>
+                <span class="md-nom">Automática</span><span class="md-nota">aparece al acercar el cursor al borde</span></button>
               <button type="button" class="modo" data-barra="fijo"><span class="md-visto"></span>
-                <span class="md-nom">Fija</span><span class="md-nota">siempre visible</span></button>
+                <span class="md-nom">Fija</span><span class="md-nota">queda siempre a la vista</span></button>
             </div>
 
             <div class="ren" style="margin-top:12px">
               <div class="ren-txt"><div class="ren-tit">Posición del menú</div>
-                <div class="ren-nota">Dónde colocas la barra de secciones.</div></div>
+                <div class="ren-nota">En qué parte de la pantalla se coloca.</div></div>
             </div>
             <div class="modos">
               <button type="button" class="modo on" data-pos="izquierda"><span class="md-visto"></span>
@@ -248,7 +248,7 @@
               <button type="button" class="modo" data-pos="derecha"><span class="md-visto"></span>
                 <span class="md-nom">Derecha</span><span class="md-nota">columna a la derecha</span></button>
               <button type="button" class="modo" data-pos="arriba"><span class="md-visto"></span>
-                <span class="md-nom">Arriba</span><span class="md-nota">barra horizontal, como la 1.0.0</span></button>
+                <span class="md-nom">Arriba</span><span class="md-nota">franja horizontal, en la parte de arriba</span></button>
             </div>
 
             <div class="ren" style="margin-top:12px">
@@ -259,17 +259,41 @@
               <button type="button" class="modo on" data-estilo="clasica"><span class="md-visto"></span>
                 <span class="md-nom">Clásica</span><span class="md-nota">el fondo del tema</span></button>
               <button type="button" class="modo" data-estilo="compacta"><span class="md-visto"></span>
-                <span class="md-nom">Compacta</span><span class="md-nota">más pequeña</span></button>
+                <span class="md-nom">Compacta</span><span class="md-nota">botones más pequeños</span></button>
               <button type="button" class="modo" data-estilo="pastillas"><span class="md-visto"></span>
-                <span class="md-nom">Pastillas</span><span class="md-nota">redondeada, resalta la activa</span></button>
+                <span class="md-nom">Pastillas</span><span class="md-nota">redondeados; resalta el activo</span></button>
             </div>
 
             <div class="ren" style="margin-top:12px">
               <div class="ren-txt"><div class="ren-tit">Recordar cómo la dejé</div>
-                <div class="ren-nota">Al volver a abrir, la barra aparece como la dejaste.</div></div>
+                <div class="ren-nota">Al volver a abrir, el menú queda como lo dejaste.</div></div>
               <button type="button" class="pastilla ren-ctl" id="aj-recordar-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
             </div>
             <div class="oculto-para-el-motor"><input type="checkbox" id="aj-recordar" checked></div>
+
+            <!-- ATAJOS DE TECLADO: viajar entre secciones. Si/No + lista PLEGABLE (si no, la
+                 ventana se haria enorme). La lista se dibuja desde AV_ATAJOS_FABRICA en el puente. -->
+            <div class="ren" style="margin-top:16px; border-top:0">
+              <div class="ren-txt"><div class="ren-tit">Atajos de teclado</div>
+                <div class="ren-nota">Vienen siete de fábrica; puedes cambiarlos o apagarlos.</div></div>
+              <div class="ren-ctl filtros" id="atajos-on">
+                <button type="button" class="mini" data-atajos-on="si">Sí</button>
+                <button type="button" class="mini" data-atajos-on="no">No</button>
+              </div>
+            </div>
+            <details class="barra-extraible" id="nav-atajos">
+              <summary><span class="izq">Personalizar los atajos</span><span class="flecha">&#9654;</span></summary>
+              <div class="cuerpo">
+                <div class="atajo-cab"><span>Sección</span><span>Tecla</span></div>
+                <div id="nav-atajos-lista"></div>
+                <div class="atajo-pie">
+                  <span class="atajo-hint">Pulsa una tecla para cambiarla.</span>
+                  <button type="button" class="mini" id="nav-atajos-reset">Restablecer los de fábrica</button>
+                </div>
+                <p class="atajo-hint">Estos no se cambian: <span class="tecla">Enter</span> confirmar ·
+                   <span class="tecla">Esc</span> cerrar.</p>
+              </div>
+            </details>
           </div>
           <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
         </div>

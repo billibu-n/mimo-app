@@ -399,6 +399,110 @@
       .observe(cajaAct, { childList: true, characterData: true, subtree: true });
   }
 
+  /* ---- ATAJOS DE TECLADO (Navegación) -------------------------------------
+     La lista se dibuja desde AV_ATAJOS_FABRICA (la fuente), y cada fila lleva el nombre de la
+     seccion y un boton con su tecla. El motor de verdad vive en 06-arranque.js (window.mimoAtajos);
+     aqui solo se pinta y se guarda lo que el usuario elige. */
+  const NOMBRE_SECCION = {calendario:'Calendario', estudio:'Estudio', malla:'Malla', notas:'Notas',
+                          tiempo:'Tiempo', tareas:'Tareas', ajustes:'Ajustes'};
+  function etiquetaTecla(comb){
+    if (!comb) return '—';
+    return comb.split('+').map(function (p) {
+      if (p === 'ctrl') return 'Ctrl';
+      if (p === 'alt') return 'Alt';
+      if (p === 'shift') return 'Mayús';
+      if (p === 'espacio') return 'Espacio';
+      return p.length === 1 ? p.toUpperCase() : p.charAt(0).toUpperCase() + p.slice(1);
+    }).join(' + ');
+  }
+  function atajosDeVista(){
+    try { if (window.mimoAtajos) return window.mimoAtajos.vigentes(); } catch (e) {}
+    return {};
+  }
+  /* Guarda al instante, como los demas apartados de esta ventana (fuente, titulos, formatos). */
+  function guardarAtajos(){
+    if (!E.ajustes) E.ajustes = {};
+    if (!E.ajustes.av) E.ajustes.av = {};
+    if (typeof guardar === 'function') guardar();
+  }
+  function pintarAtajos(){
+    const cont = document.getElementById('nav-atajos-lista');
+    if (!cont) return;
+    const vig = atajosDeVista();
+    const orden = (window.mimoAtajos && window.mimoAtajos.fabrica) ? Object.keys(window.mimoAtajos.fabrica) : Object.keys(NOMBRE_SECCION);
+    cont.innerHTML = orden.map(function (sec) {
+      return '<div class="atajo-fila"><span class="a-nom">' + (NOMBRE_SECCION[sec] || sec) + '</span>' +
+             '<button type="button" class="tecla" data-atajo="' + sec + '">' + etiquetaTecla(vig[sec]) + '</button></div>';
+    }).join('');
+    cont.querySelectorAll('[data-atajo]').forEach(function (b) {
+      b.onclick = function () { capturarTecla(b, b.dataset.atajo); };
+    });
+  }
+  /* Apagado del apartado: se marca la cara y se guarda. */
+  function pintarAtajosOn(){
+    let enc = true;
+    try { if (window.mimoAtajos) enc = window.mimoAtajos.encendidos(); } catch (e) {}
+    document.querySelectorAll('#p-ajustes [data-atajos-on]').forEach(function (b) {
+      b.classList.toggle('on', (b.dataset.atajosOn === 'si') === !!enc);
+    });
+  }
+  /* Captura la proxima combinacion. Las reglas son las MISMAS que las del motor (mimoAtajos). */
+  function capturarTecla(boton, sec){
+    const antes = boton.textContent;
+    boton.classList.add('capturando');
+    boton.textContent = 'Pulsa…';
+    function terminar(){ document.removeEventListener('keydown', alPulsar, true); boton.classList.remove('capturando'); }
+    function alPulsar(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      if (ev.key === 'Escape') { terminar(); boton.textContent = antes; return; }
+      const comb = window.mimoAtajos ? window.mimoAtajos.normalizar(ev) : '';
+      if (!comb) return;                                  // solo modificadores: sigue esperando
+      if (window.mimoAtajos && window.mimoAtajos.fijos[comb]) {
+        terminar();
+        if (typeof avisar === 'function') avisar('Esa combinación la usa el navegador (Ctrl + T, Ctrl + W…). Elige otra.');
+        boton.textContent = antes; return;
+      }
+      const mapa = atajosDeVista();
+      for (const otra in mapa) {
+        if (otra !== sec && mapa[otra] === comb) {
+          terminar();
+          if (typeof avisar === 'function') avisar('Esa combinación ya la tiene «' + (NOMBRE_SECCION[otra] || otra) + '». Elige otra.');
+          boton.textContent = antes; return;
+        }
+      }
+      E.ajustes.av.atajos[sec] = comb;
+      guardarAtajos();
+      terminar();
+      pintarAtajos();
+    }
+    document.addEventListener('keydown', alPulsar, true);
+  }
+  function montarAtajos(){
+    const lista = document.getElementById('nav-atajos-lista');
+    if (!lista) return;
+    pintarAtajos();
+    pintarAtajosOn();
+    document.querySelectorAll('#p-ajustes [data-atajos-on]').forEach(function (b) {
+      b.onclick = function () {
+        if (!E.ajustes) E.ajustes = {};
+        if (!E.ajustes.av) E.ajustes.av = {};
+        E.ajustes.av.atajosOn = (b.dataset.atajosOn === 'si');
+        guardarAtajos();
+        pintarAtajosOn();
+      };
+    });
+    const reset = document.getElementById('nav-atajos-reset');
+    if (reset) reset.onclick = function () {
+      if (!E.ajustes) E.ajustes = {};
+      if (!E.ajustes.av) E.ajustes.av = {};
+      const fab = (window.mimoAtajos && window.mimoAtajos.fabrica) || {};
+      E.ajustes.av.atajos = Object.assign({}, fab);
+      guardarAtajos();
+      pintarAtajos();
+    };
+  }
+
   sincronizarTodo();
   sincronizarVersion();
+  montarAtajos();
 })();

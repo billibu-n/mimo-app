@@ -2,9 +2,14 @@
    Todo lo de esta parte es aspecto: no cambia ni un dato. Los colores de estado se derivan del color
    fuerte que elige el usuario: el fondo suave, el borde y el texto se calculan mezclando. Asi con un
    solo selector por estado queda coherente en los dos temas. */
+/* Los atajos de fabrica: viajar entre las siete secciones, en el orden de la barra. Van aparte
+   para poder volver a ellos ("Restablecer los de fabrica") sin repetir la lista. */
+const AV_ATAJOS_FABRICA = {calendario:'ctrl+1', estudio:'ctrl+2', malla:'ctrl+3', notas:'ctrl+4',
+                           tiempo:'ctrl+5', tareas:'ctrl+6', ajustes:'ctrl+7'};
 const AV_FABRICA = {
   tema:'clasico', tModo:'claro', relleno:'suave', densidad:'normal', grosor:'normal', esquinas:'redondeadas',
   candado:true, creditos:true, barra:'manual', fuente:1,
+  atajosOn:true, atajos:Object.assign({}, AV_ATAJOS_FABRICA),
   // tema: el ULTIMO tema elegido (el que se ve si tModo no es 'sistema').
   // tModo: 'claro' / 'oscuro' / 'sistema'. En 'sistema' manda el sistema: claro u oscuro.
   // temaClaro / temaOscuro: que tema usar en cada caso. Solo se usan en 'sistema'.
@@ -73,6 +78,9 @@ function av(){
   // Quien haya guardado el tema con el nombre viejo conserva su eleccion.
   if (a.tema === 'gemini') a.tema = 'medianoche';
   a.colores = Object.assign({}, AV_FABRICA.colores, a.colores || {});
+  // Los atajos tambien se rellenan: una configuracion vieja no trae la lista, y una seccion nueva
+  // (si algun dia se anade) recibe su tecla de fabrica sin dejar huecos.
+  a.atajos = Object.assign({}, AV_ATAJOS_FABRICA, a.atajos || {});
   return a;
 }
 /* Los ajustes que se ven en pantalla: el borrador si hay uno abierto, y si no lo guardado. */
