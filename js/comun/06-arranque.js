@@ -150,6 +150,13 @@ document.getElementById('malla-reordenar').onclick = modalReordenarMalla;
 document.getElementById('malla-exportar').onclick = exportarMalla;
 document.getElementById('malla-simular').onclick = modalSimular;
 document.getElementById('malla-importar').onclick = modalImportarMalla;
+// Si se cambia de idioma con la ventana de importar abierta, se rehace su contenido.
+document.addEventListener('mimo:idioma', () => {
+  const caja = document.getElementById('modal-caja');
+  if (!caja || !caja.classList.contains('imp-caja')) return;
+  const m = document.getElementById('modal');
+  if (m && m.classList.contains('on')) modalImportarMalla();
+});
 document.getElementById('cl-nuevo').onclick = nuevaTarea;
 document.getElementById('btn-nuevo-sem').onclick = modalNuevoSemestre;
 document.getElementById('btn-edit-sem').onclick = modalEditarSemestre;

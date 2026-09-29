@@ -55,6 +55,23 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ### Changed
 
+- **The *Import* window (Plan) now says only what it has to say, and looks like the rest.** It used
+  to be a wall of text — four paragraphs plus a box with the CSV and JSON examples — and it showed
+  the browser's own file button. Now it carries the **same face as the Settings windows**: an icon
+  and a short title (*Import*), the formats underneath (*JSON, CSV, TSV or PDF*), an **X in the top
+  right corner** (**replacing the "Cerrar" text button**) and a footer with *Cancel* / *Import*. The
+  four paragraphs and the example box are gone. Measured in the real application: the window went
+  from **555 px to 255 px** tall. The file reader is untouched: same ids, same PDF/JSON/CSV paths.
+- **Picking a file no longer shows the browser's own button.** The `<input type="file">` carries a
+  button and a text that belong to the **browser**: they cannot be styled or translated (the browser
+  writes them in *its* language, not the one the app is set to). It is now hidden — invisible but
+  alive — and a **button of the house** ("Elegir archivo", with its icon) opens it, followed by the
+  chosen file's name. It is the **same pattern the Backup window in Settings already used**; the Plan
+  import was the only place still showing the native control.
+- **The Import window is translated.** Its texts no longer live hard-coded in the code: they come
+  from the language dictionaries (`malla.importar.*`, `boton.*`), like the rest of the interface, so
+  the window redraws itself if the language is changed while it is open.
+
 - **"General" is now its own set of apartados.** One line per apartado with the control on the
   right: *Abreviación de texto* (with the **recorte example** underneath — a fixed box that does
   not change, while the name fits inside it), *Tamaño de la fuente*, *Formato de las horas* and

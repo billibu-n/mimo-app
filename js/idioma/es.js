@@ -61,5 +61,19 @@ registrarIdioma('es', {
   'colab.r4': 'A mantener el proyecto: el tiempo de quien lo hace y lo que cuesta tenerlo en línea.',
   'colab.p5': '¿Puedo ayudar de otra forma?',
   'colab.r5': 'Sí: las tres de arriba ayudan tanto o más que el café.',
-  'colab.fallo.cuerpo': 'Qué pasó:\n\n\nQué esperabas que pasara:\n\n\nCómo reproducirlo:\n1. \n2. \n3. \n\n— Datos del equipo (se rellenan solos) —\nVersión de Mimo: {version}\nNavegador y sistema: {navegador} · {sistema}\n\nSi añades capturas, tapa antes tus datos.'
+  'colab.fallo.cuerpo': 'Qué pasó:\n\n\nQué esperabas que pasara:\n\n\nCómo reproducirlo:\n1. \n2. \n3. \n\n— Datos del equipo (se rellenan solos) —\nVersión de Mimo: {version}\nNavegador y sistema: {navegador} · {sistema}\n\nSi añades capturas, tapa antes tus datos.',
+
+  // --- la ventana de Importar (Malla) ---
+  'malla.importar.titulo': 'Importar',
+  'malla.importar.sub': 'JSON, CSV, TSV o PDF',
+  'malla.importar.campo': 'Archivo',
+  'malla.importar.elegir': 'Elegir archivo',
+  'malla.importar.ninguno': 'Ningún archivo elegido',
+  'malla.importar.ayuda': 'Un PDF de tu malla, o un archivo JSON, CSV o TSV.',
+  'malla.importar.pegar': 'Copia aquí los ramos que veas, una línea por ramo',
+
+  // --- botones de las ventanas ---
+  'boton.cancelar': 'Cancelar',
+  'boton.importar': 'Importar',
+  'boton.cerrar': 'Cerrar'
 });

@@ -58,5 +58,19 @@ registrarIdioma('en', {
   'colab.r4': 'To keeping the project alive: the time of whoever makes it and what it costs to keep it online.',
   'colab.p5': 'Can I help in another way?',
   'colab.r5': 'Yes: the three above help as much or more than the coffee.',
-  'colab.fallo.cuerpo': 'What happened:\n\n\nWhat you expected to happen:\n\n\nHow to reproduce it:\n1. \n2. \n3. \n\n— Device details (filled in for you) —\nMimo version: {version}\nBrowser and system: {navegador} · {sistema}\n\nIf you add screenshots, cover your own data first.'
+  'colab.fallo.cuerpo': 'What happened:\n\n\nWhat you expected to happen:\n\n\nHow to reproduce it:\n1. \n2. \n3. \n\n— Device details (filled in for you) —\nMimo version: {version}\nBrowser and system: {navegador} · {sistema}\n\nIf you add screenshots, cover your own data first.',
+
+  // --- the Import window (Plan) ---
+  'malla.importar.titulo': 'Import',
+  'malla.importar.sub': 'JSON, CSV, TSV or PDF',
+  'malla.importar.campo': 'File',
+  'malla.importar.elegir': 'Choose file',
+  'malla.importar.ninguno': 'No file chosen',
+  'malla.importar.ayuda': 'A PDF of your plan, or a JSON, CSV or TSV file.',
+  'malla.importar.pegar': 'Paste the courses you see here, one per line',
+
+  // --- window buttons ---
+  'boton.cancelar': 'Cancel',
+  'boton.importar': 'Import',
+  'boton.cerrar': 'Close'
 });

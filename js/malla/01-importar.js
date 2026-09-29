@@ -299,48 +299,45 @@ function renderDeshacer(){
   if (b) b.onclick = deshacerImportacion;
 }
 function modalImportarMalla(){
-  document.getElementById('modal-caja').innerHTML =
-    '<h2>Traer una malla desde un archivo</h2>' +
-    '<button class="cerrar" id="cerrar">Cerrar</button>' +
-    '<p class="ayuda"><b>Archivo, PDF o foto.</b> Puedes cargar el <b>PDF</b> de tu malla (el '+
-      'que publica tu universidad), una <b>foto</b> de ella, o un <b>CSV/TSV/JSON</b> con una ' +
-      'linea por ramo.</p>' +
-    '<p class="ayuda">Con el <b>PDF</b>, el programa <b>propone</b> una malla leyendo donde esta ' +
-      'cada texto: codigos, nombres, creditos y semestre. No siempre acierta, y por eso lo que ' +
-      'lee te lo muestra para que lo revises y lo corrijas en el editor. Corregir es mucho mas ' +
-      'rapido que escribir todo de nuevo.</p>' +
-    '<p class="ayuda">Con una <b>foto</b> no adivino nada: te la muestro al lado para que copies ' +
-      'lo que ves. Inventar numeros a partir de una imagen seria peor que no hacer nada.</p>' +
-    '<p class="ayuda"><b>JSON es el formato de esta aplicacion</b> (es lo que descarga el boton ' +
-      '\u201cExportar la malla\u201d). Tambien puedes traer un <b>CSV o TSV</b>, donde el orden de las ' +
-      'columnas da igual. Estos son los dos formatos de texto que reconozco:</p>' +
-    '<pre class="ayuda" style="background:var(--malla-codigo-bg);padding:10px;border-radius:8px;overflow:auto">' +
-    'codigo,nombre,creditos,nivel,requisitos,tipo\n' +
-    'MA1001,Calculo Diferencial,8,1,,obligatorio\n' +
-    'MA2001,Calculo Integral,9,2,MA1001,obligatorio\n' +
-    '\n' +
-    '-- JSON (el formato de la app) --\n' +
-    '{"ramos":[{"codigo":"MA1001","nombre":"Calculo Diferencial","creditos":8,' +
-    '"nivel":1,"requisitos":[],"tipo":"obligatorio"}]}</pre>' +
-    '<p class="ayuda">Varios requisitos se separan con <b>;</b>. El <b>nivel</b> es el semestre ' +
-      'en que va el ramo y es lo que ordena las columnas de la malla.</p>' +
-    '<div class="campo"><span>Archivo (.json es el formato de la app; tambien .pdf, .csv, .tsv, .txt o foto)</span>' +
-      '<input type="file" id="malla-archivo" accept=".json,.pdf,.csv,.tsv,.txt,image/*"></div>' +
+  const caja = document.getElementById('modal-caja');
+  caja.classList.add('imp-caja');
+  caja.innerHTML =
+    '<div class="aj-cab">' +
+      '<span class="t-ic"><svg class="imp-ic"><use href="#ARQ-08"></use></svg></span>' +
+      '<div><h2 data-i18n="malla.importar.titulo">Importar</h2>' +
+        '<div class="sub" data-i18n="malla.importar.sub">JSON, CSV, TSV o PDF</div></div>' +
+    '</div>' +
+    '<button class="aj-x" type="button" data-i18n-att="aria-label:boton.cerrar">&times;</button>' +
+    '<div class="g-cuerpo">' +
+      '<label class="imp-eti" data-i18n="malla.importar.campo">Archivo</label>' +
+      '<div class="imp-archivo">' +
+        '<button class="btn" id="imp-elegir" type="button">' +
+          '<svg class="imp-ic"><use href="#ARQ-15"></use></svg>' +
+          '<span data-i18n="malla.importar.elegir">Elegir archivo</span></button>' +
+        '<span class="imp-nombre" id="malla-archivo-nombre" data-i18n="malla.importar.ninguno">Ningún archivo elegido</span>' +
+        '<input type="file" id="malla-archivo" accept=".json,.pdf,.csv,.tsv,.txt,image/*">' +
+      '</div>' +
+      '<p class="ayuda imp-ayuda" data-i18n="malla.importar.ayuda">Un PDF de tu malla, o un archivo JSON, CSV o TSV.</p>' +
+    '</div>' +
     '<div id="malla-foto"></div>' +
-    '<div id="malla-pegado" style="display:none" class="campo">' +
-      '<span>Copia aqui los ramos que veas, una linea por ramo</span>' +
-      '<textarea id="malla-texto" rows="8" style="width:100%;font-family:ui-monospace,monospace">' +
-      '</textarea></div>' +
+    '<div id="malla-pegado" class="imp-pegado" style="display:none">' +
+      '<span data-i18n="malla.importar.pegar">Copia aquí los ramos que veas, una línea por ramo</span>' +
+      '<textarea id="malla-texto" rows="8"></textarea></div>' +
     '<div id="malla-aviso"></div>' +
-    '<div class="fila" style="justify-content:flex-end;gap:8px;margin-top:12px">' +
-      '<button class="btn" id="malla-cancelar">Cancelar</button>' +
-      '<button class="btn acento" id="malla-cargar" disabled>Cargar la malla</button>' +
+    '<div class="aj-pie">' +
+      '<button class="btn suave" id="malla-cancelar" data-i18n="boton.cancelar">Cancelar</button>' +
+      '<button class="btn acento" id="malla-cargar" disabled data-i18n="boton.importar">Importar</button>' +
     '</div>';
   document.getElementById('modal').classList.add('on');
-  document.getElementById('cerrar').onclick = cerrarEditor;
+  aplicarIdioma(caja);
+  // El boton de la casa abre el input de archivo, que va oculto: el boton nativo del navegador
+  // no se puede pintar ni traducir. Mismo patron que el Respaldo de Ajustes.
+  document.getElementById('imp-elegir').onclick = () => document.getElementById('malla-archivo').click();
+  caja.querySelector('.aj-x').onclick = cerrarEditor;
   document.getElementById('malla-cancelar').onclick = cerrarEditor;
   const aviso = document.getElementById('malla-aviso');
   const boton = document.getElementById('malla-cargar');
+  const casilla = document.getElementById('malla-archivo');
   let leido = null;
 
   // El resumen de lo que se leyo. Lo comparten los tres caminos (PDF, archivo de texto y lo
@@ -371,8 +368,10 @@ function modalImportarMalla(){
     boton.disabled = false;
   }
 
-  document.getElementById('malla-archivo').onchange = async ev => {
+  casilla.onchange = async ev => {
     const f = ev.target.files && ev.target.files[0];
+    const etiqueta = document.getElementById('malla-archivo-nombre');
+    if (etiqueta) { etiqueta.textContent = f ? f.name : t('malla.importar.ninguno'); etiqueta.classList.toggle('on', !!f); }
     if (!f) return;
     leido = null; boton.disabled = true;
     aviso.innerHTML = '<p class="ayuda">Leyendo ' + esc(f.name) + '...</p>';
