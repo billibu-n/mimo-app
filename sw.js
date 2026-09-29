@@ -5,7 +5,7 @@
    navegador la pueda INSTALAR (PWA).
 
    ESTE FICHERO NO SE EDITA A MANO. Es la salida de `plantilla-sw.js`: lo escribe el armador
-   (mimo_config/construir/index.py), que sustituye 1.0.0-desktop por la version, a486a5ccb9 por un
+   (mimo_config/construir/index.py), que sustituye 1.0.0-desktop por la version, 2d605ba93e por un
    sello del contenido y [
   "./index.html",
   "./manifest.json",
@@ -64,6 +64,11 @@
   "./js/semestre/03-calendario.js",
   "./js/tareas/01-tareas.js",
   "./js/tiempo/01-tiempo.js",
+  "./js/idioma/00-motor.js",
+  "./js/idioma/01-inicio.js",
+  "./js/idioma/01-panel.js",
+  "./js/idioma/en.js",
+  "./js/idioma/es.js",
   "./sonido/alarma.mp3",
   "./vendor/pdf-motor.js",
   "./vendor/pdf.min.js",
@@ -91,7 +96,7 @@
    is not supported"). Al abrir el index.html con doble clic este fichero ni se usa.
  */
 const VERSION = '1.0.0-desktop';
-const HUELLA = 'a486a5ccb9';
+const HUELLA = '2d605ba93e';
 const CACHE = 'mimo-' + VERSION + '-' + HUELLA;
 
 // La aplicacion COMPLETA, la escribio el armador al construir.
@@ -153,6 +158,11 @@ const ARCHIVOS = [
   "./js/semestre/03-calendario.js",
   "./js/tareas/01-tareas.js",
   "./js/tiempo/01-tiempo.js",
+  "./js/idioma/00-motor.js",
+  "./js/idioma/01-inicio.js",
+  "./js/idioma/01-panel.js",
+  "./js/idioma/en.js",
+  "./js/idioma/es.js",
   "./sonido/alarma.mp3",
   "./vendor/pdf-motor.js",
   "./vendor/pdf.min.js",

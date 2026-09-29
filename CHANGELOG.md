@@ -11,11 +11,19 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ### Added
 
+- **Language engine (i18n)**: the app can now translate its own texts, not just list languages.
+  A small engine built on the *format of the standard* (i18next-style keys such as
+  `ajustes.apariencia`, one dictionary file per language, fallback to Spanish): adding a language
+  later is *one file and one line*, without touching any screen. Dates, times and numbers are
+  handled by the browser's own `Intl`, so no hand-written month names survive in another language.
+  Spanish is the base; **English is the first finished translation** (the app screen is translated
+  as a pilot, the rest follows section by section). Nothing changes for whoever keeps Spanish.
 - **Eight languages listed in *Language***, each written in its own language and with its flag:
   Español · English · Deutsch · Français · Italiano · Português · 简体中文 · 繁體中文. French,
   Italian and Portuguese share the row of the Romance languages; the two Chinese close the grid,
-  so it is a clean four-by-two. **Only Spanish is complete for now**: the other seven are shown
-  switched off, marked *"en preparación"* — a button that translates nothing would be a lie. The
+  so it is a clean four-by-two. **Spanish is complete and English is under way** (the app screen is
+  already translated); the rest are shown switched off, marked *"en preparación"* — a button that
+  translates nothing would be a lie. The
   flags are drawn inside the app (the project has no country flags in its icon set).
 - **Keyboard shortcuts** to move between sections, in *Navigation*. Seven come from the factory
   (`Ctrl + 1` … `Ctrl + 7`, in the order of the bar) and can be **changed or turned off**. The

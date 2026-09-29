@@ -9,6 +9,10 @@
 # El sentido general es: primero lo que no depende de nada (cabecera, utilidades, estado),
 # despues el motor de calculo, y al final el arranque, que ya puede usar todo.
 comun/00-cabecera.js
+idioma/00-motor.js
+idioma/es.js
+idioma/en.js
+idioma/01-inicio.js
 ajustes/01-borrador.js
 comun/01-utilidades.js
 comun/02-estado.js
@@ -44,3 +48,4 @@ comun/10b-migracion-tauri.js
 comun/10-respaldo-carpeta.js
 comun/08-barra.js
 ajustes/08-g2-puente.js
+idioma/01-panel.js
