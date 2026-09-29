@@ -189,4 +189,4 @@ If Mimo Academics has been helpful to you and you'd like to support its continue
 
 [![](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-yellow?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://www.buymeacoffee.com/billibu)
 
-Every contribution helps cover development time, hosting costs, and future improvements. Thank you for being part of this journey!
+Every contribution helps cover development time and future improvements. Thank you for being part of this journey!
