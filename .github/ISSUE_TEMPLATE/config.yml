@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Preguntas y conversación
+  - name: Questions and conversation
     url: https://github.com/billibu-n/mimo-app/discussions
-    about: Si tienes dudas de uso o quieres proponer algo sin abrir un issue.
+    about: If you have a question about using it, or want to propose something without opening an issue.

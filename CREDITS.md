@@ -1,21 +1,21 @@
-# Creditos y licencias de terceros
+# Third-party credits and licences
 
-Mimo Academics es **MIT** (ver [`LICENSE`](LICENSE)). Dentro lleva trabajo de otros, y aqui esta
-de quien es y con que condiciones. **No es un adorno**: las licencias de abajo exigen conservar sus
-avisos, y por eso los textos estan completos.
+Mimo Academics is **MIT** (see [`LICENSE`](LICENSE)). Inside it carries other people's work, and
+here is whose it is and under what conditions. **This is not decoration**: the licences below
+require their notices to be kept, which is why the texts are complete.
 
 ---
 
-## Iconos de la interfaz — Lucide
+## Interface icons — Lucide
 
-Los **407 iconos** de la interfaz (`iconos/iconos.svg`) vienen de [Lucide](https://lucide.dev).
+The **407 icons** of the interface (`iconos/iconos.svg`) come from [Lucide](https://lucide.dev).
 
-- **Licencia: ISC.** Requiere que el aviso de copyright y el permiso aparezcan en **todas las
-  copias**.
-- **147 de esos iconos** derivan ademas del proyecto **Feather**, y esos llevan **licencia MIT**
-  (el texto de Lucide trae la lista completa y su aviso aparte).
+- **Licence: ISC.** It requires the copyright notice and this permission notice to appear in **all
+  copies**.
+- **147 of those icons** are also derived from the **Feather** project, and those carry the **MIT
+  licence** (Lucide's text includes the full list and its separate notice).
 
-Los dos textos, tal cual los publica Lucide:
+Both texts, exactly as Lucide publishes them:
 
 ```
 ISC License
@@ -80,39 +80,39 @@ SOFTWARE.
 
 ---
 
-## Lector de PDF — pdf.js
+## PDF reader — pdf.js
 
-El lector de PDF del navegador es [pdf.js](https://mozilla.github.io/pdf.js/), de **Mozilla
-Foundation**, bajo **licencia Apache 2.0**. Va incluido en `vendor/pdf.min.js` y
-`vendor/pdf-motor.js`, con su aviso de licencia dentro del propio fichero.
-
----
-
-## Caparazon de escritorio — Tauri
-
-La aplicacion de escritorio se construye con [Tauri](https://v2.tauri.app/), de **Tauri
-Programmes Ltd**, bajo licencia **MIT** o **Apache 2.0** (a eleccion). Usa el motor web del
-sistema: WebKitGTK en Linux, WebView2 en Windows y WKWebView en macOS.
+The browser's PDF reader is [pdf.js](https://mozilla.github.io/pdf.js/), by **Mozilla
+Foundation**, under the **Apache 2.0 licence**. It is included in `vendor/pdf.min.js` and
+`vendor/pdf-motor.js`, with its licence notice inside the file itself.
 
 ---
 
-## Herramientas de IA
+## Desktop shell — Tauri
 
-Parte de este proyecto se ha construido con asistencia de IA, y se nombra aqui porque tambien ha
-puesto trabajo:
-
-- **DeepSeek** — modelo usado para buena parte del desarrollo y la revision.
-- **OpenHands** — agente que ejecuta el trabajo sobre el repositorio (codigo, verificaciones y
-  documentacion).
-
-El **diseno del proyecto, las decisiones y el contenido son de Billibu**; estas herramientas
-se usaron como apoyo, no como autores.
+The desktop application is built with [Tauri](https://v2.tauri.app/), by **Tauri Programmes
+Ltd**, under the **MIT** or **Apache 2.0** licence (your choice). It uses the system's web engine:
+WebKitGTK on Linux, WebView2 on Windows and WKWebView on macOS.
 
 ---
 
-## Como anadir algo aqui
+## AI tools
 
-Si incorporas material de terceros (una libreria, iconos, tipografias, sonido), **anade su
-licencia aqui** y el aviso que exija, **antes** de subirlo. En este proyecto hay una regla que ya
-ha evitado mas de un problema: un dato en varios sitios son varios defectos, asi que la licencia
-va **junto al material** ademas de aqui.
+Part of this project was built with AI assistance, and it is named here because it also put work
+in:
+
+- **DeepSeek** — model used for a good part of the development and the review.
+- **OpenHands** — agent that runs the work on the repository (code, verifications and
+  documentation).
+
+The **project design, the decisions and the contents belong to Billibu**; these tools were used as
+support, not as authors.
+
+---
+
+## How to add something here
+
+If you bring in third-party material (a library, icons, fonts, sound), **add its licence here**
+and the notice it requires, **before** uploading it. This project has a rule that has already
+avoided more than one problem: one fact in several places is several defects, so the licence goes
+**next to the material** as well as here.

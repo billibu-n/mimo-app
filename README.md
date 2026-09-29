@@ -1,148 +1,148 @@
 # Mimo Academics
 
-![Versión](https://img.shields.io/badge/versión-1.0.0-16a34a)
-![Plataforma](https://img.shields.io/badge/escritorio-Linux%20%7C%20Windows-2563eb)
-![Licencia](https://img.shields.io/badge/licencia-MIT-3da639)
+![Version](https://img.shields.io/badge/version-1.0.0-16a34a)
+![Platform](https://img.shields.io/badge/desktop-Linux%20%7C%20Windows-2563eb)
+![License](https://img.shields.io/badge/license-MIT-3da639)
 
-**Panel de semestre universitario que funciona sin conexion.** Reune la malla de ramos, el
-calendario, las notas, el estudio y el tiempo en una sola aplicacion, y **no manda tus datos a
-ningun sitio**: se quedan en tu equipo.
+**A university semester panel that works offline.** It brings your course map, calendar, grades,
+study time and timer into one application, and **it does not send your data anywhere**: it stays
+on your machine.
 
-## Instalacion
+## Installation
 
-Elige tu sistema. En todos los casos, **tus datos se guardan en tu equipo** y puedes llevarlos
-contigo con el respaldo de **Ajustes**.
+Pick your system. In every case, **your data is kept on your machine** and you can take it with
+you using the backup in **Settings**.
 
 ### Linux
 
-La version de escritorio esta probada en **Fedora** (y sirve en cualquier distribucion con
-WebKitGTK 4.1: Debian, Ubuntu, Arch, openSUSE...). Descarga el instalable desde
-**[Releases](https://github.com/billibu-n/mimo-app/releases)** y:
+The desktop version is tested on **Fedora** (and works on any distribution with WebKitGTK 4.1:
+Debian, Ubuntu, Arch, openSUSE...). Download the installer from
+**[Releases](https://github.com/billibu-n/mimo-app/releases)** and run:
 
 ```bash
-# Fedora, openSUSE y derivados (.rpm)
+# Fedora, openSUSE and derivatives (.rpm)
 sudo dnf install 'Mimo Academics-1.0.0-1.x86_64.rpm'
 
-# Debian, Ubuntu y derivados (.deb)
+# Debian, Ubuntu and derivatives (.deb)
 sudo apt install './Mimo Academics_1.0.0_amd64.deb'
 ```
 
-> **Ojo**: el nombre del fichero **lleva un espacio**, por eso va entre comillas.
+> **Careful**: the file name **contains a space**, which is why it goes in quotes.
 
-Despues, en el menu de aplicaciones busca **Mimo Academics** (aparece en *Educacion*). Si no lo ves
-al momento, cierra sesion y vuelve a entrar: el menu se guarda en cache.
+Then look for **Mimo Academics** in your applications menu (it appears under *Education*). If you
+do not see it right away, log out and back in: the menu is cached.
 
-Tambien hay un **AppImage**, que no necesita instalacion: se le dan permisos de ejecucion y se abre.
+There is also an **AppImage**, which needs no installation: give it permission to run and open it.
 
 ### Windows
 
-Descarga el instalador `.exe` desde
-**[Releases](https://github.com/billibu-n/mimo-app/releases)** y ejecutalo.
+Download the `.exe` installer from
+**[Releases](https://github.com/billibu-n/mimo-app/releases)** and run it.
 
-> Windows avisara de que es de un "editor desconocido" (SmartScreen) porque el instalador **no
-> esta firmado digitalmente**: firmarlo cuesta dinero al ano. Para continuar: *Mas informacion*
-> -> *Ejecutar de todas formas*.
+> Windows will warn that the publisher is unknown (SmartScreen) because the installer **is not
+> digitally signed**: signing costs money every year. To continue: *More info* -> *Run anyway*.
 
-> El instalador de Windows **todavia no esta publicado**: se compila en Windows. Si te manejas,
-> en `escritorio/` estan las instrucciones.
+> The Windows installer **is not published yet**: it is built on Windows. If you know your way
+> around, the instructions are in `escritorio/`.
 
 ### macOS
 
-Pendiente. Compilar para macOS necesita un Mac; desde Linux no es posible. Anunciado aqui cuando
-este.
+Pending. Building for macOS requires a Mac; it cannot be done from Linux. It will be announced
+here when it is.
 
-### Android, iPhone y tablet
+### Android, iPhone and tablets
 
-Pendiente, y es lo ultimo de la lista **a proposito**: la interfaz actual esta pensada para
-pantalla grande y necesita un rediseno antes de caber en un telefono. Una tablet es lo mismo que
-un telefono: corre Android o iOS.
+Pending, and it is last on the list **on purpose**: the current interface is designed for a large
+screen and needs a redesign before it fits on a phone. A tablet is the same as a phone: it runs
+Android or iOS.
 
-### Desde el codigo (para desarrollo)
+### From the source code (for development)
+
+See **[DEVELOPMENT.md](DEVELOPMENT.md)**. In short:
 
 ```bash
-cd escritorio && ./preparar-frontend.sh
-cd src-tauri && cargo run --release
+cd escritorio
+./preparar-frontend.sh      # copies the app into app/
+cd src-tauri
+cargo tauri build           # the packages end up in target/release/bundle/
 ```
 
-Esto **no instala nada**: abre la aplicacion en una ventana, para probar cambios. El detalle esta
-en [`escritorio/INSTALAR.md`](escritorio/INSTALAR.md).
+The web version needs nothing at all: open `index.html` by double-clicking it, or run
+`./abrir.sh`.
 
-## Como se usa
+## How to use it
 
-1. Abre **Mimo Academics** desde el menu de aplicaciones.
-2. La primera vez te pedira elegir una **carpeta para las copias de seguridad** (por ejemplo,
-   dentro de *Documentos*). Ahi se guarda tu progreso, con tres copias que rotan solas: asi **no
-   se pierde aunque desinstales la aplicacion**.
-3. Si venias de una version anterior, Mimo **recupera tus datos sola** al abrirla y te lo avisa.
+The application is a semester panel. The bar on the left has seven sections:
 
-En **Ajustes** tienes ademas *Descargar mis datos*, que genera un `.json` que puedes guardar donde
-quieras y volver a cargar en cualquier equipo.
+- **Semester** — the calendar of the current semester: events, exams and deadlines.
+- **Study** — how many hours you study, week by week, against your goal.
+- **Courses** — your degree map: the courses, their credits and which ones are prerequisites.
+- **Grades** — what you need in each assessment to reach the grade you want.
+- **Time** — stopwatch, timer and pomodoro, with the time charged to a course.
+- **Tasks** — everything pending, joined to your courses and your calendar.
+- **Settings** — colour theme, backup folder, advanced options and updates.
 
-## Que trae
+Everything is stored in your browser or in the application itself. **Nothing is sent to a server.**
+Use *Settings -> Backup* to take your data to another machine.
 
-- **Malla curricular**: importa tu malla desde PDF o editala a mano, con simulador de ramos.
-- **Notas**: calcula promedios y escenarios por ramo y por semestre.
-- **Calendario**: vistas Mes / Ano / Semestre; eventos academicos y personales.
-- **Tareas** y **Estudio**: pendientes y bloques de tiempo con temporizador y alarma.
-- **Tiempo**: temporizador de estudio con alarma.
-- **Ajustes**: 9 temas de color, la carpeta de respaldo y las actualizaciones.
+## What it includes
 
-## Estado del proyecto
+- **Offline from the first second.** No connection, no account, no sign-up.
+- **Course map with prerequisites.** It draws itself, level by level, from the courses you enter.
+- **Imports a course list from a PDF.** It reads the map many universities publish.
+- **Grades by weighting.** It tells you what you need in the next assessment.
+- **Nine colour themes**, including a high-contrast one.
+- **Automatic backup** to a folder you choose, keeping the last three copies.
+- **Desktop application** with its own window and its own icon (Linux `.rpm`, `.deb`, AppImage).
 
-Esta **en construccion**: hay herramientas incompletas y detalles visuales por pulir. Se usa a
-diario, pero conviene **hacer copias de seguridad** y no confiarle todavia lo unico importante.
+## Project status
 
-El proyecto se ha construido con ayuda de herramientas de IA, dado su tamano y mi poca experiencia
-previa en desarrollo de aplicaciones; ha sido tambien una forma de pasar de la teoria a algo util.
+Version 1.0.0, and the first one with a **desktop application**. It is **usable and stable**, and
+it keeps growing: synchronisation, mobile and languages are on the list. **Bug reports and ideas
+are welcome** — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Contribuir
+## Contributing
 
-Las ideas, los reportes de errores y los cambios de codigo son bienvenidos: Mimo se hizo para
-estudiantes y mejora mas rapido con mas gente mirandolo.
+- Found a bug? Open an issue with the error template.
+- Have an idea? Open an issue with the proposal template, or use *Discussions*.
+- Want to write code? Read [CONTRIBUTING.md](CONTRIBUTING.md) first.
+- Want to translate it? That work is planned but not started; say so in *Discussions*.
 
-- ¿Encontraste algo roto? Abre un *issue* (hay plantillas para errores, propuestas y preguntas).
-- ¿Tienes una duda de uso o una idea? Pasa por [Discussions](https://github.com/billibu-n/mimo-app/discussions).
-- ¿Vas a tocar codigo? **Lee antes [`CONTRIBUTING.md`](CONTRIBUTING.md)**: explica como esta armado
-  el proyecto y que cambios necesitan reensamblado.
-
-Lo mas util ahora mismo: instalarla y contar **que se rompe o que estorba**. Ese aviso vale tanto
-como un parche.
-
-## Estructura
+## Structure
 
 ```
-escritorio/     la aplicacion de escritorio (Tauri): ventana propia e instalables
-index.html      la aplicacion web (se arma a partir de html/ + js/; no se edita a mano)
-css/            estilos: estructura (general.css) y temas de color (tema-*.css)
-js/             el codigo, por secciones (ver js/orden.txt para el orden de carga)
-html/           una pieza por pestana
-iconos/         los iconos y el sprite de la interfaz
-sonido/         alarma del temporizador
-vendor/         motor de lectura de PDF (pdf.js)
-plantilla.html  armazon de la pagina (cabecera, barra lateral, modales)
-version.json    numero de version, para el boton de actualizacion (lo escribe el armador)
+escritorio/     the desktop application (Tauri): its own window and installers
+index.html      the web application (built from html/ + js/; do not edit by hand)
+css/            styles: structure (general.css) and colour themes (tema-*.css)
+js/             the code, by sections (see js/orden.txt for the load order)
+html/           one piece per tab
+iconos/         the icons and the interface sprite
+sonido/         the timer alarm
+vendor/         PDF reader engine (pdf.js)
+plantilla.html  the page shell (head, sidebar, modals)
+version.json    version number, for the update button (written by the builder)
 ```
 
-## Licencia
+## License
 
-[MIT](LICENSE): puedes usar, copiar, modificar y redistribuir Mimo, tambien con fines
-comerciales, siempre que conserves el aviso de copyright. Se entrega **sin garantia**: revisalo
-antes de confiarle tus notas.
+[MIT](LICENSE): you may use, copy, modify and redistribute Mimo, including for commercial
+purposes, as long as you keep the copyright notice. It comes **with no warranty**: check it
+before trusting it with your grades.
 
 ## Version
 
-1.0.0 — el detalle de cada version esta en [`CHANGELOG.md`](CHANGELOG.md).
+1.0.0 — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
 
-## Creditos
+## Credits
 
-Mimo usa trabajo de otros, y se nombra aqui. Las licencias completas, con los textos que hay que
-conservar, estan en **[CREDITOS.md](CREDITOS.md)**.
+Mimo uses work from other people, and they are named here. The full licences, with the notices
+that must be kept, are in **[CREDITS.md](CREDITS.md)**.
 
-- **Iconos** de la interfaz: [Lucide](https://lucide.dev) (licencia ISC; 147 de ellos derivan
-  ademas de **Feather**, con licencia MIT).
-- **Lector de PDF**: [pdf.js](https://mozilla.github.io/pdf.js/), de Mozilla Foundation
-  (Apache 2.0, incluido en `vendor/`).
-- **Aplicacion de escritorio**: [Tauri](https://v2.tauri.app/), de Tauri Programmes Ltd
-  (MIT o Apache 2.0).
-- **Herramientas de IA** que han asistido en el desarrollo: **DeepSeek** y **OpenHands**.
-  El diseno, las decisiones y el contenido son de **Billibu**.
+- **Interface icons** from [Lucide](https://lucide.dev) (ISC licence; 147 of them are also
+  derived from **Feather**, under the MIT licence).
+- **PDF reader**: [pdf.js](https://mozilla.github.io/pdf.js/), by Mozilla Foundation
+  (Apache 2.0, included in `vendor/`).
+- **Desktop application**: [Tauri](https://v2.tauri.app/), by Tauri Programmes Ltd
+  (MIT or Apache 2.0).
+- **AI tools** that assisted the development: **DeepSeek** and **OpenHands**.
+  The design, the decisions and the contents are **Billibu**'s.

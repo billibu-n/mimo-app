@@ -1,83 +1,63 @@
-# Cómo contribuir a Mimo
+# How to contribute to Mimo
 
-Gracias por el interés. Mimo nace como una herramienta para estudiantes y **la ayuda es
-bienvenida**: reportar fallos, proponer ideas, traducir, escribir documentación o mandar
-código.
+Thanks for your interest. Mimo was born as a tool for students and **help is welcome**: reporting
+bugs, proposing ideas, translating, writing documentation or sending code.
 
-Antes de nada: este proyecto lo mantiene una persona, así que la respuesta puede tardar.
-Ten paciencia y no dupliques un reporte: si ya existe, súmate a la conversación.
+First of all: this project is maintained by one person, so a reply may take a while. Be patient,
+and do not duplicate a report: if one already exists, join that conversation.
 
-## Por dónde empezar
+## Where to start
 
-- **¿Encontraste un fallo?** Abre un *issue* con la plantilla de errores. Si puedes,
-  incluye qué esperabas, qué pasó y cómo reproducirlo.
-- **¿Tienes una idea?** Abre un *issue* con la plantilla de propuestas (o usa
-  *Discussions*, si está disponible). Cuenta **qué problema resuelve**, no solo cómo
-  debería verse.
-- **¿Quieres escribir código?** Mira los issues abiertos. Si es un cambio grande,
-  comenta primero en un issue para no trabajar en vano.
+- **Found a bug?** Open an issue with the bug template. If you can, include what you expected,
+  what happened and how to reproduce it.
+- **Have an idea?** Open an issue with the feature template (or use *Discussions*, if available).
+  Tell us **what problem it solves**, not only how it should look.
+- **Want to write code?** Look at the open issues. If it is a big change, comment on an issue
+  first so you do not work for nothing.
 
-## Lo más importante de esta página: cómo está armado el proyecto
+## The most important thing on this page: how the project is put together
 
-Mimo se publica como **una sola página**: `index.html`. Esa página **no se edita a mano**:
-se **ensambla** a partir de las piezas de `html/` (una por pestaña) y de los scripts de
-`js/`, en el orden que dicta `js/orden.txt`.
+Mimo is published as **a single page**: `index.html`. That page **is not edited by hand**: it is
+**assembled** from the pieces in `html/` (one per tab) and the scripts in `js/`, in the order
+dictated by `js/orden.txt`.
 
-El programa que hace ese ensamblado **no es público** (vive aparte, en el entorno del
-autor). Esto tiene una consecuencia práctica que conviene saber **antes** de empezar, para
-no perder la mañana:
+The program that does that assembly **is not public** (it lives separately, in the author's
+environment). This has a practical consequence worth knowing **before** you start, so you do not
+waste your morning:
 
-| Si tu cambio toca… | Qué se necesita |
+| If your change touches... | What is needed |
 |---|---|
-| `css/`, `js/`, `sonido/`, `vendor/` | Nada especial: la app carga esos ficheros por rutas relativas. Basta recargar. |
-| `html/*.html` (estructura de una pestaña) | Tu cambio **no se verá** hasta que el autor reensamble `index.html`. Abre el PR igualmente y **dilo en el mensaje** ("este PR necesita reensamblado"). |
-| `index.html` directamente | No hagas eso: al próximo reensamblado tu edición se pierde. Edita las fuentes. |
-| `js/orden.txt` | Igual que `html/`: es un índice autoritativo. Un fichero `.js` que no esté listado **no entra** en la app. |
+| `css/`, `js/`, `sonido/`, `vendor/` | Nothing special: the app loads those files by relative paths. Just reload. |
+| `html/*.html` (the structure of a tab) | Your change **will not be visible** until the author reassembles `index.html`. Open the PR anyway and **say so in the message** ("this PR needs a rebuild"). |
+| `index.html` directly | Do not do that: your edit is lost on the next rebuild. Edit the sources. |
+| `js/orden.txt` | Same as `html/`: it is an authoritative index. A `.js` file that is not listed **does not enter** the app. |
 
-Si dudas de si tu cambio cae en la columna "necesita reensamblado", pregúntalo en el issue
-antes de escribir código.
+If you are unsure whether your change falls in the "needs a rebuild" column, ask in the issue
+before writing code.
 
-## Cómo se prueba (y qué nos sirve de ti)
+## How it is tested (and what we need from you)
 
-- Hay **dos formas** de abrirla, y no son lo mismo:
-  - **la aplicación instalada** (lo que usa la gente): se instala desde `escritorio/` y aparece en
-    el menú de aplicaciones. Es la que hay que cuidar;
-  - **`index.html` con doble clic**, o con `./abrir.sh`, que sirve para probar cambios de CSS y de
-    JS sin compilar nada. Con eso basta para la mayoría de los retoques.
-- Ojo: la aplicación de escritorio **empaqueta su propia copia** de la web (`escritorio/app/`, que
-  se genera con `escritorio/preparar-frontend.sh`). Si cambias `js/` o `css/`, para verlo en la
-  aplicación de escritorio hay que **volver a preparar el frontend** (y no hace falta recompilar el
-  caparazón de Rust).
-- Prueba en **más de un tema de color** (hay 9) y en **más de un tamaño de ventana**. Mimo
-  se usa en computadores modestos y en pantallas pequeñas.
-- Cuéntanos **cómo comprobaste** el cambio. "Lo probé y se ve bien" no permite revisarlo;
-  "abrí Ajustes, cambié a tema oscuro, el número quedaba cortado" sí.
+- There are **two ways** to open it, and they are not the same:
+  - **the installed application** (what people use): it is installed from `escritorio/` and shows
+    up in the applications menu. That is the one to take care of;
+  - **`index.html` by double-clicking it**, or with `./abrir.sh`, which is useful for testing CSS
+    and JS changes without building anything. That is enough for most tweaks.
+- Note: the desktop application **packages its own copy** of the web app (`escritorio/app/`, which
+  is generated by `escritorio/preparar-frontend.sh`). If you change `js/` or `css/`, to see it in
+  the desktop application you have to **prepare the frontend again** (you do not need to rebuild
+  the Rust shell).
+- Test in **more than one colour theme** (there are nine) and in **more than one window size**.
+  Mimo is used on modest computers and on small screens.
+- Tell us **how you checked** the change. "I tried it and it looks fine" cannot be reviewed;
+  "I opened Settings, switched to the dark theme, the number was cut off" can.
+- The test suite is **not currently 100% green**: there are known red tests that are unrelated to
+  the app itself. Do not let that stop you, but do not add a new one either.
 
-## Cómo mandar un cambio (pull request)
+## Before opening a PR
 
-1. Haz un *fork* (o una rama, si tienes permiso).
-2. Un PR = **una cosa**. Es más fácil de revisar y de explicar.
-3. En el mensaje, di **qué cambia y por qué**, y cómo lo probaste.
-4. Si el cambio toca `html/`, avísalo (ver la tabla de arriba).
-5. No subas capturas con tus datos personales ni con tu malla curricular real: Mimo guarda
-   datos de estudio y eso es tuyo.
-
-## Estilo del proyecto
-
-- **El código y los comentarios, en español, con tildes.** El proyecto entero está en
-  español (los textos de la interfaz también).
-- Los comentarios explican **el por qué**, no el qué. El código ya dice qué hace; lo que
-  hace falta saber es por qué se hizo así (una decisión, una trampa del navegador, un
-  caso raro que rompió algo).
-- Nada de dependencias ni de *builds*: Mimo no usa frameworks a propósito. Es HTML, CSS y
-  JavaScript que se abren con doble clic. Ahí está buena parte de su valor: funciona sin
-  internet y sin instalar nada.
-- Cuida **los datos del alumno**: no los envíes a ningún servidor. Todo se guarda en su
-  navegador.
-
-## Licencia de tu aporte
-
-Al mandar un cambio aceptas que se publique bajo la licencia del proyecto (ver `LICENSE`).
-
-Y si algo de esto te resultó confuso, dilo también: la documentación de Mimo se mejora
-igual que el código.
+1. **One change, one PR.** Do not mix a fix with a redesign.
+2. **Do not touch `index.html`** if you have edited `html/`: say that it needs a rebuild instead.
+3. **Keep the language of the code comments** unchanged (they are in Spanish, and that is
+   deliberate). The **repository documentation is in English**.
+4. If your change adds third-party material (a library, icons, fonts), **add its licence to
+   [CREDITS.md](CREDITS.md)** before sending it.
