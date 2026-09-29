@@ -9,8 +9,23 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ## [Unreleased]
 
+### Added
+
+- **Font size**, in *General*: small / normal / large / very large. It is **global** and scales
+  the whole app — letters, spacing, blocks and the header — not just the text. It was checked on
+  the app engine itself (WebKitGTK), where the sidebar goes from 155 to 202 px: the text alone
+  would have left the boxes behind.
+
 ### Changed
 
+- **"General" is now its own set of apartados.** One line per apartado with the control on the
+  right: *Abreviación de texto* (with the **recorte example** underneath — a fixed box that does
+  not change, while the name fits inside it), *Tamaño de la fuente*, *Formato de las horas* and
+  *Actualización* (the version plus a *Buscar* button).
+- **Every apartado sits in two columns**: the name on the left with a fixed width and the options
+  on the right, always starting at the same point, so more options never push into the title. It
+  is alignment, not a dividing line. Applied to **all** the windows, so the view does not jump
+  from one to another.
 - **Settings is a set of buttons.** Each entry is a small card — icon, bold title and a single
   line underneath, next to the icon — and opens its own window, following the approved sketch.
   The backup entry is highlighted the same way (2-px border), with the same shape.
@@ -30,6 +45,12 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
   only the stand was drawn (7×3 px inside a 20-px box). The value is restored from the healthy
   copy of the same icon. The sprite has **31 more symbols with the same missing-geometry
   defect**; they are not used by the app yet, and are pending a full cleanup.
+
+### Removed
+
+- **"Accents in titles" and "Compact mode" are gone.** They were listed in the window but
+  **nothing read them**: the engine ignored them, so they were dead switches. Removing them also
+  cleans the bridge that painted them.
 
 ## [1.0.0-desktop] — 2026-09-29
 
