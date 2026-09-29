@@ -1,7 +1,7 @@
 # Historial de cambios
 
 Este documento cuenta **qué cambió**, en palabras. Las descargas están en
-[Releases](https://github.com/billibu-n/Mimo-Academics/releases), y dentro de la app
+[Releases](https://github.com/billibu-n/mimo-app/releases), y dentro de la app
 **Ajustes → Actualización → Buscar actualización** avisa si hay una versión más nueva.
 
 El formato sigue, con holgura, [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/);

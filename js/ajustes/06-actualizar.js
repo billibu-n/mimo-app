@@ -15,7 +15,7 @@ function versionLocal(){
   const v = el && el.getAttribute('data-local');
   return (v && /^\d+\.\d+\.\d+/.test(v)) ? v : '1.0.0';
 }
-const REPO_ACT = {user:'billibu-n', repo:'Mimo-Academics'};
+const REPO_ACT = {user:'billibu-n', repo:'mimo-app'};
 
 function pintarActualizacion(estado, texto){
   const caja = document.getElementById('caja-actualizar');

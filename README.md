@@ -17,7 +17,7 @@ contigo con el respaldo de **Ajustes**.
 
 La version de escritorio esta probada en **Fedora** (y sirve en cualquier distribucion con
 WebKitGTK 4.1: Debian, Ubuntu, Arch, openSUSE...). Descarga el instalable desde
-**[Releases](https://github.com/billibu-n/Mimo-Academics/releases)** y:
+**[Releases](https://github.com/billibu-n/mimo-app/releases)** y:
 
 ```bash
 # Fedora, openSUSE y derivados (.rpm)
@@ -37,7 +37,7 @@ Tambien hay un **AppImage**, que no necesita instalacion: se le dan permisos de 
 ### Windows
 
 Descarga el instalador `.exe` desde
-**[Releases](https://github.com/billibu-n/Mimo-Academics/releases)** y ejecutalo.
+**[Releases](https://github.com/billibu-n/mimo-app/releases)** y ejecutalo.
 
 > Windows avisara de que es de un "editor desconocido" (SmartScreen) porque el instalador **no
 > esta firmado digitalmente**: firmarlo cuesta dinero al ano. Para continuar: *Mas informacion*
@@ -101,7 +101,7 @@ Las ideas, los reportes de errores y los cambios de codigo son bienvenidos: Mimo
 estudiantes y mejora mas rapido con mas gente mirandolo.
 
 - ¿Encontraste algo roto? Abre un *issue* (hay plantillas para errores, propuestas y preguntas).
-- ¿Tienes una duda de uso o una idea? Pasa por [Discussions](https://github.com/billibu-n/Mimo-Academics/discussions).
+- ¿Tienes una duda de uso o una idea? Pasa por [Discussions](https://github.com/billibu-n/mimo-app/discussions).
 - ¿Vas a tocar codigo? **Lee antes [`CONTRIBUTING.md`](CONTRIBUTING.md)**: explica como esta armado
   el proyecto y que cambios necesitan reensamblado.
 
