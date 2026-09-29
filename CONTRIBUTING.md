@@ -50,8 +50,13 @@ before writing code.
   Mimo is used on modest computers and on small screens.
 - Tell us **how you checked** the change. "I tried it and it looks fine" cannot be reviewed;
   "I opened Settings, switched to the dark theme, the number was cut off" can.
-- The test suite is **not currently 100% green**: there are known red tests that are unrelated to
-  the app itself. Do not let that stop you, but do not add a new one either.
+- The test suite currently reports **43 green and 1 red**. The red one is a PDF-reader test that
+  needs an extra Python package that is not always installed; it is unrelated to the application.
+  Do not let it stop you, but do not add a new red one.
+- There is a **second suite**, on the desktop side: the Tauri shell has no tests of its own, but
+  the application can be measured from inside its own window with `MIMO_SONDA=1` (see
+  `escritorio/README.md`). That is how the number of sections, the stylesheets and the JavaScript
+  errors are checked on the real engine.
 
 ## Before opening a PR
 

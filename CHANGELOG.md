@@ -7,7 +7,45 @@ This document describes **what changed**, in words. Downloads are in
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Downloadable
 versions start at 1.0.2; 1.0.0 is the first official release, with the desktop application.
 
-## [1.0.0] — 2026-09-29
+## [1.0.0-desktop] — 2026-09-29
+
+The first release with the **desktop application** on all three platforms, and the first with a
+version number that makes the package managers actually update.
+
+### Why the version says `-desktop`
+
+It is not decoration. With plain `1.0.0`, `dnf` answered **"already installed"** even when the
+contents had changed, because it compares **numbers, not contents**. With the suffix,
+`rpm.vercmp('1.0.0', '1.0.0-desktop')` is `-1` (the new one is greater) and the package updates.
+The same was checked on Debian with `dpkg --compare-versions`.
+
+### Added
+
+- **It asks before deleting, in its own window.** The application used the browser's dialogs
+  (`confirm`, `alert`, `prompt`). In the desktop application those are **not shown**: the engine
+  blocks the page and the action runs anyway, so "Reset everything" wiped the data with no
+  warning. All **13** native dialogs are now an in-app dialog that behaves the same on every
+  system. On a destructive action the focus starts on *Cancel*, so Enter cannot confirm by
+  accident, and the accept button is in the danger colour.
+- **AppImage** for Linux: no installation, just run it.
+- **Windows installer (`.exe`)**, built on a Windows machine by GitHub Actions and attached to the
+  release.
+
+### Fixed
+
+- **Event text is shortened** to two lines with an ellipsis, and the day cell has a maximum
+  height. With several events in one day the month piled up and became unreadable; the full title
+  is still available on hover. This is the default, so nobody has to go looking for an option.
+- **The selected button in Settings is visible.** It used to be marked with a 4-pixel dot inside
+  a ring, which at real size was invisible; now the circle is filled and the button is tinted.
+- **The installers have no spaces in their names** (`mimo-academics-1.0.0-desktop-1.x86_64.rpm`),
+  so nothing needs quoting. The applications menu still says **Mimo Academics**.
+- **The repository root only holds what the user needs.** The builder's sources moved to
+  `construir/` and the browser launcher, the diagnosis and the repair page to `herramientas/`.
+  The release `.zip` no longer ships `plantilla.html`: it is the builder's template, of no use to
+  the user.
+
+## [1.0.0] — 2026-09-29 (superseded)
 
 First **official** release, and the first one with a **desktop application**. The version jumps to
 `1.0.0` because the program is already in use and its contents are stable; what is added is

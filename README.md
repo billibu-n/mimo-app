@@ -30,7 +30,22 @@ sudo apt install ./mimo-academics_1.0.0-desktop_amd64.deb
 Then look for **Mimo Academics** in your applications menu (it appears under *Education*). If you
 do not see it right away, log out and back in: the menu is cached.
 
-There is also an **AppImage**, which needs no installation: give it permission to run and open it.
+The file names have **no spaces**, so nothing needs quoting. The `-desktop` suffix is not
+decoration: with the previous `1.0.0` the package managers answered "already installed" even after
+the contents changed, because they compare numbers. With the suffix they update properly.
+
+**No installation: the AppImage.** If you would rather not install anything, download the
+`.AppImage`, give it permission to run and open it:
+
+```bash
+chmod +x mimo-academics_1.0.0-desktop_amd64.AppImage
+./mimo-academics_1.0.0-desktop_amd64.AppImage
+```
+
+The AppImage is bigger (about 100 MB) because it carries its own runtime; the `.rpm` and `.deb`
+are about 4 MB. It needs FUSE, which Fedora, Ubuntu and Debian include by default. Your data is
+the same either way: it is not stored inside the package, so switching between them loses
+nothing.
 
 ### Windows
 
@@ -40,8 +55,9 @@ Download the `.exe` installer from
 > Windows will warn that the publisher is unknown (SmartScreen) because the installer **is not
 > digitally signed**: signing costs money every year. To continue: *More info* -> *Run anyway*.
 
-> The Windows installer **is not published yet**: it is built on Windows. If you know your way
-> around, the instructions are in `escritorio/`.
+> The `.exe` is built by GitHub Actions on a Windows machine when a release is published, so it
+> appears in the release a few minutes after the Linux packages. If you are reading this and only
+> the Linux files are there, give it a moment and reload the page.
 
 ### macOS
 
@@ -91,7 +107,10 @@ Use *Settings -> Backup* to take your data to another machine.
 - **Grades by weighting.** It tells you what you need in the next assessment.
 - **Nine colour themes**, including a high-contrast one.
 - **Automatic backup** to a folder you choose, keeping the last three copies.
-- **Desktop application** with its own window and its own icon (Linux `.rpm`, `.deb`, AppImage).
+- **Desktop application** with its own window and its own icon (Linux `.rpm`, `.deb` and
+  AppImage; Windows `.exe`).
+- **It asks before deleting.** Every destructive action opens an in-app confirmation that says
+  what will be lost, and the focus starts on *Cancel*.
 
 ## Project status
 
@@ -109,16 +128,20 @@ are welcome** — see [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Structure
 
 ```
-escritorio/     the desktop application (Tauri): its own window and installers
 index.html      the web application (built from html/ + js/; do not edit by hand)
-css/            styles: structure (general.css) and colour themes (tema-*.css)
+css/            styles: structure (general.css, aviso.css) and themes (tema-*.css)
 js/             the code, by sections (see js/orden.txt for the load order)
 html/           one piece per tab
 iconos/         the icons and the interface sprite
 sonido/         the timer alarm
 vendor/         PDF reader engine (pdf.js)
-construir/      the builder's sources: the page shell and the service worker template
+manifest.json   PWA manifest
+sw.js           the service worker (works offline)
 version.json    version number, for the update button (written by the builder)
+escritorio/     the desktop application (Tauri): its own window and installers
+construir/      the builder's own sources (page shell, service worker template)
+herramientas/   the browser launcher, the diagnosis and the repair page
+abrir.sh        shortcut: opens the app in the browser
 ```
 
 ## License

@@ -25,6 +25,7 @@ These three programs are required and did **not** come installed. All three are 
 | `dbus-devel` | **building** Tauri (the `libdbus-sys` crate demands it) | `failed to run custom build command for libdbus-sys` |
 | `nodejs` | running the app's test suite | the 39 tests report "no verdict" |
 | `chromium` | testing the backup folder (Brave does not have it) | the app cannot open the folder dialog |
+| `file` | building the **AppImage** (linuxdeploy needs it) | `file command is missing but required` |
 
 ```bash
 sudo dnf install -y dbus-devel nodejs chromium
@@ -98,7 +99,7 @@ cargo install tauri-cli --version "^2.0.0"     # once only
 cd ~/projects/mimo-app/escritorio
 ./preparar-frontend.sh
 cd src-tauri
-cargo tauri build --bundles deb,rpm            # ~8 MB, in target/release/bundle/
+cargo tauri build --bundles deb,rpm,appimage   # in target/release/bundle/
 
 # and install it (careful: the file name CONTAINS A SPACE, it must be quoted)
 sudo dnf install ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/mimo-academics-1.0.0-desktop-1.x86_64.rpm

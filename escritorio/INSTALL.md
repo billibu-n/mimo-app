@@ -17,13 +17,22 @@ not installed.
 cd ~/projects/mimo-app/escritorio
 ./preparar-frontend.sh
 cd src-tauri
-cargo tauri build --bundles deb,rpm      # packages end up in target/release/bundle/
+cargo tauri build --bundles deb,rpm,appimage   # packages end up in target/release/bundle/
 ```
 
 (The first time, if you do not have the command: `cargo install tauri-cli --version "^2.0.0"`.)
 
-It produces two packages: `.rpm` (Fedora) and `.deb` (Debian/Ubuntu), around 8 MB each. There is
-also the `AppImage`, in the `targets` list, if you ask for it.
+It produces:
+
+| package | size | notes |
+|---|---|---|
+| `.rpm` (Fedora) | ~4 MB | installs into the applications menu |
+| `.deb` (Debian/Ubuntu) | ~4 MB | installs into the applications menu |
+| `.AppImage` | ~100 MB | no installation; carries its own runtime |
+
+> **The AppImage needs the `file` command.** Without it, `linuxdeploy` stops with
+> `file command is missing but required`. On Fedora and Debian it is normally present; if it is
+> not: `sudo dnf install file` or `sudo apt install file`. It also needs **FUSE** to run.
 
 **What they contain (verified):**
 

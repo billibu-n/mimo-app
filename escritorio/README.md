@@ -88,6 +88,10 @@ MIMO_SONDA=1 xvfb-run -a ./target/release/mimo-escritorio
    (`icon ... is not RGBA`). To generate them correctly: `cargo tauri icon <source.png>`.
 2. **Do not declare the window twice** (`app.windows` in the config **and** in the Rust `setup`):
    that gives `a webview with label 'main' already exists`. Keep it in one place only.
+3. **The AppImage needs the `file` command.** Without it, the build stops with
+   `file command is missing but required` (it comes from `linuxdeploy`, not from Tauri). Install
+   it with `sudo dnf install file` (Fedora) or `sudo apt install file` (Debian/Ubuntu). The
+   `.rpm` and `.deb` do not need it.
 
 ## What this does not solve
 
