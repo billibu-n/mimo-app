@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reparar Mimo Academics</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, sans-serif; max-width: 40rem; margin: 3rem auto; padding: 0 1.25rem;
+         line-height: 1.55; }
+  h1 { font-size: 1.4rem; }
+  .caja { border: 1px solid #8884; border-radius: .6rem; padding: 1rem 1.25rem; margin: 1.25rem 0; }
+  button, .boton { font: inherit; padding: .65rem 1.1rem; border-radius: .5rem; border: 1px solid #8886;
+                   background: #2d6cdf; color: #fff; cursor: pointer; text-decoration: none;
+                   display: inline-block; }
+  code { background: #8882; padding: .1rem .35rem; border-radius: .25rem; }
+  .hecho { color: #197d3f; font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>Reparar Mimo Academics</h1>
+
+<p>Esta pagina borra la <strong>copia guardada por el navegador</strong> (el "service worker" y su
+cache). Es lo que se queda pegado cuando, despues de una actualizacion, la aplicacion sigue
+mostrandose como antes. <strong>No toca tus datos</strong> (ramos, notas, tiempos, ajustes): esos
+viven aparte.</p>
+
+<div class="caja">
+  <p id="estado">Limpiando&hellip;</p>
+  <p id="detalle"></p>
+</div>
+
+<p><a class="boton" id="seguir" href="index.html">Ir a Mimo Academics</a></p>
+
+<script>
+(async function () {
+  var estado = document.getElementById('estado');
+  var detalle = document.getElementById('detalle');
+  var lineas = [];
+  try {
+    if ('serviceWorker' in navigator) {
+      var regs = await navigator.serviceWorker.getRegistrations();
+      lineas.push('service workers encontrados: ' + regs.length);
+      for (var i = 0; i < regs.length; i++) { await regs[i].unregister(); }
+      lineas.push('service workers borrados: ' + regs.length);
+    } else {
+      lineas.push('este navegador no usa service workers');
+    }
+  } catch (e) { lineas.push('service worker: ' + e); }
+  try {
+    if (window.caches) {
+      var ks = await caches.keys();
+      lineas.push('caches encontradas: ' + ks.length);
+      for (var j = 0; j < ks.length; j++) { await caches.delete(ks[j]); }
+      lineas.push('caches borradas: ' + ks.length);
+    }
+  } catch (e) { lineas.push('caches: ' + e); }
+
+  estado.innerHTML = '<span class="hecho">Listo.</span> El navegador ya no guarda copia vieja.';
+  detalle.textContent = lineas.join(' \u00b7 ');
+  setTimeout(function () { location.href = 'index.html'; }, 1500);
+})();
+</script>
+</body>
+</html>

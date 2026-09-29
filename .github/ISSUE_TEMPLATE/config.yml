@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Preguntas y conversación
+    url: https://github.com/billibu-n/Mimo-Academics/discussions
+    about: Si tienes dudas de uso o quieres proponer algo sin abrir un issue.

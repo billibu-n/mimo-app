@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- PWA: el manifiesto permite INSTALAR la app; theme-color tine la barra del sistema.
+     Solo tienen efecto servida por http(s) (el lanzador); con file:// se ignoran. -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<title>Mimo Academics __VERSION__</title>
+<!-- La version NO se escribe a mano en ningun sitio: aqui va el marcador __VERSION__ y la
+     pone el armador (mimo_config/construir/index.py) al construir, desde su unica VERSION.
+     El armador escribe tambien version.json. Subir de version = cambiar UNA linea: VERSION.
+     #datos-version[data-local], mas abajo, lleva el MISMO marcador; de ahi lo lee el semaforo
+     (06-actualizar.js). No repongas un numero a mano: el armador aborta si no lo encuentra. -->
+<!-- El icono de la pestana. PNG propio, 32x32, ruta relativa: vale igual en GitHub
+     Pages (billibu-n.github.io/Mimo-Academics/) y al abrir el archivo con doble clic. -->
+<link rel="icon" type="image/png" href="iconos/icon-32.png">
+<!-- El estilo, en dos capas: general.css trae la estructura y la forma (tipografia,
+     tamanos, rejillas), y cada tema-*.css trae SOLO la paleta de colores de un tema.
+     Se cargan todos los temas y el que manda es la clase que lleva el <body>; asi cambiar
+     de tema es instantaneo y no hay que recargar nada. -->
+<link rel="stylesheet" href="css/general.css">
+<link rel="stylesheet" href="css/tema-clasico.css">
+<link rel="stylesheet" href="css/tema-negro.css">
+<link rel="stylesheet" href="css/tema-medianoche.css">
+<link rel="stylesheet" href="css/tema-deepsea.css">
+<link rel="stylesheet" href="css/tema-bosque.css">
+<link rel="stylesheet" href="css/tema-sepia.css">
+<link rel="stylesheet" href="css/tema-vino.css">
+<link rel="stylesheet" href="css/tema-pinky.css">
+<link rel="stylesheet" href="css/tema-alto-contraste.css">
+<!-- Ajustes avanzados: tema, colores de estado, densidad y demas. Lo llena el programa. -->
+<style id="av-vars"></style>
+</head>
+<body class="tema-clasico">
+<noscript>
+  <style>.marco,main{display:none}</style>
+  <div class="sinjs">
+    <b>Este panel necesita JavaScript y aquí está bloqueado.</b>
+    <p>No es un error del programa: el visor del panel abre los archivos HTML en un marco aislado que no
+       ejecuta código, así que nada alcanza a dibujarse.</p>
+    <p>Ábrelo en tu navegador y funciona completo:</p>
+    <pre>xdg-open panel.html</pre>
+    <p>Para verlo acá, usa <b>vista-previa.html</b>: es la misma pantalla ya dibujada, sin los
+       controles que se mueven.</p>
+  </div>
+</noscript>
+
+<!-- Marco G1: barra lateral retractil. La navegacion entre secciones vive en la
+     columna izquierda, y esa columna se repliega de tres maneras (elegidas en Ajustes):
+     manual (boton de menu), automatica (al acercar el cursor) o fija. Los botones de
+     seccion conservan la clase .nav y el data-seccion que usa el motor G1: lo que
+     cambio es SOLO donde viven y como se ven. -->
+<div class="marco g1 modo-manual replegada">
+
+  <header class="b1">
+    <button class="btn-menu" id="btn-menu" title="Mostrar u ocultar el menú">
+      <i></i><i></i><i></i>
+    </button>
+    <div class="marca"><img class="marca-ic" src="iconos/icon-64.png" alt="" width="30" height="30">Mimo Academics</div>
+    <button class="tag-version" id="bv-tag" title="Comprobar si estás al día">v…</button>
+    <span class="guardado" id="chip-guardado">Guardado aquí</span>
+  </header>
+
+  <aside class="lateral">
+    <nav class="navs">
+      <button class="nav on" data-seccion="calendario"><svg class="ic" aria-hidden="true"><use href="#TIE-28"></use></svg>Calendario</button>
+      <button class="nav" data-seccion="estudio"><svg class="ic" aria-hidden="true"><use href="#EDI-03"></use></svg>Estudio</button>
+      <button class="nav" data-seccion="malla"><svg class="ic" aria-hidden="true"><use href="#INT-28"></use></svg>Malla</button>
+      <button class="nav" data-seccion="notas"><svg class="ic" aria-hidden="true"><use href="#EDI-02"></use></svg>Ramos</button>
+      <button class="nav" data-seccion="tiempo"><svg class="ic" aria-hidden="true"><use href="#TIE-03"></use></svg>Tiempo</button>
+      <button class="nav" data-seccion="tareas"><svg class="ic" aria-hidden="true"><use href="#INT-02"></use></svg>Tareas</button>
+      <button class="nav" data-seccion="ajustes"><svg class="ic" aria-hidden="true"><use href="#ACC-03"></use></svg>Ajustes</button>
+    </nav>
+    <div class="acciones">
+      <button class="btn acc primario" id="btn-nuevo-sem">+ Semestre</button>
+      <button class="btn chico" id="btn-edit-sem" title="Editar semestre activo">Editar</button>
+      <button class="btn chico" id="btn-borrar-sem" title="Borrar semestre activo">Borrar</button>
+      <select class="sel" id="sem-activo"></select>
+    </div>
+  </aside>
+
+  <main class="contenido">
+    <div class="banner-remoto" id="banner-remoto">
+      <span id="banner-texto"></span>
+      <button class="btn chico" id="banner-recargar">Recargar y ver los cambios</button>
+      <button class="mini" id="banner-cerrar">Ahora no</button>
+    </div>
+
+    <div class="muestra" id="aviso-muestra">
+      <b>Esto es una muestra, no la aplicación.</b> Todo lo que cambies queda guardado en este navegador.
+      Arriba a la izquierda puedes cambiar de semestre o crear uno nuevo. Recorre las cinco pestañas.
+    </div>
+
+    <!__SECCION__semestre__>
+
+    <!__SECCION__estudio__>
+
+
+    <!__SECCION__malla__>
+
+    <!__SECCION__notas__>
+
+    <!__SECCION__tiempo__>
+
+    <!__SECCION__tareas__>
+
+    <!__SECCION__ajustes__>
+
+    <!-- Barra global de cambios sin guardar -->
+    <div id="aj-bar" class="aj-bar"></div>
+  </main>
+
+</div>
+
+<div class="zona-caliente" id="zona-caliente" title="acerca el cursor acá"></div>
+
+<div class="modal" id="modal"><div class="modal-caja" id="modal-caja"></div></div>
+<div class="modal" id="ayuda"><div class="modal-caja ayuda-caja" id="ayuda-caja"></div></div>
+<div class="flotante" id="aviso"></div>
+
+<script id="datos" type="application/json">__DATOS__</script>
+
+<!-- La aplicacion, un archivo por tema. El orden esta en js/orden.txt y lo respeta el
+     ensamblador: todo el codigo comparte un mismo espacio de nombres, asi que el orden importa.
+     pdf.js NO se enlaza aqui: lo carga js/malla/04-pdf.js la primera vez que se importa un PDF,
+     porque pesa 700 KB y la mayoria de las veces no hace falta. -->
+__SCRIPTS__
+</body>
+</html>

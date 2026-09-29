@@ -1,0 +1,407 @@
+<!-- ==========================================================================
+     ajustes.html - pestana Ajustes. CARA = propuesta G2 (boceto aprobado).
+     LOGICA = motor de mimo, oculto detras; el puente (08-g2-puente.js) copia
+     el estado en las dos direcciones. No se reescribe la cara.
+     ========================================================================== -->
+  <section class="seccion ajustes" data-seccion="ajustes" id="p-ajustes">
+<div class="zona-g2">
+
+      <div class="encabezado">
+        <h1>Ajustes</h1>
+        <span class="apoyo">lo que cambies acá se guarda solo, en este navegador</span>
+      </div>
+
+      <div class="rejilla">
+
+        <!-- ============ APARIENCIA (ancho completo) ============
+             Antes esta categoria era "Tema de color" y nada mas, y arriba de
+             todo iba suelto el semaforo de version. El semaforo ES un ajuste
+             de apariencia (te dice de que version sos y te ofrece el cambio),
+             asi que se mudo adentro, como tarjeta de estado. -->
+        <section class="grupo ancho">
+          <div class="g-cab">
+            <svg class="ic"><use href="#EDI-10"></use></svg>
+            <h2>Apariencia</h2>
+            <span class="g-conteo">6 opciones</span>
+          </div>
+          <div class="g-cuerpo">
+
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">Tema de color</div>
+                <div class="ren-nota">El tema cambia los colores, las medidas y el movimiento a la vez. El elegido queda marcado.</div>
+              </div>
+            </div>
+
+            <div class="temas" data-av="tema" style="padding-bottom:4px">
+              <button class="tema on" aria-pressed="true" data-val="clasico">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#fff 55%,#2563eb)"></span>
+                <span class="tm-nom">Clásico</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="negro">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#1e1e1e 55%,#3584e4)"></span>
+                <span class="tm-nom">Negro</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="medianoche">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#131314 55%,#8ab4f8)"></span>
+                <span class="tm-nom">Medianoche</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="deepsea">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#071a2b 55%,#22d3ee)"></span>
+                <span class="tm-nom">Deepsea</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="bosque">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#eef4ee 55%,#1f7a4d)"></span>
+                <span class="tm-nom">Bosque</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="sepia">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#f6efe2 55%,#a1683a)"></span>
+                <span class="tm-nom">Sepia</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="vino">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#fbf3f4 55%,#8e2f43)"></span>
+                <span class="tm-nom">Vino</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="pinky">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#ffffff 55%,#b5226b)"></span>
+                <span class="tm-nom">Pinky</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="alto-contraste">
+                <span class="tm-muestra" style="background:linear-gradient(135deg,#fff 50%,#000 50%)"></span>
+                <span class="tm-nom">Alto contraste</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+              <button class="tema" aria-pressed="false" data-val="sistema">
+                <span class="tm-muestra" style="background:linear-gradient(90deg,#f8fafc 50%,#131314 50%)"></span>
+                <span class="tm-nom">Según el sistema</span><span class="tm-marca" aria-hidden="true"></span>
+              </button>
+            </div>
+
+            <div class="ren" style="margin-top:14px;border-top:1px solid #f2f4f7">
+              <div class="ren-txt">
+                <div class="ren-tit">Ajustes avanzados</div>
+                <div class="ren-nota">Colores de los estados de la malla, relleno, densidad y detalles de las tarjetas. Nada de esto toca tus datos.</div>
+              </div>
+              <div class="ren-ctl"><span class="av-abrir"></span></div>
+            </div>
+            <details class="plegable" id="det-avanzados">
+              <summary><span class="pl-izq">Ajustes avanzados                <span class="pl-cuenta">relleno, colores de estado, densidad y más</span></span>                <span class="pl-flecha">▸</span></summary>
+              <div class="pl-cuerpo"><div id="avanzado"></div></div>
+            </details>
+            <div id="av-tema" style="display:none"></div>
+
+            <!-- El semaforo, mudado aqui: es una tarjeta de estado, no una barra.
+                 Los ID de estado (bv-punto, bv-etq, bv-nota, bv-buscar, bv-bajar,
+                 bv-ver-cambios, bv-cambios) los usa ajustes.js: el motor no se toca,
+                 solo cambia donde vive y como se ve. OJO: esta lista decia antes que
+                 bv-ver tambien se usaba, y es falso: nadie lee bv-ver (el tag del header
+                 tiene su propio id, bv-tag). Se deja vacio mas abajo.
+                 data-local lleva el MARCADOR, no un numero: lo sustituye el armador desde
+                 su unica VERSION, y de ahi lo lee el semaforo (06-actualizar.js). -->
+            <div id="datos-version" data-local="__VERSION__" data-repo="billibu-n/Mimo-Academics"
+                 style="display:none"></div>
+
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">Versión de la aplicación</div>
+                <div class="ren-nota">Se comprueba contra GitHub. Solo avisa: no descarga ni reemplaza nada.</div>
+              </div>
+            </div>
+            <div class="semaforo" id="barra-version">
+              <span class="sf-punto" id="bv-punto" title="estado"></span>
+              <span class="sf-txt">
+                <span class="sf-tit" id="bv-etq">comprobando</span>
+                <span class="sf-sub" id="bv-nota">se comprueba contra GitHub</span>
+              </span>
+              <!-- vacio a proposito: nadie lee bv-ver; se limpia el numero fijo que estaba -->
+              <span class="sf-ver" id="bv-ver"></span>
+            </div>
+            <div class="sf-acciones">
+              <button class="mini" id="bv-buscar">Buscar actualización</button>
+              <a class="mini" id="bv-bajar" href="#" target="_blank" rel="noopener"
+                 style="display:none">Descargar</a>
+                <button class="btn" id="btn-actualizar" style="display:none">Buscar actualización</button>
+                <a id="enlace-actualizar" href="#" target="_blank" rel="noopener" style="display:none">Descargar</a>
+                <p class="ayuda" id="caja-actualizar"></p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ============ GENERAL ============
+             Antes: dos tarjetas de cuatro casillas y dos filas de filtros, todo
+             en renglones de una linea sin explicacion. Ahora cada ajuste dice
+             que hace, y el estado se lee en la pastilla. -->
+        <section class="grupo">
+          <div class="g-cab">
+            <svg class="ic"><use href="#ACC-03"></use></svg>
+            <h2>General</h2>
+            <span class="g-conteo">7 ajustes</span>
+          </div>
+          <div class="g-cuerpo">
+
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">Tildes en los títulos</div>
+                <div class="ren-nota">Si lo apagas, los nombres se escriben sin acento.</div>
+              </div>
+              <button class="pastilla ren-ctl" id="aj-tildes-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
+            </div>
+            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-tildes" checked></div>
+
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">Modo compacto</div>
+                <div class="ren-nota">Menos aire entre filas: entra más en pantalla.</div>
+              </div>
+              <button class="pastilla ren-ctl" id="aj-compacto-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
+            </div>
+            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-compacto"></div>
+
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">En "Por hacer", mostrar lo ya hecho</div>
+                <div class="ren-nota">Deja a la vista las tareas terminadas en vez de esconderlas.</div>
+              </div>
+              <button class="pastilla ren-ctl" id="aj-hechas-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
+            </div>
+            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-ver-hechas"></div>
+
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">Sonido al terminar el tiempo</div>
+                <div class="ren-nota">Suena una vez cuando el temporizador llega a cero.</div>
+              </div>
+              <button class="pastilla ren-ctl" id="aj-sonido-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
+            </div>
+            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-sonido"></div>
+
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">Formato de las horas</div>
+                <div class="ren-nota">Puedes encender más de uno: se muestran juntos, separados por un punto.</div>
+              </div>
+            </div>
+            <div class="ren" style="border-top:0;padding-top:0">
+              <div class="ren-txt"></div>
+              <div class="ren-ctl filtros">
+                <button class="mini" data-formato="hm">1h 30m</button>
+                <button class="mini" data-formato="hdec">1,5 h</button>
+                <button class="mini" data-formato="min">90 min</button>
+              </div>
+            <div id="formatos-hora" style="display:none"></div>
+            </div>
+
+            <!-- Abreviacion de los titulos: es formato, como las horas, asi que
+                 vive en General y no en Apariencia (que es color y temas). -->
+            <div class="ren">
+              <div class="ren-txt">
+                <div class="ren-tit">Cómo se abrevian los títulos</div>
+                <div class="ren-nota">En la tabla de horas el nombre comparte columna con su casilla. El completo está siempre en el globito.</div>
+              </div>
+              <div class="ren-ctl filtros">
+                <button class="mini" data-titulo="envuelto">Completo</button>
+                <button class="mini" data-titulo="puntos">Recortado</button>
+                <button class="mini" data-titulo="iniciales">Iniciales</button>
+              </div>
+            <div id="titulos-modo" style="display:none"></div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ============ NAVEGACIÓN ============
+             Antes: un desplegable propio para elegir el modo. Habia que abrirlo
+             para recordar cual estaba puesto. Ahora los tres modos se ven a la
+             vez y el elegido se marca. -->
+        <section class="grupo">
+          <div class="g-cab">
+            <svg class="ic"><use href="#INT-25"></use></svg>
+            <h2>Navegación</h2>
+            <span class="g-conteo">4 ajustes</span>
+          </div>
+          <div class="g-cuerpo">
+
+            <div class="ren" style="border-top:0">
+              <div class="ren-txt">
+                <div class="ren-tit">Barra de secciones</div>
+                <div class="ren-nota">Dónde va el menú de secciones y cómo se abre.</div>
+              </div>
+            </div>
+
+            <div class="modos">
+              <button class="modo on" data-barra="manual"><span class="md-visto"></span>
+                <span class="md-nom">Manual</span>
+                <span class="md-nota">se abre con el botón ☰</span></button>
+              <button class="modo" data-barra="automatico"><span class="md-visto"></span>
+                <span class="md-nom">Automática</span>
+                <span class="md-nota">sale al acercar el cursor al borde</span></button>
+              <button class="modo" data-barra="fijo"><span class="md-visto"></span>
+                <span class="md-nom">Fija</span>
+                <span class="md-nota">siempre visible</span></button>
+            </div>
+
+            <div class="ren" style="margin-top:12px">
+              <div class="ren-txt">
+                <div class="ren-tit">Posición del menú</div>
+                <div class="ren-nota">Dónde colocas la barra de secciones.</div>
+              </div>
+            </div>
+            <div class="modos">
+              <button class="modo on" data-pos="izquierda"><span class="md-visto"></span>
+                <span class="md-nom">Izquierda</span>
+                <span class="md-nota">columna a la izquierda</span></button>
+              <button class="modo" data-pos="derecha"><span class="md-visto"></span>
+                <span class="md-nom">Derecha</span>
+                <span class="md-nota">columna a la derecha</span></button>
+              <button class="modo" data-pos="arriba"><span class="md-visto"></span>
+                <span class="md-nom">Arriba</span>
+                <span class="md-nota">barra horizontal, como la 1.0.0</span></button>
+            </div>
+
+            <div class="ren" style="margin-top:12px">
+              <div class="ren-txt">
+                <div class="ren-tit">Estilo del menú</div>
+                <div class="ren-nota">La forma de los botones de sección.</div>
+              </div>
+            </div>
+            <div class="modos">
+              <button class="modo on" data-estilo="clasica"><span class="md-visto"></span>
+                <span class="md-nom">Clásica</span>
+                <span class="md-nota">el fondo del tema</span></button>
+              <button class="modo" data-estilo="compacta"><span class="md-visto"></span>
+                <span class="md-nom">Compacta</span>
+                <span class="md-nota">más pequeña</span></button>
+              <button class="modo" data-estilo="pastillas"><span class="md-visto"></span>
+                <span class="md-nom">Pastillas</span>
+                <span class="md-nota">redondeada, resalta la activa</span></button>
+            </div>
+
+            <div class="ren" style="margin-top:12px">
+              <div class="ren-txt">
+                <div class="ren-tit">Recordar cómo la dejé</div>
+                <div class="ren-nota">Al volver a abrir, la barra aparece como la dejaste.</div>
+              </div>
+              <button class="pastilla ren-ctl" id="aj-recordar-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
+            </div>
+            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-recordar" checked></div>
+
+          </div>
+        </section>
+
+        <!-- ============ MIS DATOS ============
+             Tercera carta de la fila, junto a General y Navegacion. Son pocos
+             botones, asi que caben sin apretar y la fila queda pareja en vez de
+             dejar un hueco al lado. Los dos bloques siguen plegables: nadie
+             respalda todos los dias, pero escondidos no estorban. -->
+        <section class="grupo">
+          <div class="g-cab">
+            <svg class="ic"><use href="#INT-06"></use></svg>
+            <h2>Mis datos</h2>
+            <span class="g-conteo">2 bloques</span>
+          </div>
+          <div class="g-cuerpo">
+
+            <details class="plegable" open>
+              <summary>
+                <svg class="ic"><use href="#ARQ-07"></use></svg>
+                <span class="pl-izq">Respaldo
+                  <span class="pl-cuenta">llevarte todo a otro navegador o a otro computador</span></span>
+                <span class="pl-flecha">▸</span>
+              </summary>
+              <div class="pl-cuerpo">
+                <p class="ayuda">Todo se guarda en este navegador, no en un servidor. Usa estos botones
+                  para respaldar o para llevar tus datos a otro computador.</p>
+                <div class="filtros apilados" style="padding-top:10px">
+                  <button class="btn" id="exportar">Descargar mis datos (.json)</button>
+                  <button class="btn suave" id="importar">Cargar un archivo</button>
+                  <button class="btn suave" id="restablecer"><svg class="ic"><use href="#ACC-07"></use></svg>Restablecer todo</button>
+                </div>
+                <input type="file" id="archivo" accept=".json" style="display:none">
+                <p class="ayuda" id="estado-guardado"></p>
+              </div>
+            </details>
+
+            <details class="plegable" id="plegable-respaldo-carpeta" hidden>
+              <summary>
+                <svg class="ic"><use href="#ARQ-07"></use></svg>
+                <span class="pl-izq">Copia automatica en una carpeta
+                  <span class="pl-cuenta">para que no se pierda si borras la aplicacion</span></span>
+                <span class="pl-flecha">▸</span>
+              </summary>
+              <div class="pl-cuerpo">
+                <p class="ayuda">Elige una carpeta de tu computador (por ejemplo, una dentro de
+                  Documentos). Mimo guardara ahi una copia de tus datos con cada cambio y conservara
+                  las 3 ultimas. Asi tu progreso no se pierde aunque desinstales o borres la
+                  aplicacion.</p>
+                <div class="filtros apilados" style="padding-top:10px">
+                  <button class="btn" id="resp-carpeta-elegir">Elegir carpeta&hellip;</button>
+                  <button class="btn suave" id="resp-carpeta-ahora" disabled>Guardar copia ahora</button>
+                  <button class="btn suave" id="resp-carpeta-quitar" disabled>Dejar de respaldar ahi</button>
+                </div>
+                <p class="ayuda" id="resp-carpeta-estado"></p>
+                <p class="ayuda" id="resp-carpeta-aviso"></p>
+              </div>
+            </details>
+
+            <details class="plegable">
+              <summary>
+                <svg class="ic"><use href="#TIE-28"></use></svg>
+                <span class="pl-izq">Calendario
+                  <span class="pl-cuenta">llevar tus eventos a Google o Apple Calendar</span></span>
+                <span class="pl-flecha">▸</span>
+              </summary>
+              <div class="pl-cuerpo">
+                <p class="ayuda">Exporta tus eventos en formato .ics e impórtalos en Google Calendar o
+                  Apple Calendar, o trae a mimo un calendario .ics que ya tengas.</p>
+                <div class="filtros apilados" style="padding-top:10px">
+                  <button class="btn" id="exportar-ical">Exportar calendario (.ics)</button>
+                  <button class="btn suave" id="importar-ical">Importar calendario (.ics)</button>
+                </div>
+                <input type="file" id="archivo-ical" accept=".ics" style="display:none">
+                <p class="ayuda" id="estado-ical"></p>
+              </div>
+            </details>
+
+          </div>
+        </section>
+
+        <!-- ============ SEMESTRE (ancho completo) ============
+             Las dos tarjetas van lado a lado: antes ya estaban en dos columnas,
+             pero dentro de una caja que las apretaba contra el borde. -->
+        <section class="grupo ancho">
+          <div class="g-cab">
+            <svg class="ic"><use href="#EDI-07"></use></svg>
+            <h2>Semestre</h2>
+            <span class="g-conteo">2 semestres · 5 metas</span>
+          </div>
+          <div class="g-cuerpo">
+            <div class="rejilla" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+
+              <div>
+                <div class="ren" style="border-top:0">
+                  <div class="ren-txt">
+                    <div class="ren-tit">Semestres guardados</div>
+                    <div class="ren-nota">Cada semestre guarda sus ramos, calendario, notas y horas. Para agregar ramos, anda a Malla.</div>
+                  </div>
+                </div>
+                <div id="lista-semestres"></div>
+              </div>
+
+              <div>
+                <div class="ren" style="border-top:0">
+                  <div class="ren-txt">
+                    <div class="ren-tit">Metas por ramo</div>
+                    <div class="ren-nota">Horas semanales que quieres dedicarle a cada ramo.</div>
+                  </div>
+                </div>
+                <div class="env-tabla"><table class="comp" id="tabla-metas-ramo"></table></div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+
+      </div>
+    </div>
+  </section>

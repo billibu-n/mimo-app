@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Mimo Academics
+Comment=Panel universitario (abre la app en el navegador)
+# EDITAR: pon la ruta REAL de esta carpeta (donde esta lanzador.py).
+Exec=python3 /ruta/a/mimo/lanzador.py
+Path=/ruta/a/mimo
+Icon=iconos/icon-512.png
+Terminal=false
+Categories=Education;Office;
