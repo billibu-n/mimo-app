@@ -6,7 +6,7 @@ the desktop launcher and the Tauri shell; the SVG is the interface's symbol shee
 | file | where it is used |
 |---|---|
 | `icon-16.png` | smallest favicon size |
-| `icon-32.png` | browser tab favicon (declared in `plantilla.html`) |
+| `icon-32.png` | browser tab favicon (declared in `construir/plantilla.html`) |
 | `icon-64.png` | sidebar logo and PWA manifest |
 | `icon-512.png` | PWA manifest (regular and `maskable`) and launcher icon |
 | `iconos.svg` | the interface's SVG symbol sheet. The builder **inlines** it into `index.html` |
@@ -25,9 +25,9 @@ from memory):
 
 | place | what |
 |---|---|
-| `plantilla.html` | the favicon (`<link rel="icon">`) and the sidebar logo (`<img class="marca-ic">`) |
+| `construir/plantilla.html` | the favicon (`<link rel="icon">`) and the sidebar logo |
 | `manifest.json` | the three `icons` entries (PWA) |
-| `mimo.desktop` | `Icon=`, the launcher's icon path (relative to the `.desktop`) |
+| `herramientas/mimo.desktop` | `Icon=`, the launcher's icon path (relative to the `.desktop`) |
 | `escritorio/preparar-frontend.sh` | the list of what gets copied into Tauri's frontend |
 
 **In the builder (`~/projects/mimo_config/construir/`):**

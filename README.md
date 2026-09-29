@@ -119,7 +119,7 @@ html/           one piece per tab
 iconos/         the icons and the interface sprite
 sonido/         the timer alarm
 vendor/         PDF reader engine (pdf.js)
-plantilla.html  the page shell (head, sidebar, modals)
+construir/      the builder's sources: the page shell and the service worker template
 version.json    version number, for the update button (written by the builder)
 ```
 

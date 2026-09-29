@@ -225,7 +225,8 @@ def detectar_navegador():
 
 def encontrar_proyecto(ruta):
     """Acepta la carpeta de la app (con index.html) o una que lo tenga en `mimo/`."""
-    for candidata in (ruta, os.path.join(ruta, 'mimo')):
+    madre = os.path.dirname(ruta)
+    for candidata in (ruta, os.path.join(ruta, 'mimo'), madre):
         if os.path.isfile(os.path.join(candidata, 'index.html')):
             return os.path.abspath(candidata)
     sys.exit('No encuentro index.html en:\n  %s\n  %s' %
@@ -256,7 +257,11 @@ def comando_app(base, url, perfil):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--proyecto', default=AQUI, help='carpeta de la aplicacion (con index.html)')
+    # La aplicacion vive en la RAIZ del repositorio y este lanzador en `herramientas/`:
+    # por defecto se apunta a la raiz (la carpeta madre de este fichero), no a la propia.
+    raiz_repo = os.path.dirname(AQUI)
+    ap.add_argument('--proyecto', default=raiz_repo,
+                    help='carpeta de la aplicacion (con index.html)')
     ap.add_argument('--puerto', type=int, default=PUERTO_FIJO)
     ap.add_argument('--pestana', action='store_true', help='abrir en una pestana normal')
     ap.add_argument('--reparar', action='store_true',
@@ -278,7 +283,9 @@ def main():
     raiz = encontrar_proyecto(os.path.abspath(a.proyecto))
     puerto = a.puerto
     # --reparar abre la pagina que limpia la copia vieja del navegador y luego entra sola.
-    pagina = 'fix.html' if a.reparar else 'index.html'
+    # `fix.html` se mudo con este lanzador a `herramientas/`: se sirve desde su ruta,
+    # no desde la raiz del proyecto (donde ya no esta).
+    pagina = ('herramientas/fix.html' if a.reparar else 'index.html')
     url = 'http://127.0.0.1:%d/%s' % (puerto, pagina)
 
     # Si ya hay una copia de Mimo corriendo en el puerto fijo, NO se levanta otro servidor: se

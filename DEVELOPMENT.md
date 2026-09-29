@@ -73,7 +73,7 @@ when it starts and tells you which one to open with:
 ./abrir.sh --navegador /usr/bin/chromium-browser
 ```
 
-If that binary does not exist, find out which one you have: `./diagnostico.sh`.
+If that binary does not exist, find out which one you have: `./herramientas/diagnostico.sh`.
 
 ## 3. The desktop application
 
@@ -124,14 +124,14 @@ To remove it: `sudo dnf remove mimo-escritorio`. **Your data is not deleted.**
 | path | what it is |
 |---|---|
 | `index.html` | **THE ASSEMBLED PRODUCT.** Do not edit it by hand: rebuild it |
-| `plantilla.html`, `html/`, `css/`, `js/` | the app's SOURCES |
+| `html/`, `css/`, `js/` | the app's SOURCES |
+| `construir/` | the builder's own sources (`plantilla.html`, `plantilla-sw.js`) |
 | `js/orden.txt` | the authoritative index of which JS enters, and in what order |
-| `sw.js` / `plantilla-sw.js` | service worker: product / source |
+| `sw.js` | service worker: the PRODUCT (rebuilt from `construir/plantilla-sw.js`) |
 | `manifest.json` | PWA manifest |
 | `iconos/` | the icons and the interface sprite (see `ICONS.md`) |
-| `lanzador.py`, `abrir.sh`, `mimo.desktop` | the classic desktop launcher |
-| `diagnostico.sh` | tells you which browser the launcher finds, and why |
-| `fix.html` | repair page (clears the service worker and the cache; does not touch your data) |
+| `herramientas/` | the browser launcher, the diagnosis and the repair page |
+| `abrir.sh` | shortcut: opens the app in the browser (forwards to `herramientas/`) |
 | `escritorio/` | **the Tauri shell**: the desktop application |
 | `_trabajo/` | working notes. **Not versioned** |
 
@@ -144,7 +144,7 @@ To remove it: `sudo dnf remove mimo-escritorio`. **Your data is not deleted.**
 | `failed to run custom build command for libdbus-sys` | DBus development files are missing: `sudo dnf install dbus-devel` |
 | The folder dialog does not open | you are on Brave, which ships it disabled: use Chromium or the desktop version |
 | The app shows an old version | `./abrir.sh --reparar` |
-| The browser cannot find the folder | `./diagnostico.sh` |
+| The browser cannot find the folder | `./herramientas/diagnostico.sh` |
 | `cargo: command not found` | Rust is missing: `curl ... https://sh.rustup.rs \| sh -s -- -y` and reload the terminal |
 
 ## Note on AI assistance
