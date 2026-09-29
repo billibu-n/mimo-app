@@ -182,3 +182,11 @@ that must be kept, are in **[CREDITS.md](CREDITS.md)**.
   (MIT or Apache 2.0).
 - **AI tools** that assisted the development: **DeepSeek** and **OpenHands**.
   The design, the decisions and the contents are **Billibu**'s.
+
+## Support the Project
+
+If Mimo Academics has been helpful to you and you'd like to support its continued development, consider supporting via Buy Me a Coffee! ☕
+
+[![](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-yellow?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://www.buymeacoffee.com/billibu)
+
+Every contribution helps cover development time, hosting costs, and future improvements. Thank you for being part of this journey!
