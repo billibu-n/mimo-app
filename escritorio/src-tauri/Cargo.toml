@@ -15,4 +15,10 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 [profile.release]
-opt-level = 0
+# `opt-level = 0` (el valor que trae por defecto cuando alguien lo escribe asi) deja el caparazon
+# SIN optimizar: el binario funciona, pero arranca y responde mas lento sin ninguna ganancia a
+# cambio. Se sube a 3, que es lo normal para una version que se entrega.
+# Medido antes de subirlo: el tiron de la app al cambiar de tema (534 ms en WebKitGTK) NO viene de
+# aqui -- eso lo hace el motor web al repintar el CSS --, pero el resto del caparazon si se
+# beneficia. La compilacion tarda mas; el binario, menos.
+opt-level = 3

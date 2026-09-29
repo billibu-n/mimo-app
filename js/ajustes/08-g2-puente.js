@@ -210,10 +210,12 @@
 
   /* ---- la galeria de temas del boceto aplica el tema real -----------------
      El motor dibuja el tema en #av-tema (oculto). La cara visible son las
-     tarjetas .tema[data-tema] del boceto. Al pulsar una, se aplica el tema por el
+     tarjetas .tema[data-val] del boceto. Al pulsar una, se aplica el tema por el
      mismo camino que avSeg (borrador + aplicarAvanzado + repintar), y se marca
-     "elegido" en esa tarjeta. En "Según el sistema" no existe en mimo (los 9
-     temas son fijos), asi que esa tarjeta se quita del flujo o se ignora. */
+     "elegido" en esa tarjeta.
+     OJO: aqui hubo una tarjeta "Segun el sistema" que NO hacia nada (mimo tiene
+     temas fijos y el CSS no trae ninguna regla prefers-color-scheme). Se quito de
+     la galeria en vez de dejar un boton que prometia algo que no hacia. */
   var tarjetas = document.querySelectorAll('#p-ajustes .tema[data-val]');
   function pintarTemaElegido() {
     var actual = 'clasico';
@@ -235,8 +237,6 @@
     });
   }
   tarjetas.forEach(function (t) {
-    // "sistema" no es un tema de mimo: se ignora (no hace nada).
-    if (t.dataset.val === 'sistema') return;
     t.onclick = function () {
       // El MISMO camino que el motor: escribir en el BORRADOR, no aplicar directo.
       // Asi el tema se previsualiza y aparece la barra "N cambios sin guardar"
