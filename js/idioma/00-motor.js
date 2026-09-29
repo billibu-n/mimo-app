@@ -129,6 +129,8 @@ function cambiarIdioma(codigo) {
   aplicarIdioma(document);
   if (window.mimoIdiomaPanel) { try { window.mimoIdiomaPanel.pintar(); } catch (e) {} }
   if (typeof renderTodo === 'function') { try { renderTodo(true); } catch (e) {} }
+  // Quien tenga textos que NO viven en el DOM fijo (enlaces calculados, listas) se apunta aqui.
+  document.dispatchEvent(new CustomEvent('mimo:idioma', { detail: { codigo: codigo } }));
   return true;
 }
 

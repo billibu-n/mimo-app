@@ -19,7 +19,7 @@ registrarIdioma('es', {
   'ajustes.idioma': 'Idioma',
   'ajustes.idioma.d': 'El idioma de la interfaz.',
   'ajustes.colaborar': 'Colaborar',
-  'ajustes.colaborar.d': 'Apoyar el proyecto con un café.',
+  'ajustes.colaborar.d': 'Tres formas de ayudar sin pagar; el café es opcional.',
   'ajustes.semestre': 'Semestre',
   'ajustes.semestre.d': 'Los semestres guardados y sus metas.',
   'ajustes.respaldo': 'Respaldo',
@@ -32,5 +32,34 @@ registrarIdioma('es', {
   'idioma.nota': 'Ocho idiomas. Solo los que están listos traducen de verdad; el resto se queda en español.',
   'idioma.preparacion': 'en preparación',
   'idioma.simplificado': 'chino simplificado',
-  'idioma.tradicional': 'chino tradicional'
+  'idioma.tradicional': 'chino tradicional',
+
+  // --- la ventana de Colaborar (SOLO GitHub; aqui no se publica ningún correo) ---
+  'colab.intro': { parts: [
+    'Mimo es ', ['b', 'gratis y sin anuncios'],
+    '. Si te sirve, puedes ayudar así (todo se abre en GitHub, en tu navegador):'
+  ] },
+  'colab.fallo': 'Contar un fallo',
+  'colab.fallo.d': 'Algo que no funciona o se ve mal.',
+  'colab.idea': 'Proponer una idea',
+  'colab.idea.d': 'Algo que falta o se podría mejorar.',
+  'colab.compartir': 'Enseñárselo a alguien',
+  'colab.compartir.d': 'Un compañero al que le sirva.',
+  'colab.compartir.titulo': 'Mimo Academics',
+  'colab.cafe': 'Invítame un café',
+  'colab.cafe.nota': 'Opcional; la aplicación no cobra nada por dentro.',
+  'colab.copiado': 'Enlace copiado.',
+  'colab.faq': 'Preguntas frecuentes',
+  'colab.faq.cuenta': 'cinco dudas de siempre, con su respuesta',
+  'colab.p1': '¿Es obligatorio colaborar?',
+  'colab.r1': 'No. Mimo funciona igual de completo sin colaborar.',
+  'colab.p2': '¿Necesito cuenta de GitHub?',
+  'colab.r2': 'Solo para contar un fallo o proponer una idea: GitHub pide cuenta para publicar (es gratis). Para compartir la aplicación, no hace falta.',
+  'colab.p3': '¿Se ven mis datos si reporto?',
+  'colab.r3': 'No. El informe solo lleva la versión, el sistema y el navegador; nunca tus ramos, notas ni tu respaldo. Si pones una captura, tapa antes lo tuyo.',
+  'colab.p4': '¿A dónde va lo que aportas?',
+  'colab.r4': 'A mantener el proyecto: el tiempo de quien lo hace y lo que cuesta tenerlo en línea.',
+  'colab.p5': '¿Puedo ayudar de otra forma?',
+  'colab.r5': 'Sí: las tres de arriba ayudan tanto o más que el café.',
+  'colab.fallo.cuerpo': 'Qué pasó:\n\n\nQué esperabas que pasara:\n\n\nCómo reproducirlo:\n1. \n2. \n3. \n\n— Datos del equipo (se rellenan solos) —\nVersión de Mimo: {version}\nNavegador y sistema: {navegador} · {sistema}\n\nSi añades capturas, tapa antes tus datos.'
 });

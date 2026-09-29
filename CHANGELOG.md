@@ -11,6 +11,23 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ### Added
 
+- **The *Support us* window now shows the ways to help that cost nothing**, and the coffee is
+  optional and set apart. Before it was a button to buy a coffee and little else. Now it offers
+  **three cards** (the same card as the rest of the app: icon, title, description below):
+  **Report a bug** (opens the repository's own `bug.md` template in Issues, already filled with
+  the app version and the browser and system, so the report is useful from the first line),
+  **Suggest an idea** (opens a new discussion in the *Ideas* category) and **Tell someone about
+  it** (shares the project; on desktop, where there is no system share sheet, it copies the link).
+  Under the cards sits the **coffee**, marked as optional and with the note that the app charges
+  nothing inside, and a **collapsible FAQ** with five questions (among them: *will my data be
+  visible if I report?* — no: the report carries version, system and browser only).
+
+  **GitHub only, and no personal email.** The repository already ships issue templates
+  (`bug.md`, `feature-request.md`, `question.md`), the *Ideas* discussion category and a
+  `config.yml` that routes questions to Discussions, so nothing had to be created on GitHub and
+  **no email address is published anywhere** — which is what keeps the app from collecting spam
+  bots. The whole window is translated with the language engine (Spanish and English), and the
+  report body is written in the language the app is *in* at that moment.
 - **Language engine (i18n)**: the app can now translate its own texts, not just list languages.
   A small engine built on the *format of the standard* (i18next-style keys such as
   `ajustes.apariencia`, one dictionary file per language, fallback to Spanish): adding a language

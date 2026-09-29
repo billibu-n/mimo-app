@@ -1901,24 +1901,52 @@
         <div class="aj-panel" id="colab-panel" role="dialog" aria-modal="true" aria-labelledby="colab-titulo">
           <div class="aj-cab">
             <span class="t-ic"><svg class="ic"><use href="#EST-09"></use></svg></span>
-            <div><h2 id="colab-titulo">Colaborar</h2>
-              <div class="sub">Apoyar el proyecto.</div></div>
+            <div><h2 id="colab-titulo" data-i18n="ajustes.colaborar">Colaborar</h2></div>
           </div>
           <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
-            <p class="ayuda">Mimo es <b>gratis y sin anuncios</b>, y se mantiene con el tiempo de quien lo
-              hace. Si te sirve, puedes invitarme un café. Se abre en tu navegador; <b>no se cobra nada
-              dentro de la aplicación</b>.</p>
-            <div style="margin:16px 0">
-              <a class="bmc" href="https://www.buymeacoffee.com/billibu" target="_blank" rel="noopener">
+            <p class="ayuda" data-i18n-html="colab.intro"></p>
+
+            <div class="opciones">
+              <a class="grupo opcion" id="colab-enlace-fallo" href="#" target="_blank" rel="noopener">
+                <div class="g-cab">
+                  <span class="t-ic"><svg class="ic"><use href="#DES-08"></use></svg></span>
+                  <div class="g-txt"><h2 class="g-tit" data-i18n="colab.fallo"></h2>
+                    <div class="g-des" data-i18n="colab.fallo.d"></div></div>
+                  <span class="o-flecha" aria-hidden="true">↗</span>
+                </div>
+              </a>
+              <a class="grupo opcion" id="colab-enlace-idea" href="#" target="_blank" rel="noopener">
+                <div class="g-cab">
+                  <span class="t-ic"><svg class="ic"><use href="#PER-06"></use></svg></span>
+                  <div class="g-txt"><h2 class="g-tit" data-i18n="colab.idea"></h2>
+                    <div class="g-des" data-i18n="colab.idea.d"></div></div>
+                  <span class="o-flecha" aria-hidden="true">↗</span>
+                </div>
+              </a>
+              <button class="grupo opcion" id="colab-compartir" type="button">
+                <div class="g-cab">
+                  <span class="t-ic"><svg class="ic"><use href="#ACC-08"></use></svg></span>
+                  <div class="g-txt"><h2 class="g-tit" data-i18n="colab.compartir"></h2>
+                    <div class="g-des" data-i18n="colab.compartir.d"></div></div>
+                  <span class="o-flecha" aria-hidden="true">↗</span>
+                </div>
+              </button>
+            </div>
+
+            <div class="colab-cafe">
+              <a class="bmc" id="colab-enlace-cafe" href="#" target="_blank" rel="noopener">
                 <svg class="taza" viewBox="0 0 24 24" fill="none" aria-hidden="true" width="22" height="22">
                   <path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="#222"/>
                   <path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17" stroke="#222" stroke-width="1.6"/>
                   <path d="M8 3.5c-.6.8-.6 1.6 0 2.4M11.5 3c-.6.8-.6 1.6 0 2.4" stroke="#222" stroke-width="1.4" stroke-linecap="round"/>
                 </svg>
-                Invítame un café
+                <span data-i18n="colab.cafe"></span>
               </a>
+              <span class="ayuda" data-i18n="colab.cafe.nota"></span>
             </div>
+
+            <div id="colab-preguntas"></div>
           </div>
           <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
         </div>
@@ -2169,6 +2197,7 @@
 <script src="js/ajustes/06-actualizar.js"></script>
 <script src="js/ajustes/07-ical.js"></script>
 <script src="js/ajustes/09-paneles.js"></script>
+<script src="js/ajustes/10-colaborar.js"></script>
 <script src="js/comun/09-pwa.js"></script>
 <script src="js/comun/11-avisos.js"></script>
 <script src="js/comun/06-arranque.js"></script>

@@ -40,6 +40,7 @@ comun/07-select.js
 ajustes/06-actualizar.js
 ajustes/07-ical.js
 ajustes/09-paneles.js
+ajustes/10-colaborar.js
 comun/09-pwa.js
 comun/11-avisos.js
 comun/06-arranque.js

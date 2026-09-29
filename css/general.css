@@ -1438,6 +1438,27 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 .bmc .taza { flex: none; }
 .aj-panel .ayuda { color: var(--fg); }
 
+/* --- la ventana "Colaborar": las tres formas de ayudar, como tarjetas ----------
+   Una tarjeta por forma (icono + titulo, y la descripcion debajo), el mismo patron
+   que las tarjetas de Ajustes. La flecha marca que abre fuera, en GitHub. */
+.opciones { display: grid; gap: 8px; margin: 12px 0 0; }
+.opcion { text-decoration: none; color: inherit; }
+.opcion .g-cab { align-items: center; }
+.o-flecha { margin-left: auto; color: var(--muted); font-size: 1rem; line-height: 1; flex: none; }
+.opcion:hover .o-flecha { color: var(--ac); }
+/* El cafe va debajo, en su propio renglon, con su nota al lado. */
+.colab-cafe { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 16px 0 2px; }
+/* La FAQ, dentro del desplegable: mismo patron que el resto de la app. */
+#colab-preguntas { margin-top: 14px; }
+.preguntas { border-top: 1px solid var(--line); }
+.pregunta { border-bottom: 1px solid var(--line); }
+.pregunta summary { list-style: none; cursor: pointer; padding: 10px 2px; font-size: .86rem;
+  font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.pregunta summary::-webkit-details-marker { display: none; }
+.pregunta summary::before { content: "+"; color: var(--ac); font-weight: 700; width: 12px; }
+.pregunta[open] summary::before { content: "–"; }
+.pregunta p { margin: 0 2px 12px 22px; font-size: .82rem; color: var(--muted2); }
+
 /* --- lo que el motor necesita pero no se ve ----------------------------- */
 .oculto-para-el-motor { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 
