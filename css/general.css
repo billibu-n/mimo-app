@@ -1218,10 +1218,20 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 /* --- un ajuste = un renglon --------------------------------------------- */
 .ren { display: flex; align-items: center; gap: 14px; padding: 11px 0; border-top: 1px solid var(--line2); }
 .ren:first-of-type { border-top: 0; }
-.ren-txt { flex: 1 1 auto; min-width: 0; }
+/* DOS COLUMNAS: el nombre con ancho FIJO y las opciones siempre en la misma vertical, para que al
+   crecer el numero de botones no invadan el titulo. Es alineacion, no una raya: no se dibuja nada. */
+.ren { display: grid; grid-template-columns: 34% 1fr; gap: 14px; }
+.ren-txt { min-width: 0; }
 .ren-tit { font-size: .85rem; font-weight: 550; }
 .ren-nota { font-size: .75rem; color: var(--muted); margin-top: 2px; line-height: 1.45; }
-.ren-ctl { flex: 0 0 auto; }
+.ren-ctl { justify-self: start; }
+.filtros { justify-content: flex-start; }
+/* El ejemplo del recorte: recuadro de geometria FIJA; el texto se ajusta a el. */
+.ren-eco { display: grid; grid-template-columns: 34% 1fr; gap: 14px; align-items: center; padding: 2px 0 10px; }
+.eco-etq { font-size: .72rem; color: var(--muted); }
+.eco-caja { width: 200px; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--sup2); padding: 5px 9px;
+  font-size: .82rem; }
 
 /* --- la galeria de temas (cara del boceto) ------------------------------ */
 .temas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }

@@ -22,8 +22,8 @@
   /* ---- una pastilla por cada casilla que el motor maneja ------------------ */
   // [id de la pastilla visible, id de la casilla real]
   const PASTILLAS = [
-    ['aj-tildes-pastilla',   'aj-tildes'],
-    ['aj-compacto-pastilla', 'aj-compacto'],
+    // 'aj-hechas' y 'aj-sonido' siguen aqui porque FUNCIONAN, pero se MUDAN (Por hacer -> Calendario;
+    // Sonido -> Tiempo). Mientras no se muevan, su pastilla esta oculta. Ver PENDIENTES-GENERAL.md.
     ['aj-hechas-pastilla',   'aj-ver-hechas'],
     ['aj-sonido-pastilla',   'aj-sonido'],
     ['aj-recordar-pastilla', 'aj-recordar'],
@@ -50,6 +50,8 @@
     PASTILLAS.forEach(par => sincronizar(par[0], par[1]));
     pintarModos();
     pintarTitulos();
+    pintarEjemplo();
+    pintarFuente();
   }
 
   /* ---- como se abrevian los titulos -------------------------------------
@@ -73,9 +75,61 @@
       if (typeof guardar === 'function') guardar();
       if (typeof renderEstudio === 'function') renderEstudio();
       pintarTitulos();
+      pintarEjemplo();
     };
   });
   pintarTitulos();
+
+  /* ---- el EJEMPLO del recorte ---------------------------------------------
+     Un nombre largo dentro de un recuadro de geometria FIJA; el texto se ajusta a el. Usa la misma
+     regla que la app (resumirTitulo), asi que ensena de verdad lo que pasara. */
+  var NOMBRE_EJEMPLO = 'Mecánica de los Medios Continuos';
+  function pintarEjemplo() {
+    var caja = document.getElementById('gen-ejemplo');
+    if (!caja) return;
+    var modo = 'envuelto';
+    try { if (typeof formatoTitulo === 'function') modo = formatoTitulo().modo || 'envuelto'; } catch (e) {}
+    if (modo === 'puntos') {
+      caja.style.whiteSpace = 'nowrap';
+      caja.textContent = (typeof resumirTitulo === 'function') ? resumirTitulo(NOMBRE_EJEMPLO) : NOMBRE_EJEMPLO;
+    } else if (modo === 'iniciales') {
+      caja.style.whiteSpace = 'nowrap';
+      caja.textContent = (typeof resumirTitulo === 'function') ? resumirTitulo(NOMBRE_EJEMPLO) : NOMBRE_EJEMPLO;
+    } else {
+      // "Hueco": el recuadro no cambia; el nombre se recorta a su ancho con puntos suspensivos.
+      caja.style.whiteSpace = 'nowrap';
+      caja.textContent = NOMBRE_EJEMPLO;
+    }
+  }
+
+  /* ---- tamano de la FUENTE ------------------------------------------------
+     Global. Se guarda en E.ajustes.av.fuente (motor 02-avanzados.js) y escala la app entera. */
+  var bFuente = document.querySelectorAll('#p-ajustes button[data-fuente]');
+  function pintarFuente() {
+    var actual = 1;
+    try {
+      var a = (typeof avVista === 'function') ? avVista() : {};
+      actual = Number(a.fuente) || 1;
+    } catch (e) {}
+    bFuente.forEach(function (b) { b.classList.toggle('on', Math.abs(Number(b.dataset.fuente) - actual) < 0.001); });
+  }
+  bFuente.forEach(function (b) {
+    b.onclick = function () {
+      // El tamaño de la fuente se guarda AL INSTANTE, como los demas ajustes de General
+      // (titulos y formatos). Si fuera por el borrador habria que pulsar "Aceptar y guardar"
+      // solo para esto, y en la misma ventana unos ajustes se guardarian y otros no.
+      if (!E.ajustes) E.ajustes = {};
+      if (!E.ajustes.av) E.ajustes.av = {};
+      E.ajustes.av.fuente = Number(b.dataset.fuente) || 1;
+      if (typeof avBorrador !== 'undefined' && avBorrador) avBorrador.fuente = E.ajustes.av.fuente;
+      if (typeof guardar === 'function') guardar();
+      if (typeof aplicarAvanzado === 'function') aplicarAvanzado();
+      if (typeof renderTodo === 'function') renderTodo(true);
+      if (typeof pintarBarraAjustes === 'function') pintarBarraAjustes();
+      pintarFuente();
+    };
+  });
+  pintarFuente();
 
   /* ---- formato de las horas -----------------------------------------------
      El motor guarda E.ajustes.formatos como LISTA (se pueden marcar varios formatos
@@ -186,17 +240,20 @@
   });
   pintarBarraPos(); pintarBarraEstilo();
 
-  /* ---- la cara de la version ---------------------------------------------
-     La pastilla de estado muestra lo mismo que el semaforo, sin repetir la
-     logica: solo copia el texto que el motor ya escribio en #bv-etq. */
+  /* ---- la cara de la VERSION ---------------------------------------------
+     El motor (06-actualizar.js) escribe el semaforo oculto (#bv-etq) y su caja (#caja-actualizar).
+     En General se muestra la version y, al pulsar "Buscar", el resultado bajo el apartado. */
   function sincronizarVersion() {
-    const pastilla = document.getElementById('aj-version-pastilla');
-    const etq = document.getElementById('bv-etq');
-    const caja = document.getElementById('barra-version');
-    if (!pastilla || !etq || !caja) return;
-    const texto = document.getElementById('aj-version-estado');
-    if (texto) texto.textContent = etq.textContent;
-    pastilla.setAttribute('aria-pressed', caja.classList.contains('al-dia') ? 'true' : 'false');
+    const gen = document.getElementById('gen-version');
+    if (gen && typeof versionLocal === 'function') gen.textContent = 'v' + versionLocal();
+    const caja = document.getElementById('caja-actualizar');
+    const visible = document.getElementById('aj-version-aviso');
+    if (visible && caja) {
+      const t = (caja.textContent || '').trim();
+      visible.textContent = t;
+      visible.className = caja.className || '';
+      visible.style.display = t ? '' : 'none';
+    }
   }
 
   /* ---- el boton visible del semaforo dispara el del motor ------------------
@@ -335,12 +392,11 @@
       pintarColorModo(); pintarTemasGrid();
     };
   }
-  // 06-actualizar.js corre al cargar y escribe el semaforo cuando termina: se
-  // observa el texto, que es la via que no depende de tocar ese archivo.
-  const etq = document.getElementById('bv-etq');
-  if (etq && window.MutationObserver) {
+  // 06-actualizar.js corre al cargar y escribe el aviso cuando termina: se observa la caja.
+  const cajaAct = document.getElementById('caja-actualizar');
+  if (cajaAct && window.MutationObserver) {
     new MutationObserver(sincronizarVersion)
-      .observe(etq, { childList: true, characterData: true, subtree: true });
+      .observe(cajaAct, { childList: true, characterData: true, subtree: true });
   }
 
   sincronizarTodo();

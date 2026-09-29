@@ -4,7 +4,7 @@
    solo selector por estado queda coherente en los dos temas. */
 const AV_FABRICA = {
   tema:'clasico', tModo:'claro', relleno:'suave', densidad:'normal', grosor:'normal', esquinas:'redondeadas',
-  candado:true, creditos:true, barra:'manual',
+  candado:true, creditos:true, barra:'manual', fuente:1,
   // tema: el ULTIMO tema elegido (el que se ve si tModo no es 'sistema').
   // tModo: 'claro' / 'oscuro' / 'sistema'. En 'sistema' manda el sistema: claro u oscuro.
   // temaClaro / temaOscuro: que tema usar en cada caso. Solo se usan en 'sistema'.
@@ -90,7 +90,7 @@ const AV_ETIQUETAS = {tema:'Tema', tModo:'Modo de color', temaClaro:'Tema claro'
                       // estar, pintarBarraAjustes() veia "0 cambios", anulaba el borrador y
                       // descartaba en silencio lo elegido en Navegacion (quedaba "en blanco").
                       barra:'Modo de la barra', barraPos:'Posición de la barra',
-                      barraEstilo:'Estilo de la barra'};
+                      barraEstilo:'Estilo de la barra', fuente:'Tamaño de la fuente'};
 function valorLegible(k, v){ return typeof v === 'boolean' ? (v ? 'sí' : 'no') : String(v); }
 /* Que cambio y en que, para el resumen de la barra. Sin esto, "hay cambios" es un numero que no dice
    nada y el usuario tiene que acordarse de lo que toco. */
@@ -193,6 +193,13 @@ function aplicarAvanzado(){
   });
   NOMBRES_TEMA.forEach(n => document.body.classList.toggle('tema-' + n, efecto === n));
   document.body.classList.toggle('relleno-solido', a.relleno === 'solido');
+  // Tamano de la fuente: es GLOBAL y escala la app ENTERA, no solo la letra. Se usa el zoom de la
+  // raiz porque el CSS tiene muchas medidas en px (1108) y pocas atadas a la letra (202): subir solo
+  // la letra dejaria los huecos sin crecer y se veria descuadrado. El zoom escala letra + huecos +
+  // bloques + la propia ventana (vh sigue bien) y WebKit/Safari lo soporta desde 3.1, asi que vale
+  // igual en el navegador y en la app de escritorio. Medido: el panel pasa de 560 a 728 px.
+  var zoom = Number(a.fuente) || 1;
+  document.documentElement.style.zoom = (zoom === 1 ? '' : String(zoom));
   // El modo de la barra lateral lo aplica el motor de la barra (comun/08-barra.js),
   // que vive en window.mimoBarra. Se le pasa el valor elegido en Ajustes.
   if (window.mimoBarra) {

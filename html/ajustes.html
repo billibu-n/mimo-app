@@ -131,31 +131,6 @@
               </div>
             </div>
             <div class="temas" id="av-temas"></div>
-
-            <!-- Los controles de VERSION no tienen nada que ver con la apariencia: se quitan de
-                 esta ventana. Quedan aqui, ocultos, porque el motor los usa: 06-actualizar.js lee
-                 #datos-version y escribe en #bv-etq, y 06-arranque.js engancha #btn-actualizar. El
-                 aviso de version vive en el tag de la cabecera (#bv-tag). PENDIENTE: decidir donde. -->
-            <div id="av-version-oculta" hidden>
-              <div id="datos-version" data-local="__VERSION__" data-repo="billibu-n/mimo-app"
-                   data-version="__VERSION__" hidden></div>
-              <div class="semaforo" id="barra-version">
-                <span class="sf-punto" id="bv-punto" title="estado"></span>
-                <span class="sf-txt">
-                  <span class="sf-tit" id="bv-etq">comprobando</span>
-                  <span class="sf-sub" id="bv-nota">se comprueba contra GitHub</span>
-                </span>
-                <span class="sf-ver" id="bv-ver"></span>
-              </div>
-              <div class="sf-acciones">
-                <button type="button" class="mini" id="bv-buscar">Buscar actualización</button>
-                <a class="mini" id="bv-bajar" href="#" target="_blank" rel="noopener"
-                   style="display:none">Descargar la nueva</a>
-                <button class="btn" id="btn-actualizar" style="display:none">Buscar actualización</button>
-                <a id="enlace-actualizar" href="#" target="_blank" rel="noopener" style="display:none">Descargar</a>
-                <p class="ayuda" id="caja-actualizar"></p>
-              </div>
-            </div>
           </div>
           <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
         </div>
@@ -165,44 +140,36 @@
           <div class="aj-cab">
             <span class="t-ic"><svg class="ic"><use href="#ACC-03"></use></svg></span>
             <div><h2 id="gen-titulo">General</h2>
-              <div class="sub">Formato de las horas, títulos y sonido.</div></div>
+              <div class="sub">Ajustes generales</div></div>
           </div>
           <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
+            <!-- UN APARTADO = un bloque .ren. Anadir uno = pegar otro bloque igual; quitarlo = borrarlo. -->
             <div class="ren">
-              <div class="ren-txt"><div class="ren-tit">Tildes en los títulos</div>
-                <div class="ren-nota">Si lo apagas, los nombres se escriben sin acento.</div></div>
-              <button type="button" class="pastilla ren-ctl" id="aj-tildes-pastilla" aria-pressed="true"><span class="bola"></span><span>Sí</span></button>
+              <div class="ren-txt"><div class="ren-tit">Abreviación de texto</div></div>
+              <div class="ren-ctl filtros">
+                <button type="button" class="mini" data-titulo="envuelto">Hueco</button>
+                <button type="button" class="mini" data-titulo="iniciales">Iniciales</button>
+                <button type="button" class="mini" data-titulo="puntos">Completo</button>
+              </div>
             </div>
-            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-tildes" checked></div>
+            <div id="titulos-modo" style="display:none"></div>
+            <!-- El EJEMPLO del recorte: recuadro de geometria FIJA; el nombre se ajusta a el. -->
+            <div class="ren-eco"><span class="eco-etq">así:</span>
+              <span class="eco-caja" id="gen-ejemplo">Mecánica de los Medios Continuos</span></div>
 
             <div class="ren">
-              <div class="ren-txt"><div class="ren-tit">Modo compacto</div>
-                <div class="ren-nota">Menos aire entre filas: entra más en pantalla.</div></div>
-              <button type="button" class="pastilla ren-ctl" id="aj-compacto-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
+              <div class="ren-txt"><div class="ren-tit">Tamaño de la fuente</div></div>
+              <div class="ren-ctl filtros" id="gen-fuente">
+                <button type="button" class="mini" data-fuente="0.9">Pequeña</button>
+                <button type="button" class="mini on" data-fuente="1">Normal</button>
+                <button type="button" class="mini" data-fuente="1.15">Grande</button>
+                <button type="button" class="mini" data-fuente="1.3">Muy grande</button>
+              </div>
             </div>
-            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-compacto"></div>
 
             <div class="ren">
-              <div class="ren-txt"><div class="ren-tit">En "Por hacer", mostrar lo ya hecho</div>
-                <div class="ren-nota">Deja a la vista las tareas terminadas en vez de esconderlas.</div></div>
-              <button type="button" class="pastilla ren-ctl" id="aj-hechas-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
-            </div>
-            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-ver-hechas"></div>
-
-            <div class="ren">
-              <div class="ren-txt"><div class="ren-tit">Sonido al terminar el tiempo</div>
-                <div class="ren-nota">Suena una vez cuando el temporizador llega a cero.</div></div>
-              <button type="button" class="pastilla ren-ctl" id="aj-sonido-pastilla" aria-pressed="false"><span class="bola"></span><span>No</span></button>
-            </div>
-            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-sonido"></div>
-
-            <div class="ren">
-              <div class="ren-txt"><div class="ren-tit">Formato de las horas</div>
-                <div class="ren-nota">Puedes encender más de uno: se muestran juntos, separados por un punto.</div></div>
-            </div>
-            <div class="ren" style="border-top:0;padding-top:0">
-              <div class="ren-txt"></div>
+              <div class="ren-txt"><div class="ren-tit">Formato de las horas</div></div>
               <div class="ren-ctl filtros">
                 <button type="button" class="mini" data-formato="hm">1h 30m</button>
                 <button type="button" class="mini" data-formato="hdec">1,5 h</button>
@@ -212,15 +179,39 @@
             <div id="formatos-hora" style="display:none"></div>
 
             <div class="ren">
-              <div class="ren-txt"><div class="ren-tit">Cómo se abrevian los títulos</div>
-                <div class="ren-nota">En la tabla de horas el nombre comparte columna con su casilla. El completo está siempre en el globito.</div></div>
+              <div class="ren-txt"><div class="ren-tit">Actualización</div></div>
               <div class="ren-ctl filtros">
-                <button type="button" class="mini" data-titulo="envuelto">Completo</button>
-                <button type="button" class="mini" data-titulo="puntos">Recortado</button>
-                <button type="button" class="mini" data-titulo="iniciales">Iniciales</button>
+                <span id="gen-version" style="color:var(--muted);font-size:.78rem">v1.0.0</span>
+                <button type="button" class="mini" id="bv-buscar">Buscar</button>
               </div>
             </div>
-            <div id="titulos-modo" style="display:none"></div>
+            <div id="aj-version-aviso" style="display:none"></div>
+
+            <!-- APARCADO: controles que FUNCIONAN pero se mudan (Por hacer -> Calendario;
+                 Sonido -> Tiempo). Se retiran de la vista pero su motor sigue vivo, porque
+                 renderAjustes y 06-arranque los buscan por id. Ver PENDIENTES-GENERAL.md. -->
+            <div hidden>
+              <input type="checkbox" id="aj-ver-hechas">
+              <input type="checkbox" id="aj-sonido">
+              <button type="button" id="aj-hechas-pastilla"></button>
+              <button type="button" id="aj-sonido-pastilla"></button>
+            </div>
+
+            <!-- El motor de la VERSION (leido por 06-actualizar.js y 06-arranque.js). El semaforo
+                 decorativo se retiro: era muerto. La cara visible es #gen-version y el tag de la cabecera. -->
+            <div hidden id="av-version-oculta">
+              <div id="datos-version" data-local="__VERSION__" data-repo="billibu-n/mimo-app"
+                   data-version="__VERSION__" hidden></div>
+              <div class="semaforo" id="barra-version">
+                <span class="sf-punto" id="bv-punto"></span>
+                <span class="sf-txt"><span class="sf-tit" id="bv-etq">comprobando</span>
+                  <span class="sf-sub" id="bv-nota"></span></span>
+                <span class="sf-ver" id="bv-ver"></span>
+              </div>
+              <button class="btn" id="btn-actualizar" style="display:none"></button>
+              <a id="enlace-actualizar" href="#" target="_blank" rel="noopener" style="display:none">Descargar</a>
+              <p class="ayuda" id="caja-actualizar"></p>
+            </div>
           </div>
           <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
         </div>
