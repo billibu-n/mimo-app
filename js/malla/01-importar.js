@@ -301,32 +301,37 @@ function renderDeshacer(){
 function modalImportarMalla(){
   const caja = document.getElementById('modal-caja');
   caja.classList.add('imp-caja');
+  // Por dentro es un .aj-panel, como en el boceto: asi hereda la cara de Ajustes (.aj-cab/.aj-x/
+  // .aj-pie) sin inventar clases. Las clases de la casa (.eti/.archivo/.nombre) las pinta el CSS
+  // acotadas al imp-caja.
   caja.innerHTML =
+    '<div class="aj-panel" role="dialog" aria-modal="true" aria-labelledby="imp-titulo">' +
     '<div class="aj-cab">' +
-      '<span class="t-ic"><svg class="imp-ic"><use href="#ARQ-08"></use></svg></span>' +
-      '<div><h2 data-i18n="malla.importar.titulo">Importar</h2>' +
+      '<span class="t-ic"><svg class="ic"><use href="#ARQ-08"></use></svg></span>' +
+      '<div><h2 id="imp-titulo" data-i18n="malla.importar.titulo">Importar</h2>' +
         '<div class="sub" data-i18n="malla.importar.sub">JSON, CSV, TSV o PDF</div></div>' +
     '</div>' +
     '<button class="aj-x" type="button" data-i18n-att="aria-label:boton.cerrar">&times;</button>' +
     '<div class="g-cuerpo">' +
-      '<label class="imp-eti" data-i18n="malla.importar.campo">Archivo</label>' +
-      '<div class="imp-archivo">' +
+      '<label class="eti" data-i18n="malla.importar.campo">Archivo</label>' +
+      '<div class="archivo">' +
         '<button class="btn" id="imp-elegir" type="button">' +
-          '<svg class="imp-ic"><use href="#ARQ-15"></use></svg>' +
+          '<svg class="ic"><use href="#ARQ-15"></use></svg>' +
           '<span data-i18n="malla.importar.elegir">Elegir archivo</span></button>' +
-        '<span class="imp-nombre" id="malla-archivo-nombre" data-i18n="malla.importar.ninguno">Ningún archivo elegido</span>' +
+        '<span class="nombre" id="malla-archivo-nombre" data-i18n="malla.importar.ninguno">Ningún archivo elegido</span>' +
         '<input type="file" id="malla-archivo" accept=".json,.pdf,.csv,.tsv,.txt,image/*">' +
       '</div>' +
-      '<p class="ayuda imp-ayuda" data-i18n="malla.importar.ayuda">Un PDF de tu malla, o un archivo JSON, CSV o TSV.</p>' +
+      '<p class="ayuda" data-i18n="malla.importar.ayuda">Un PDF de tu malla, o un archivo JSON, CSV o TSV.</p>' +
     '</div>' +
     '<div id="malla-foto"></div>' +
-    '<div id="malla-pegado" class="imp-pegado" style="display:none">' +
+    '<div id="malla-pegado" class="pegado" style="display:none">' +
       '<span data-i18n="malla.importar.pegar">Copia aquí los ramos que veas, una línea por ramo</span>' +
       '<textarea id="malla-texto" rows="8"></textarea></div>' +
     '<div id="malla-aviso"></div>' +
     '<div class="aj-pie">' +
       '<button class="btn suave" id="malla-cancelar" data-i18n="boton.cancelar">Cancelar</button>' +
       '<button class="btn acento" id="malla-cargar" disabled data-i18n="boton.importar">Importar</button>' +
+    '</div>' +
     '</div>';
   document.getElementById('modal').classList.add('on');
   aplicarIdioma(caja);

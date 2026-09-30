@@ -269,27 +269,31 @@ table.comp input{width:64px;padding:3px 6px;border:1px solid var(--line);border-
 .modal.on{display:flex}
 .modal-caja{background:var(--sup);border-radius:var(--r-lg);max-width:620px;width:100%;padding:20px 22px;
             box-shadow:0 18px 50px rgba(15,23,42,.3)}
-/* Las ventanas que usan la cara de Ajustes (.aj-cab/.aj-x/.aj-pie) meten su propia X en la
-   esquina: la caja tiene que ser el punto de referencia posicional. */
-.modal-caja.imp-caja{position:relative}
-.modal-caja.imp-caja .imp-ic{width:16px;height:16px}
+/* La ventana de Importar (Malla) lleva la cara de Ajustes: por dentro es un .aj-panel, como en el
+   boceto aprobado; asi hereda tal cual .aj-cab/.aj-x/.aj-pie. El #modal-caja comun queda solo de
+   envoltorio (transparente). Las clases de la casa (.eti/.archivo/.nombre) se acotan al imp-caja
+   para NO tocar las de Ajustes, que viven dentro de .aj-panel. */
+.modal-caja.imp-caja{background:none;border:0;box-shadow:none;padding:0;max-width:none;width:100%}
+.modal-caja.imp-caja > .aj-panel{display:block}
 .modal-caja h2{margin:0 0 4px;font-size:1.1rem}
 .modal-caja .cerrar{float:right;border:0;background:var(--sup2);border-radius:var(--r-sm);padding:4px 10px;
                     cursor:pointer;font:inherit}
 /* --- elegir un archivo, sin el boton feo del navegador ---
    El <input type="file"> trae su boton y su texto, y son del NAVEGADOR: no se pueden pintar ni
    traducir. Se esconde (invisible, pero vivo) y lo abre un boton de la casa. */
-.imp-archivo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px}
-.imp-archivo .btn{display:inline-flex;align-items:center;gap:8px}
-.imp-archivo input[type=file]{position:absolute;width:1px;height:1px;padding:0;opacity:0;pointer-events:none}
-.imp-nombre{color:var(--muted);font-size:.82rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.imp-nombre.on{color:var(--fg);font-weight:600}
-.imp-eti{display:block;font-size:.75rem;font-weight:700;color:var(--muted);letter-spacing:.03em;
-         text-transform:uppercase;margin:0 0 2px 1px}
-.imp-ayuda{margin:10px 0 0}
-.imp-pegado{display:grid;gap:6px;margin-top:8px;font-size:.85rem}
-.imp-pegado textarea{width:100%;font-family:ui-monospace,monospace;font-size:.82rem;min-height:74px;
-                     padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-sm);resize:vertical}
+.modal-caja.imp-caja .eti{display:block;font-size:.75rem;font-weight:700;color:var(--muted);
+                          letter-spacing:.03em;text-transform:uppercase;margin:0 0 2px 1px}
+.modal-caja.imp-caja .archivo{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.modal-caja.imp-caja .archivo .btn{display:inline-flex;align-items:center;gap:8px}
+.modal-caja.imp-caja .archivo input[type=file]{position:absolute;width:1px;height:1px;padding:0;opacity:0;pointer-events:none}
+.modal-caja.imp-caja .nombre{color:var(--muted);font-size:.82rem;min-width:0;overflow:hidden;
+                             text-overflow:ellipsis;white-space:nowrap}
+.modal-caja.imp-caja .nombre.on{color:var(--fg);font-weight:600}
+.modal-caja.imp-caja .g-cuerpo .ayuda{margin:10px 0 0}
+.modal-caja.imp-caja .pegado{display:grid;gap:6px;margin-top:8px;font-size:.85rem}
+.modal-caja.imp-caja .pegado textarea{width:100%;font-family:ui-monospace,monospace;font-size:.82rem;
+                                      min-height:74px;padding:8px 10px;border:1px solid var(--line);
+                                      border-radius:var(--r-sm);resize:vertical}
 textarea{width:100%;min-height:74px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-sm);
          font:inherit;font-size:.85rem;resize:vertical}
 .prioridades{display:flex;gap:6px}
