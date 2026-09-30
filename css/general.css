@@ -273,7 +273,7 @@ table.comp input{width:64px;padding:3px 6px;border:1px solid var(--line);border-
    boceto aprobado; asi hereda tal cual .aj-cab/.aj-x/.aj-pie. El #modal-caja comun queda solo de
    envoltorio (transparente). Las clases de la casa (.eti/.archivo/.nombre) se acotan al imp-caja
    para NO tocar las de Ajustes, que viven dentro de .aj-panel. */
-.modal-caja.imp-caja{background:none;border:0;box-shadow:none;padding:0;max-width:none;width:100%}
+.modal-caja.imp-caja{background:none;border:0;box-shadow:none;padding:0;max-width:640px}
 .modal-caja.imp-caja > .aj-panel{display:block}
 .modal-caja h2{margin:0 0 4px;font-size:1.1rem}
 .modal-caja .cerrar{float:right;border:0;background:var(--sup2);border-radius:var(--r-sm);padding:4px 10px;
