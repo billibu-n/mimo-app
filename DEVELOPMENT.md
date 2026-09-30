@@ -101,8 +101,8 @@ cd ~/projects/mimo-app/escritorio
 cd src-tauri
 cargo tauri build --bundles deb,rpm,appimage   # in target/release/bundle/
 
-# and install it (careful: the file name CONTAINS A SPACE, it must be quoted)
-sudo dnf install ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/mimo-academics-1.0.0-desktop-1.x86_64.rpm
+# and install the version you just built (hoy, 1.1.0-desktop); no quotes needed
+sudo dnf install ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/mimo-academics-1.1.0-desktop-1.x86_64.rpm
 ```
 
 Then, in the applications menu: **Mimo Academics**, under Education. If it does not show up right

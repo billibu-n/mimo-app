@@ -22,6 +22,10 @@ cargo tauri build --bundles deb,rpm,appimage   # packages end up in target/relea
 
 (The first time, if you do not have the command: `cargo install tauri-cli --version "^2.0.0"`.)
 
+> **The version in the file name is the one in `tauri.conf.json`**, not a fixed one. Today the
+> source is `1.1.0-desktop`, so the packages are called `...-1.1.0-desktop-...`. If you are not
+> sure what you just built, list it: `ls target/release/bundle/rpm/`.
+
 It produces:
 
 | package | size | notes |
@@ -64,15 +68,22 @@ the Education section of the menu.
 ## Installing it on your Fedora
 
 ```bash
-sudo dnf install ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/mimo-academics-1.0.0-desktop-1.x86_64.rpm
+# Sustituye la version por la que acabas de compilar (hoy, 1.1.0-desktop):
+ls ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/
+sudo dnf install ~/projects/mimo-app/escritorio/src-tauri/target/release/bundle/rpm/mimo-academics-1.1.0-desktop-1.x86_64.rpm
 ```
 
-Then look for **Mimo Academics** in the applications menu. If it does not show up right away, log
-out and back in (GNOME caches the menu).
+Then look for **Mimo Academics** in the applications menu (or run it: `mimo-escritorio`). If it
+does not show up right away, log out and back in (GNOME caches the menu).
+
+> **`dnf` compares NUMBERS.** If you install a package whose version is the same or lower than the
+> one already installed, it replies *"already installed"* and does nothing. If you are rebuilding
+> the same version, force it: `sudo dnf install --allowerasing <file>` or remove first
+> (`sudo dnf remove mimo-escritorio`) and install again.
 
 ### Careful with the quotes
 
-The file name has **no spaces** (`mimo-academics-1.0.0-desktop-1.x86_64.rpm`): write it straight, without quotes.
+The file name has **no spaces** (`mimo-academics-1.1.0-desktop-1.x86_64.rpm`): write it straight, without quotes.
 
 ## Uninstalling
 
