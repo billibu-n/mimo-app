@@ -248,62 +248,65 @@ function avSeg(clave, opciones){
     '<button data-val="' + o[0] + '"' + (a[clave] === o[0] ? ' class="on"' : '') + '>' + o[1] +
     '</button>').join('') + '</div>';
 }
+/* Un nodo de la maqueta: la MISMA receta de color que usa la malla de verdad (fondo, borde y
+   texto derivados del color del estado), con la forma y el tamano que piden los ajustes. */
+function avMaqNodo(estado, a, efecto, oscuro){
+  const T = (k) => (typeof window.t === 'function' ? window.t(k) : k);
+  const c = a.colores[estado];
+  const fondo = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .86);
+  const borde = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .45);
+  const texto = a.relleno === 'solido'
+    ? (aLuminancia(c) > .5 ? '#101828' : '#ffffff')
+    : (oscuro ? aMezcla(c, '#ffffff', .58) : aMezcla(c, '#000000', .5));
+  const d = AV_DENSIDAD[a.densidad] || AV_DENSIDAD.normal;
+  const radio = a.esquinas === 'rectas' ? '3px' : 'var(--r-md)';
+  return '<div class="av-maq-nodo" style="background:' + fondo + ';border-color:' + borde +
+    ';color:' + texto + ';border-width:' + (AV_GROSOR[a.grosor] || 1.6) + 'px;border-radius:' + radio +
+    ';padding:' + d.pad + ';font-size:' + d.fuente + '">' +
+    '<span class="av-maq-nombre">' + T('malla.est.' + estado) + '</span>' +
+    '<span class="av-maq-ratio">' + aContraste(fondo, texto).toFixed(1) + ':1</span></div>';
+}
+/* La maqueta de la ventana de Malla. Va en #av-maqueta, FUERA de #avanzado: ocupa el ancho
+   completo y queda debajo de las filas de controles (boceto B aprobado). Se repinta sola cada vez
+   que cambia un ajuste, porque la llama renderAvanzado(), que es el punto por el que pasan todos. */
+function pintarMaquetaMalla(){
+  const z = document.getElementById('av-maqueta');
+  if (!z) return;
+  const T = (k) => (typeof window.t === 'function' ? window.t(k) : k);
+  const a = avVista(), efecto = temaEfectivo(), oscuro = !esClaro(efecto);
+  z.innerHTML = '<div class="av-maq-cab"><b>' + T('malla.maq') + '</b><span>' + T('malla.maq.d') + '</span></div>' +
+    '<div class="av-maq-rej">' + AV_ESTADOS.map(x => avMaqNodo(x[0], a, efecto, oscuro)).join('') + '</div>';
+}
 function renderAvanzado(){
   const a = avVista(), efecto = temaEfectivo();
   const oscuro = !esClaro(efecto);            // la misma fuente unica que aplicarAvanzado
-  const muestra = (estado) => {
-    const c = a.colores[estado];
-    const fondo = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .86);
-    const borde = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .45);
-    const texto = a.relleno === 'solido'
-      ? (aLuminancia(c) > .5 ? '#101828' : '#ffffff')
-      : (oscuro ? aMezcla(c, '#ffffff', .58) : aMezcla(c, '#000000', .5));
-    return '<i style="background:' + fondo + ';border-color:' + borde + '"></i>' +
-      '<span style="color:' + ('"' + texto + '"') + '">no marca</span>';
-  };
-  const contra = (estado) => {
-    const c = a.colores[estado];
-    const fondo = a.relleno === 'solido' ? c : aMezcla(c, fondoTema(efecto), .86);
-    const texto = a.relleno === 'solido'
-      ? (aLuminancia(c) > .5 ? '#101828' : '#ffffff')
-      : (oscuro ? aMezcla(c, '#ffffff', .58) : aMezcla(c, '#000000', .5));
-    return aContraste(fondo, texto);
-  };
-  // "?" junto al nombre: la explicacion larga va en el title del icono, no como parrafo suelto
-  // que empuja y dispersa la fila.
-  const pista = t => '<span class="ayuda-ico" title="' + esc(t) + '">?</span>';
+  // Los textos salen por el motor de idioma (window.t): este bloque se pinta en JS, no lleva
+  // data-i18n. renderAvanzado se vuelve a llamar al cambiar de idioma.
+  const T = (k) => (typeof window.t === 'function' ? window.t(k) : k);
   document.getElementById('avanzado').innerHTML =
-    '<div class="av-fila"><span class="eti">Relleno de los estados</span>' + pista('Con "todo pintado", un ramo aprobado es un recuadro verde entero en vez de un fondo pálido con borde de color.') +
-      avSeg('relleno', [['suave','Suave'], ['solido','Todo pintado']]) + '</div>' +
-    '<div class="av-fila"><span class="eti">Colores de los estados</span>' + pista('De este color se calculan solos el fondo, el borde y el texto, en los dos temas. Abajo, el contraste de cada uno (sobre 4.5 se lee bien).') +
+    '<div class="av-fila"><span class="eti">' + T('malla.rel') + '</span>' +
+      avSeg('relleno', [['suave', T('malla.suave')], ['solido', T('malla.solido')]]) + '</div>' +
+    '<div class="av-fila"><span class="eti">' + T('malla.tam') + '</span>' +
+      avSeg('densidad', [['compacta', T('malla.compacta')], ['normal', T('malla.normal')], ['amplia', T('malla.amplia')]]) + '</div>' +
+    '<div class="av-fila"><span class="eti">' + T('malla.esq') + '</span>' +
+      avSeg('esquinas', [['redondeadas', T('malla.redondas')], ['rectas', T('malla.rectas')]]) + '</div>' +
+    '<div class="av-fila"><span class="eti">' + T('malla.col') + '</span>' +
       '<span style="display:flex;gap:12px;flex-wrap:wrap">' +
       AV_ESTADOS.map(x => '<span class="av-color"><input type="color" data-avcolor="' + x[0] +
-        '" value="' + a.colores[x[0]] + '" title="' + x[2] + '"><span>' + x[2] + '</span></span>').join('') +
-      '</span><button class="mini" id="av-fabrica">Volver al diseño de fábrica</button></div>' +
-    '<div class="av-fila"><span class="eti">Cómo se verían</span><span class="av-muestra">' +
-      AV_ESTADOS.map(x => '<span style="display:flex;align-items:center;gap:4px">' + muestra(x[0]) +
-        '<b style="color:var(--fg)">' + x[2] + '</b> <span>(' + contra(x[0]).toFixed(1) + ':1)</span></span>').join('') +
-      '</span></div>' +
-    '<div class="av-fila"><span class="eti">Tamaño de las tarjetas</span>' + pista('Más compacto entra más malla en pantalla; más amplio se lee más cómodo.') +
-      avSeg('densidad', [['compacta','Compacta'], ['normal','Normal'], ['amplia','Amplia']]) + '</div>' +
-    '<div class="av-fila"><span class="eti">Grosor de las líneas</span>' + pista('Sólo afecta a las líneas de prerrequisito de la malla.') +
-      avSeg('grosor', [['fina','Fina'], ['normal','Normal'], ['gruesa','Gruesa']]) + '</div>' +
-    '<div class="av-fila"><span class="eti">Esquinas</span>' + pista('La forma de las tarjetas de la malla.') +
-      avSeg('esquinas', [['redondeadas','Redondeadas'], ['rectas','Rectas']]) + '</div>' +
-    '<div class="av-fila"><span class="eti">Icono de estado</span>' + pista('El candadito, el lápiz o el visto bueno en la esquina de cada ramo.') +
-      '<input type="checkbox" id="av-candado"' + (a.candado ? ' checked' : '') + '></div>' +
-    '<div class="av-fila"><span class="eti">Créditos en las tarjetas</span>' + pista('Los "6 cr" al pie de cada ramo.') +
-      '<input type="checkbox" id="av-creditos"' + (a.creditos ? ' checked' : '') + '></div>' +
-    '<div class="av-fila"><span class="eti">Sumar un ramo</span>' + pista('Cada tarjeta de la malla trae un + para agregar ese ramo a tu semestre en curso (queda "en curso", con su columna de horas y su espacio en Notas), y un − para sacarlo. Los ramos que ya están en el semestre muestran la resta.') +
-      '</div>';
+        '" value="' + a.colores[x[0]] + '" title="' + T('malla.est.' + x[0]) + '"><span>' + T('malla.est.' + x[0]) + '</span></span>').join('') +
+      '</span><button class="mini" id="av-fabrica">' + T('malla.fab') + '</button></div>' +
+    '<div class="av-fila"><span class="eti">' + T('malla.gro') + '</span>' +
+      avSeg('grosor', [['fina', T('malla.fina')], ['normal', T('malla.normal')], ['gruesa', T('malla.gruesa')]]) + '</div>' +
+    '<div class="av-fila"><span class="eti">' + T('malla.ext') + '</span>' +
+      '<label class="av-check"><input type="checkbox" id="av-candado"' + (a.candado ? ' checked' : '') + '> ' + T('malla.ico') + '</label>' +
+      '<label class="av-check"><input type="checkbox" id="av-creditos"' + (a.creditos ? ' checked' : '') + '> ' + T('malla.cre') + '</label></div>';
+  pintarMaquetaMalla();
   document.getElementById('av-fabrica').onclick = () => {
     abrirBorrador();
     avBorrador = JSON.parse(JSON.stringify(AV_FABRICA));
     aplicarAvanzado(); renderTodo(true); renderAvanzado(); pintarBarraAjustes();
   };
-  // Se convierte aca, no en renderAjustes: hay varios sitios que repintan este bloque (el tema,
-  // el relleno, las esquinas) llamando a esta funcion a secas, y si la conversion viviera mas
-  // arriba, el ? desaparecia y volvian las explicaciones largas.
+  // convertirPistas() sigue haciendo falta: convierte los .pista de OTRAS ventanas en su boton.
   convertirPistas();
 }
 /* Nada de esto guarda: todo va al borrador y la barra de abajo es la que decide. */

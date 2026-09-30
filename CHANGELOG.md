@@ -203,6 +203,33 @@ texts stopped pretending. See the entries below (they were the *Unreleased* bloc
   **nothing read them**: the engine ignored them, so they were dead switches. Removing them also
   cleans the bridge that painted them.
 
+- **The attendance block is gone from *Ramos*.** *Asistencia* (the attendance pie, the minimum and
+  the class-by-class marks) and the weekly schedule that lived with it were removed from the course
+  card, along with every link behind them: the engine that computed it, the bridges that fed it into
+  the grades, and the stored data. It was a feature nobody used in that place, and it will come back
+  as **a section of its own** later; nothing of it is half-alive in the meantime.
+
+### Changed (Malla window)
+
+- **The *Malla* window is now the approved sketch, and it stops being a wall of text.** The middle
+  column that used to describe every switch is gone; the window is now **one column**, like the rest
+  of Settings, with six labelled rows (fill, card size, corners, state colours, line thickness,
+  details) and, **below them and across the whole width, a live preview of the four grid states**
+  (passed, in progress, available, locked). The preview is not a drawing: it is painted with the
+  *same* colours, border and text recipe the real grid uses, and it **updates as you touch the
+  controls**, so you see the change before saving. The preview sits below the rows on purpose: in a
+  side column it fought the labels for the width and broke on narrow screens.
+
+### Added (right-click menu)
+
+- **Right-clicking a card now offers what you can do with it.** One menu for the whole app
+  (`js/comun/12-contexto.js`), opened where the pointer is and closed with Esc or by clicking away.
+  On a **course card** in *Malla*: add it to the semester (or remove it), mark it passed (or undo),
+  open its card and edit it. On a **calendar event** and on a **task**: mark it done (or put it back
+  to pending), set its priority, or open it. It only replaces the system menu when the thing under
+  the pointer has actions; elsewhere the right-click behaves as always. The menu is the same one
+  Estudio already used for its quick-add, now shared.
+
 ## [1.0.0-desktop] — 2026-09-29
 
 The first release with the **desktop application** on all three platforms, and the first with a

@@ -576,6 +576,11 @@
           <div class="g-cuerpo">
             <div id="avanzado"></div>
           </div>
+          <!-- LA MAQUETA de la malla. Va FUERA de #avanzado, a todo el ancho y debajo de las
+               filas: asi no compite por el espacio con las etiquetas ni da problema en pantallas
+               estrechas (boceto B aprobado). La pinta pintarMaquetaMalla(), que la llama
+               renderAvanzado() y el puente del borrador cuando el usuario cambia algo. -->
+          <div class="av-maqueta" id="av-maqueta"></div>
           <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
         </div>
 

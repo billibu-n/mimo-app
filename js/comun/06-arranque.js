@@ -330,7 +330,7 @@ document.getElementById('archivo').onchange = ev => {
         // nuevos; quedan con su valor de fabrica y el usuario solo llena lo que le falte.
         E.ajustes = Object.assign(estadoInicial().ajustes, datos.estado.ajustes || {});
         E.tiempo = Object.assign(estadoInicial().tiempo, datos.estado.tiempo || {});
-        E.asistencia = Object.assign({pesoParcial:{}, minimo:{}, clases:{}, reglas:{}, horario:{}}, datos.estado.asistencia || {});
+        // (la asistencia se retiro del esquema 2026-09-30; el respaldo viejo puede traerla y se ignora)
         migrarTiempo(E);   // pone el tiempo viejo (raiz) en crono/temp, si el respaldo es anterior
         // 2. la malla (catalogo y niveles) que el respaldo traiga: entra por E.catalogo, porque
         //    D es la capa fija que trae el HTML y no se puede reescribir. CAT() ya combina ambas.

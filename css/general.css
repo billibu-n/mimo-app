@@ -746,6 +746,21 @@ textarea{color:var(--fg);background:var(--sup)}
 .av-muestra{border:1px solid var(--line);border-radius:var(--r-sm);padding:7px 10px;display:flex;gap:8px;
   align-items:center;flex-wrap:wrap;font-size:.76rem;color:var(--muted)}
 .av-muestra i{width:52px;height:20px;border-radius:5px;border:1px solid var(--line);display:inline-block}
+/* Ventana de Malla (aprobada 2026-09-30): las casillas de la fila "Detalles" y la MAQUETA, que va
+   a todo el ancho debajo de las filas de controles. Los nodos toman su color, forma y tamano del
+   estado real de los ajustes (los pinta renderAvanzado con estilo en linea). */
+.av-check{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--fg)}
+.av-maqueta{margin-top:12px;border:1px solid var(--line);border-radius:var(--r-sm);
+  background:var(--sup3);padding:11px 13px}
+.av-maq-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;
+  margin-bottom:9px}
+.av-maq-cab b{font-size:.85rem}
+.av-maq-cab span{font-size:.74rem;color:var(--muted)}
+.av-maq-rej{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+@media (max-width:640px){.av-maq-rej{grid-template-columns:repeat(2,1fr)}}
+.av-maq-nodo{display:flex;justify-content:space-between;align-items:center;gap:8px;border-style:solid}
+.av-maq-nombre{font-weight:600}
+.av-maq-ratio{opacity:.75;font-variant-numeric:tabular-nums;font-size:.72rem}
 .nav.on,
 .mini.on,
 .btn.primario,
@@ -774,6 +789,12 @@ textarea{color:var(--fg);background:var(--sup)}
                   background:transparent;color:var(--fg);font:inherit;font-size:.82rem;
                   text-align:left;cursor:pointer}
 .menu-suma .ms-op:hover,.menu-suma .ms-op:focus{background:var(--sup2);outline:none}
+/* El MISMO menu lo usa ahora el boton derecho de toda la app (comun/12-contexto.js): la opcion que
+   ya esta en ese estado se marca, la que borra va en color de peligro, y las rayas separan grupos. */
+.menu-suma .ms-op.on{color:var(--ac);font-weight:600}
+.menu-suma .ms-op.ms-peligro{color:var(--bad)}
+.menu-suma .ms-op.ms-peligro:hover,.menu-suma .ms-op.ms-peligro:focus{background:var(--bad-suave)}
+.menu-suma .ms-sep{height:1px;margin:5px 6px;background:var(--line2)}
 
 /* La columna Meta de la tabla: la meta de esa semana en concreto.
    En blanco = se usa la meta base, y se ve en gris para que no parezca un dato olvidado. Cuando la

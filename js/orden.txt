@@ -43,6 +43,7 @@ ajustes/09-paneles.js
 ajustes/10-colaborar.js
 comun/09-pwa.js
 comun/11-avisos.js
+comun/12-contexto.js
 comun/06-arranque.js
 comun/10a-carpeta-tauri.js
 comun/10b-migracion-tauri.js
