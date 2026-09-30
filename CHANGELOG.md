@@ -9,6 +9,14 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ## [Unreleased]
 
+(nothing yet)
+
+## [1.1.0-desktop] — 2026-09-30
+
+Settings, section by section, now holds the settings that belong to each section, and the
+texts stopped pretending. See the entries below (they were the *Unreleased* block).
+
+
 ### Added
 
 - **The *Support us* window now shows the ways to help that cost nothing**, and the coffee is
