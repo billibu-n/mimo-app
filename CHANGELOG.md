@@ -72,6 +72,16 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
   the column was 682 px tall and the button ended up 162 px below the screen; now the column fits
   the window and the button is reachable.
 
+- **The Import window follows the approved sketch, class by class.** The sketch built it with the
+  Settings face by putting its content **inside a `.aj-panel`**, using the house classes
+  (`.ic`, `.eti`, `.archivo`, `.nombre`). The first implementation instead dropped the content
+  straight into the shared `.modal-caja` and **invented its own classes** (`.imp-ic`, `.imp-eti`,
+  `.imp-archivo`, `.imp-nombre`), because the panel-scoped rules did not reach it: that is why the
+  text sat tighter and the window did not follow the same rules. Content now lives in an
+  `.aj-panel` (as in the sketch) and uses the house classes, with the CSS scoped to `.imp-caja` so
+  the Settings windows are untouched. Measured: panel 640 px (was 620), icon tile 38 px (was 40),
+  icon header as in the sketch. The other windows on `#modal-caja` (Simulator, ramo editor, alerts)
+  are unchanged.
 - **The *Import* window (Plan) now says only what it has to say, and looks like the rest.** It used
   to be a wall of text — four paragraphs plus a box with the CSV and JSON examples — and it showed
   the browser's own file button. Now it carries the **same face as the Settings windows**: an icon
