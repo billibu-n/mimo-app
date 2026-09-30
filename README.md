@@ -103,10 +103,11 @@ The web version needs nothing at all: open `index.html` by double-clicking it, o
 
 The application is a semester panel. The bar on the left has seven sections:
 
-- **Semester** — the calendar of the current semester: events, exams and deadlines.
+- **Calendar** — the calendar of the current semester: events, exams and deadlines.
 - **Study** — how many hours you study, week by week, against your goal.
-- **Courses** — your degree map: the courses, their credits and which ones are prerequisites.
-- **Grades** — what you need in each assessment to reach the grade you want.
+- **Degree map** — the courses, their credits and which ones are prerequisites.
+- **Courses** — your subjects and their grades: what you need in each assessment to reach the
+  grade you want.
 - **Time** — stopwatch, timer and pomodoro, with the time charged to a course.
 - **Tasks** — everything pending, joined to your courses and your calendar.
 - **Settings** — colour theme, backup folder, advanced options and updates.
@@ -122,6 +123,15 @@ Use *Settings -> Backup* to take your data to another machine.
 - **Grades by weighting.** It tells you what you need in the next assessment.
 - **Nine colour themes**, including a high-contrast one.
 - **Automatic backup** to a folder you choose, keeping the last three copies.
+- **A sync button in the header**, in place of the old static label: **green** when it synced less
+  than a minute ago, **yellow** when it has been longer, **red** when the sync folder has not been
+  set yet, and it **spins a full turn** while it syncs. Pressing it syncs right away.
+- **The version button updates on press.** If a newer version exists, it downloads and opens the
+  installer on Windows, or opens the release page on Linux and in the browser.
+- **The interface is translated** (Spanish and English), starting with the top menu and the
+  header.
+- **The header icon hides a small game**: press it **10 times in under 20 seconds** and see what
+  happens.
 - **Desktop application** with its own window and its own icon (Linux `.rpm`, `.deb` and
   AppImage; Windows `.exe`).
 - **Stopwatch, timer and pomodoro**, with the duration typed straight into the clock and the
@@ -132,7 +142,8 @@ Use *Settings -> Backup* to take your data to another machine.
 ## Project status
 
 Version 1.1.1-desktop. The desktop application is **usable and stable**, and it keeps growing:
-synchronisation, mobile and languages are on the list. **Bug reports and ideas are welcome** — see
+synchronisation, mobile and the rest of the translations are still on the list (the top menu and
+the header already speak Spanish and English). **Bug reports and ideas are welcome** — see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Contributing
