@@ -32,7 +32,7 @@ in **Settings**. Nothing is uploaded anywhere.
 The desktop version is tested on **Fedora**, and works on any distribution with WebKitGTK 4.1
 (Debian, Ubuntu, Arch, openSUSE...).
 
-**With an installer** (it appears in your applications menu under *Education*):
+**With an installer**:
 
 ```bash
 # Fedora, openSUSE and derivatives
@@ -110,10 +110,9 @@ The application is a semester panel. The bar on the left has seven sections:
   grade you want.
 - **Time** — stopwatch, timer and pomodoro, with the time charged to a course.
 - **Tasks** — everything pending, joined to your courses and your calendar.
-- **Settings** — colour theme, backup folder, advanced options and updates.
+- **Settings** — colour theme, backup folder, other options and updates.
 
-Everything is stored in your browser or in the application itself. **Nothing is sent to a server.**
-Use *Settings -> Backup* to take your data to another machine.
+**Nothing is sent to a server.**
 
 ## What it includes
 
@@ -121,17 +120,13 @@ Use *Settings -> Backup* to take your data to another machine.
 - **Course map with prerequisites.** It draws itself, level by level, from the courses you enter.
 - **Imports a course list from a PDF.** It reads the map many universities publish.
 - **Grades by weighting.** It tells you what you need in the next assessment.
-- **Nine colour themes**, including a high-contrast one.
+- **Eight colour themes**, including a high-contrast one.
 - **Automatic backup** to a folder you choose, keeping the last three copies.
-- **A sync button in the header**, in place of the old static label: **green** when it synced less
-  than a minute ago, **yellow** when it has been longer, **red** when the sync folder has not been
-  set yet, and it **spins a full turn** while it syncs. Pressing it syncs right away.
+- **A sync button in the header**, pressing it syncs right away.
 - **The version button updates on press.** If a newer version exists, it downloads and opens the
   installer on Windows, or opens the release page on Linux and in the browser.
 - **The interface is translated** (Spanish and English), starting with the top menu and the
   header.
-- **The header icon hides a small game**: press it **10 times in under 20 seconds** and see what
-  happens.
 - **Desktop application** with its own window and its own icon (Linux `.rpm`, `.deb` and
   AppImage; Windows `.exe`).
 - **Stopwatch, timer and pomodoro**, with the duration typed straight into the clock and the
