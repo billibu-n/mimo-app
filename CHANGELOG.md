@@ -60,6 +60,12 @@ Fixes in the **Time** section, and the current day stands out.
   release page; in the browser it opens the release page too. It also checks once at start-up, in
   silence, so the chip already shows green (up to date) or yellow (outdated).
 
+- **The Mimo icon in the corner is a small hidden game.** It is now a button: pressing it swaps
+  the icon at random among the 64 px ones (the original and the new ones). Press it **10 times in
+  under 20 seconds** and the *indifferent* icon appears and stays for **10 seconds**; pressing it
+  again while it is there restarts that countdown, and when it ends the original icon returns. The
+  *indifferent* icon never comes up by chance — only through the game.
+
 ### Fixed (header, panel and updates)
 
 - **A large font no longer hides the Semester block.** Choosing *Large* or *Very large* in

@@ -1059,7 +1059,12 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 .g1 .b1 .btn-sync.girando .ic{animation:mimo-vuelta 900ms linear infinite}
 @keyframes mimo-vuelta{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.g1 .b1 .btn-sync.girando .ic{animation:none}}
-.marca{display:flex;align-items:center;font-weight:650;font-size:.95rem;letter-spacing:-.01em}
+.marca{display:flex;align-items:center;font-weight:650;font-size:.95rem;letter-spacing:-.01em;
+  /* Es un BOTON (el guino de los iconos), pero tiene que seguir pareciendo la marca: sin
+     fondo, sin borde y sin relleno de boton. */
+  background:none;border:0;padding:0;font-family:inherit;color:inherit;cursor:pointer}
+.marca:hover .marca-ic{transform:scale(1.08)}
+.marca-ic{transition:transform 140ms ease-out}
 .tag-version{font-size:.7rem;font-weight:650;border-radius:999px;padding:2px 10px;cursor:pointer;
   border:1px solid var(--line2);background:var(--sup2);color:var(--muted);white-space:nowrap;
   transition:background 140ms ease-out,color 140ms ease-out,border-color 140ms ease-out}

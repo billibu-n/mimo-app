@@ -169,4 +169,5 @@ registrarIdioma('es', {
   'sync.lista': "Carpeta lista, todavía sin copia. Pulsa para sincronizar ahora.",
   'sync.permiso': "Falta dar permiso a la carpeta. Pulsa para concederlo.",
   'sync.noguardar': "No se puede guardar en este aparato. Usa \"Descargar mis datos\" para conservar los cambios.",
+  'marca.titulo': "Mimo Academics",
 });

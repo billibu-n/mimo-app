@@ -166,4 +166,5 @@ registrarIdioma('en', {
   'sync.lista': "Folder ready, no copy yet. Press to sync now.",
   'sync.permiso': "The folder still needs permission. Press to grant it.",
   'sync.noguardar': "Cannot save on this device. Use \"Download my data\" to keep your changes.",
+  'marca.titulo': "Mimo Academics",
 });
