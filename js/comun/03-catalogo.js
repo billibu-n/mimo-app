@@ -289,7 +289,7 @@ function estadoInicial(){
              // (asistencia: RETIRADA del esquema 2026-09-30; sera una seccion propia)
              tiempo:{modo:'cronometro',
                              crono:{acumulado:0, corriendo:false, inicio:null},
-                             temp:{objetivo:25, restante:0, corriendo:false, inicio:null},
+                             temp:{objetivoSeg:1500, restante:0, corriendo:false, inicio:null},
                              ramo:null, semana:null, dia:null,
                              pomodoro:{fase:'trabajo', restante:null, corriendo:false, inicio:null,
                                        trabajos:0, racha:0, hoy:null,
@@ -338,13 +338,17 @@ function migrarTiempo(e){
   const t = e.tiempo || {};
   e.tiempo = t;
   t.crono = t.crono || {acumulado:0, corriendo:false, inicio:null};
-  t.temp = t.temp || {objetivo:25, restante:0, corriendo:false, inicio:null};
+  t.temp = t.temp || {objetivoSeg:1500, restante:0, corriendo:false, inicio:null};
+  // La duracion del temporizador paso de minutos (`objetivo`) a segundos (`objetivoSeg`), para no
+  // perder los segundos que se escriben en el reloj. Un estado viejo trae minutos: se convierten.
+  if (t.temp.objetivoSeg == null) t.temp.objetivoSeg = (Number(t.temp.objetivo) || 25) * 60;
+  delete t.temp.objetivo;
   // El estado viejo vivia en la raiz de t. Si todavia esta, se rescata al cronometro y se limpia.
   if (t.acumulado !== undefined || t.corriendo !== undefined){
     t.crono.acumulado = Number(t.acumulado) || 0;
     t.crono.corriendo = !!t.corriendo;
     t.crono.inicio = t.inicio || null;
-    t.temp.objetivo = Number(t.objetivo) || 25;
+    t.temp.objetivoSeg = (Number(t.objetivo) || 25) * 60;
     delete t.acumulado; delete t.corriendo; delete t.inicio; delete t.objetivo;
   }
 }

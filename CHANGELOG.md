@@ -11,6 +11,34 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 (nothing yet)
 
+## [1.1.1-desktop] — 2026-09-30
+
+Fixes in the **Time** section, and the current day stands out.
+
+### Fixed
+
+- **The day total no longer sticks to its number.** The code wrote the CSS class with an accent
+  (`sesión total`) while the stylesheet defined it without one (`sesion total`), so the rule never
+  matched: that row lost its spacing and its alignment and the label ran into the figure. The name
+  is now the same in both places, and the figure keeps a minimum separation from the label.
+- **The current day is set apart, at the top.** In *Sessions per day*, today now heads the list in
+  a box with the section's colour, with its own total; the other days of the week follow below,
+  dimmer. (The code already listed today first; it just was not visible.)
+- **The seconds are no longer lost.** The timer stored its duration in **minutes**, so the seconds
+  typed into the clock were rounded away (00:00:45 became 1 minute). It is now stored in seconds:
+  you can set hours, minutes and seconds, and the countdown respects them.
+
+### Changed
+
+- **The "Timer duration (minutes)" field is gone.** The duration is typed straight into the clock,
+  which was already editable, so there is one way to set it instead of two.
+- **The seconds stay out of sight.** They are kept inside (they are a real measurement) but the
+  sessions and the totals are shown in **hours and minutes** only, so the list is not crowded with
+  figures.
+
+> **Your saved timer duration is not lost.** A duration saved by an earlier version was in minutes;
+> when the app finds one, it converts it to seconds and drops the old key.
+
 > **Nota (2026-09-30):** la version visible de la aplicacion dejo de estar escrita a mano. El
 > ajuste *Actualizacion* mostraba `v1.0.0` —un numero viejo escrito en el HTML— hasta que el
 > motor lo corregia; ahora el armador escribe la version en ese hueco, y el respaldo del motor

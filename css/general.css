@@ -539,7 +539,15 @@ table.cat input[type=color]:focus{outline:none;border-color:var(--ac);box-shadow
   text-transform:uppercase;letter-spacing:.05em;border-top:1px solid var(--line2)}
 .dia-titulo:first-of-type{border-top:0;margin-top:0}
 .sesion.total{border-bottom:0;color:var(--muted);font-size:.8rem}
-.sesion.total .h{color:var(--fg)}
+.sesion.total .h{color:var(--fg);padding-left:12px}
+/* El dia de HOY, arriba y destacado: recuadro con el acento de la seccion. El resto de dias de
+   la semana van debajo, con su epigrafe, mas apagados. Antes todo era una lista corrida. */
+.hoy-caja{border:1px solid var(--ac);border-radius:var(--r-md);background:var(--hoy-bg);padding:10px 12px 4px}
+.hoy-tit{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:2px}
+.hoy-tit b{color:var(--ac-fuerte);font-size:.86rem}
+.hoy-tit .h{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ac-fuerte);padding-left:12px}
+.resto-tit{margin:16px 0 4px;font-size:.74rem;font-weight:700;text-transform:uppercase;
+           letter-spacing:.05em;color:var(--muted)}
 .destino{background:var(--info-bg);border:1px solid #93c5fd;border-radius:var(--r-md);padding:8px 11px;font-size:.8rem;
          margin-bottom:10px}
 .mini.peligro{color:var(--bad);border-color:#fecaca}

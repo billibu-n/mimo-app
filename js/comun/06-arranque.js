@@ -186,10 +186,6 @@ document.getElementById('crono-semana').onchange = ev => {
   guardar(); renderTiempo();
 };
 document.getElementById('crono-dia').onchange = ev => { E.tiempo.dia = ev.target.value; guardar(); };
-document.getElementById('crono-objetivo').onchange = ev => {
-  E.tiempo.objetivo = Math.max(1, Math.min(600, Number(ev.target.value) || 25));
-  guardar(); renderTiempo();
-};
 document.querySelectorAll('.seccion[data-seccion="tiempo"] .modo').forEach(b => b.onclick = () => {
   E.tiempo.modo = b.dataset.modo;
   document.querySelectorAll('.seccion[data-seccion="tiempo"] .modo').forEach(x => x.classList.toggle('on', x === b));

@@ -83,6 +83,12 @@ function etiquetaDia(fecha){
   const d = aFecha(fecha);
   return NOMBRES_DIA[(d.getDay() + 6) % 7] + ' ' + d.getDate() + ' ' + MESES[d.getMonth()];
 }
+// Duracion del temporizador, en SEGUNDOS. Se guarda ahi, y no en minutos, para no perder los
+// segundos que el usuario escribe en el reloj. Si un estado viejo traia minutos, se convierte.
+function segObjetivo(tp){
+  if (tp && tp.objetivoSeg != null) return tp.objetivoSeg;
+  return ((tp && tp.objetivo) || 25) * 60;
+}
 // El tiempo "actual" del modo activo, en milisegundos. Para el cronometro es lo acumulado (sube);
 // para el temporizador es lo que queda por correr (baja). Cada uno usa SU estado, no se pisan.
 function tiempoActualMs(){
@@ -90,7 +96,7 @@ function tiempoActualMs(){
   if (t.modo === 'pomodoro') return pomoRestanteMs();
   if (t.modo === 'temporizador'){
     const tp = t.temp || (t.temp = {objetivo:25, restante:null, corriendo:false, inicio:null});
-    const base = tp.restante != null ? tp.restante : (tp.objetivo || 25) * 60000;
+    const base = tp.restante != null ? tp.restante : segObjetivo(tp) * 1000;
     return Math.max(0, base - (tp.corriendo && tp.inicio ? Date.now() - tp.inicio : 0));
   }
   const c = t.crono || (t.crono = {acumulado:0, corriendo:false, inicio:null});
@@ -109,16 +115,11 @@ function renderTiempo(){
   const reloj = document.getElementById('crono-reloj');
   document.querySelectorAll('.modo').forEach(b => b.classList.toggle('on', b.dataset.modo === t.modo));
   pintarReloj();
-  const obj = document.getElementById('crono-objetivo');
-  const objetivo = (t.temp && t.temp.objetivo) || 25;
-  if (obj && Number(obj.value) !== objetivo) obj.value = objetivo;
   const extra = document.getElementById('crono-extra');
   const recPanel = document.getElementById('rec-panel');
   if (t.modo === 'recordatorios'){
     if (recPanel) recPanel.hidden = false;
     if (extra) extra.innerHTML = '';
-    const fObj = document.getElementById('crono-objetivo');
-    if (fObj && fObj.closest('.campo')) fObj.closest('.campo').style.display = 'none';
     // en modo recordatorios el reloj no cuenta: se oculta el reloj y los controles play/pausa/parar
     document.getElementById('crono-reloj').textContent = 'Recordatorios';
     pintarRecordatorios();
@@ -148,18 +149,15 @@ function renderTiempo(){
     const p = pomo();
     extra.innerHTML = '<div class="destino">' + esc(pomoTituloFase(p.fase)) +
       ' · ' + p.trabajos + ' trabajo(s) hoy · racha ' + p.racha + '</div>';
-    const fObj = document.getElementById('crono-objetivo');
-    if (fObj && fObj.closest('.campo')) fObj.closest('.campo').style.display = 'none';
     // la configuracion del pomodoro aparece solo aca
     const pc = document.getElementById('pomo-config');
     if (pc) { pc.hidden = false; enlazarPomoConfig(); }
   } else {
-    const fObj = document.getElementById('crono-objetivo');
-    if (fObj && fObj.closest('.campo')) fObj.closest('.campo').style.display = '';
     const pc = document.getElementById('pomo-config');
     if (pc) pc.hidden = true;
     extra.innerHTML = t.modo === 'temporizador'
-      ? '<div class="destino">Cuenta atrás desde ' + objetivo + ' minutos. Al llegar a cero se detiene sola.</div>'
+      ? '<div class="destino">Cuenta atrás desde ' + fmtHM(segObjetivo(t.temp) / 60) +
+        '. Al llegar a cero se detiene sola.</div>'
       : '';
   }
   pintarControles();
@@ -206,21 +204,38 @@ function renderTiempo(){
   dias.forEach((f, i) => { orden[f] = i; });
   const lista = sesionesDeLaSemana(t.semana)
     .sort((a, b) => (orden[a.fecha] - orden[b.fecha]) || (a.hora || '').localeCompare(b.hora || ''));
-  let html = '';
-  let diaActual = null, totDia = 0;
+  // Se agrupan las sesiones por dia y se suman sus minutos. OJO: la clase del total se escribe SIN
+  // tilde (`.sesion`), que es como la define la hoja de estilos. Antes decia `sesión`, con tilde,
+  // y esa regla NO coincidia nunca: el total se quedaba sin su separacion ni su alineacion.
+  const grupos = [];
   lista.forEach(x => {
-    if (x.fecha !== diaActual) {
-      if (diaActual !== null) html += '<div class="sesión total"><span><b>Total ' + etiquetaDia(diaActual) +
-        '</b></span><span class="h">' + fmtHM(totDia) + '</span></div>';
-      diaActual = x.fecha; totDia = 0;
-      html += '<div class="dia-titulo">' + esc(etiquetaDia(x.fecha)) + '</div>';
-    }
-    totDia += x.minutos;
-    html += '<div class="sesion"><span>' + (x.hora ? x.hora + ' · ' : '') + esc(aliasDe(x.ramo)) + '</span>' +
-      '<span class="h">' + x.minutos + ' min <button class="quitar" data-sesion="' + x.id + '" style="margin-left:6px">×</button></span></div>';
+    let g = grupos[grupos.length - 1];
+    if (!g || g.fecha !== x.fecha) { g = {fecha: x.fecha, minutos: 0, sesiones: []}; grupos.push(g); }
+    g.minutos += x.minutos; g.sesiones.push(x);
   });
-  if (diaActual !== null) html += '<div class="sesión total"><span><b>Total ' + etiquetaDia(diaActual) +
-    '</b></span><span class="h">' + fmtHM(totDia) + '</span></div>';
+  const filaSes = x =>
+    '<div class="sesion"><span>' + (x.hora ? x.hora + ' · ' : '') + esc(aliasDe(x.ramo)) + '</span>' +
+    '<span class="h">' + x.minutos + ' min <button class="quitar" data-sesion="' + x.id +
+    '" style="margin-left:6px">×</button></span></div>';
+  const filaTotal = g =>
+    '<div class="sesion total"><span>Total del día</span><span class="h">' + fmtHM(g.minutos) + '</span></div>';
+  // El dia de HOY (si cae en esta semana) va ARRIBA y destacado, con su propio total; el resto de
+  // dias de la semana va debajo, mas apagado. Se mantiene el color de la seccion (el acento).
+  let html = '';
+  const hayHoy = grupos.length && grupos[0].fecha === hoy();
+  if (hayHoy) {
+    const g = grupos[0];
+    html += '<div class="hoy-caja"><div class="hoy-tit"><b>Hoy · ' + esc(etiquetaDia(g.fecha)) +
+      '</b><span class="h">' + fmtHM(g.minutos) + '</span></div>' +
+      g.sesiones.map(filaSes).join('') + '</div>';
+  }
+  if (grupos.length > (hayHoy ? 1 : 0)) {
+    if (hayHoy) html += '<div class="resto-tit">Resto de la semana</div>';
+    (hayHoy ? grupos.slice(1) : grupos).forEach(g => {
+      html += '<div class="dia-titulo">' + esc(etiquetaDia(g.fecha)) + '</div>' +
+        g.sesiones.map(filaSes).join('') + filaTotal(g);
+    });
+  }
   document.getElementById('crono-sesiones').innerHTML = html ||
     '<p class="ayuda">Todavía no registras sesiones en esta semana.</p>';
   document.querySelectorAll('[data-sesion]').forEach(el => el.onclick = () => {
@@ -248,7 +263,7 @@ function cronoPlay(){
   } else if (t.modo === 'temporizador'){
     const tp = t.temp;
     // si no hay restante guardado (recien iniciado o llego a cero), parte del objetivo
-    if (tp.restante == null || tp.restante <= 0) tp.restante = (tp.objetivo || 25) * 60000;
+    if (tp.restante == null || tp.restante <= 0) tp.restante = segObjetivo(tp) * 1000;
     tp.corriendo = true; tp.inicio = Date.now();
   } else {
     const c = t.crono;
@@ -303,7 +318,7 @@ function minutosActuales(){
   if (t.modo === 'pomodoro') return 0;   // el pomodoro registra solo al completar una fase
   if (t.modo === 'temporizador'){
     const tp = t.temp;
-    const transcurrido = (tp.objetivo || 25) * 60000 - tiempoActualMs();
+    const transcurrido = segObjetivo(tp) * 1000 - tiempoActualMs();
     return Math.round(transcurrido / 60000);
   }
   return Math.round(tiempoActualMs() / 60000);
@@ -355,7 +370,7 @@ function cronoCero(){
   const t = E.tiempo;
   esconderAvisoRegistro();
   if (t.modo === 'temporizador'){
-    t.temp.restante = (t.temp.objetivo || 25) * 60000;
+    t.temp.restante = segObjetivo(t.temp) * 1000;
     t.temp.corriendo = false; t.temp.inicio = null;
   } else {
     t.crono.acumulado = 0;
@@ -393,11 +408,11 @@ function pintarReloj(){
     const nuevoMs = (hh * 3600 + mm * 60 + ss) * 1000;
     // En temporizador, lo que se edita es el tiempo QUE QUEDA; en cronometro, el acumulado.
     if (t.modo === 'temporizador') {
-      t.temp.objetivo = Math.max(1, Math.round(nuevoMs / 60000));   // el objetivo en minutos
+      // La duracion se guarda en SEGUNDOS: antes se redondeaba a minutos y los segundos que el
+      // usuario escribia en el reloj se perdian (p. ej. 00:00:45 se volvian 1 min).
+      t.temp.objetivoSeg = Math.max(1, Math.round(nuevoMs / 1000));
       t.temp.restante = nuevoMs;
       t.temp.corriendo = false; t.temp.inicio = null;
-      const obj = document.getElementById('crono-objetivo');
-      if (obj) obj.value = t.temp.objetivo;
     } else {
       t.crono.acumulado = nuevoMs;
       t.crono.inicio = t.crono.corriendo ? Date.now() : null;

@@ -18,11 +18,11 @@ Pick the file for your system:
 
 | Your system | Download this file | Then |
 |---|---|---|
-| **Fedora**, openSUSE, RHEL | `mimo-academics-1.1.0-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
-| **Debian**, Ubuntu, Mint | `mimo-academics_1.1.0-desktop_amd64.deb` | `sudo apt install ./<file>` |
-| **Any Linux**, no install | `mimo-academics_1.1.0-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
-| **Windows 10 / 11** | `mimo-academics_1.1.0-desktop_x64-setup.exe` | double-click it |
-| **Any system**, web version | `mimo-v1.1.0-desktop.zip` | unzip and open `mimo/index.html` |
+| **Fedora**, openSUSE, RHEL | `mimo-academics-1.1.1-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
+| **Debian**, Ubuntu, Mint | `mimo-academics_1.1.1-desktop_amd64.deb` | `sudo apt install ./<file>` |
+| **Any Linux**, no install | `mimo-academics_1.1.1-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
+| **Windows 10 / 11** | `mimo-academics_1.1.1-desktop_x64-setup.exe` | double-click it |
+| **Any system**, web version | `mimo-v1.1.1-desktop.zip` | unzip and open `mimo/index.html` |
 
 **Your data is kept on your machine** in every case, and you can take it with you using the backup
 in **Settings**. Nothing is uploaded anywhere.
@@ -36,10 +36,10 @@ The desktop version is tested on **Fedora**, and works on any distribution with 
 
 ```bash
 # Fedora, openSUSE and derivatives
-sudo dnf install mimo-academics-1.1.0-desktop-1.x86_64.rpm
+sudo dnf install mimo-academics-1.1.1-desktop-1.x86_64.rpm
 
 # Debian, Ubuntu and derivatives
-sudo apt install ./mimo-academics_1.1.0-desktop_amd64.deb
+sudo apt install ./mimo-academics_1.1.1-desktop_amd64.deb
 ```
 
 If the app does not show up in the menu right away, log out and back in: the menu is cached.
@@ -47,8 +47,8 @@ If the app does not show up in the menu right away, log out and back in: the men
 **Without installing anything** (the AppImage):
 
 ```bash
-chmod +x mimo-academics_1.1.0-desktop_amd64.AppImage
-./mimo-academics_1.1.0-desktop_amd64.AppImage
+chmod +x mimo-academics_1.1.1-desktop_amd64.AppImage
+./mimo-academics_1.1.1-desktop_amd64.AppImage
 ```
 
 The AppImage is about **100 MB** (it carries its own runtime) against about **4 MB** for the
@@ -62,7 +62,7 @@ The AppImage is about **100 MB** (it carries its own runtime) against about **4 
 
 ### Windows
 
-Download **`mimo-academics_1.1.0-desktop_x64-setup.exe`** and double-click it. It installs for
+Download **`mimo-academics_1.1.1-desktop_x64-setup.exe`** and double-click it. It installs for
 your user and creates a Start Menu entry, so you do not need administrator rights.
 
 > **Windows will warn you** that the publisher is unknown (SmartScreen), because the installer
@@ -124,12 +124,14 @@ Use *Settings -> Backup* to take your data to another machine.
 - **Automatic backup** to a folder you choose, keeping the last three copies.
 - **Desktop application** with its own window and its own icon (Linux `.rpm`, `.deb` and
   AppImage; Windows `.exe`).
+- **Stopwatch, timer and pomodoro**, with the duration typed straight into the clock and the
+  day you are on set apart at the top of the session list.
 - **It asks before deleting.** Every destructive action opens an in-app confirmation that says
   what will be lost, and the focus starts on *Cancel*.
 
 ## Project status
 
-Version 1.1.0-desktop. The desktop application is **usable and stable**, and it keeps growing:
+Version 1.1.1-desktop. The desktop application is **usable and stable**, and it keeps growing:
 synchronisation, mobile and languages are on the list. **Bug reports and ideas are welcome** — see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -167,7 +169,7 @@ before trusting it with your grades.
 
 ## Version
 
-1.1.0-desktop — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
+1.1.1-desktop — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Credits
 
