@@ -381,6 +381,26 @@ const GUION_SONDA: &str = r#"
 "#;
 
 fn main() {
+    // Parche de RENDIMIENTO/PESTANEO para Linux con WebKitGTK (el webview de Tauri en Linux).
+    // Documentado por Tauri (https://v2.tauri.app/develop/debug/linux-graphics/): el renderizador
+    // DMA-BUF de WebKitGTK y los drivers de GPU (sobre todo NVIDIA) no se ponen de acuerdo, y
+    // salen pantallas en blanco, pestaneo (sobre todo al animar o redimensionar) o cierres con
+    // "Error 71" en Wayland. La solucion ordenada, de menos a mas agresiva:
+    //   1. nvidia_drm.modeset=1 (es del sistema, no se toca aqui)
+    //   2. __NV_DISABLE_EXPLICIT_SYNC=1  -> arregla el Error 71 de Wayland SIN perder rendimiento
+    //   3. WEBKIT_DISABLE_DMABUF_RENDERER=1 -> arregla el pestaneo, a cambio de la via mas rapida
+    //   4. WEBKIT_DISABLE_COMPOSITING_MODE=1 -> ultimo recurso (desactiva la composicion acelerada)
+    // Aqui se pone la 2, que es la que arregla el pestaneo sin coste de rendimiento. A PROPOSITO
+    // NO se fuerza la 3 ni la 4: la propia Tauri avisa de que desactivarian la via rapida para
+    // TODO EL MUNDO, tambien para quien no tiene el problema. Si en algun equipo hace falta mas,
+    // se arranca con la variable puesta a mano; ver docs/comun/plan-mimo.md.
+    #[cfg(target_os = "linux")]
+    {
+        if std::env::var_os("__NV_DISABLE_EXPLICIT_SYNC").is_none() {
+            std::env::set_var("__NV_DISABLE_EXPLICIT_SYNC", "1");
+        }
+    }
+
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())

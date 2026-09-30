@@ -63,6 +63,13 @@ function diasDeLaSemana(lunes){
   for (let k = 0; k < 7; k++) out.push(sumaDias(lunes, k));
   return out;
 }
+// Los mismos 7 dias, pero con el de HOY primero (si cae en la semana): la semana se lee de hoy
+// hacia adelante y luego lo que queda. Es lo que hace que "la sesion actual se vea primero" y que
+// la semana se muestre, por ejemplo, de martes a lunes en vez de lunes a domingo.
+function diasConHoyPrimero(dias){
+  const i = dias.indexOf(hoy());
+  return i <= 0 ? dias.slice() : dias.slice(i).concat(dias.slice(0, i));
+}
 // Las sesiones que caen dentro de la semana seleccionada, ordenadas por fecha y hora.
 function sesionesDeLaSemana(lunes){
   const dias = diasDeLaSemana(lunes);
@@ -97,6 +104,7 @@ function estaCorriendo(){
 }
 function renderTiempo(){
   const t = E.tiempo;
+  enlazarSonido();
   const ms = tiempoActualMs();
   const reloj = document.getElementById('crono-reloj');
   document.querySelectorAll('.modo').forEach(b => b.classList.toggle('on', b.dataset.modo === t.modo));
@@ -177,18 +185,27 @@ function renderTiempo(){
       '<p class="ayuda">Crea un semestre para empezar a registrar tus sesiones.</p>';
     return;
   }
-  // Los 7 dias de la semana elegida, para el selector de dia y para agrupar las sesiones.
-  const dias = diasDeLaSemana(t.semana);
-  if (diaSel.options.length !== dias.length) {
+  // Los 7 dias de la semana elegida, para el selector de dia y para agrupar las sesiones. Van con
+  // HOY primero: lo actual arriba, y el resto detras.
+  const dias = diasConHoyPrimero(diasDeLaSemana(t.semana));
+  // El selector de dia se rehace cuando cambia la semana (o su orden). Antes se comparaba solo el
+  // NUMERO de opciones, que siempre es 7: al cambiar de semana las etiquetas se quedaban viejas.
+  const firma = dias.join('|');
+  if (diaSel.dataset.dias !== firma) {
     diaSel.innerHTML = dias.map(f => '<option value="' + f + '">' + esc(etiquetaDia(f)) + '</option>').join('');
+    diaSel.dataset.dias = firma;
   }
   // El dia por defecto es HOY si cae dentro de la semana; si no, el lunes. El valor efectivo se
   // persiste en registrarMinutos() (cuando de verdad se registra) para no guardar a cada render.
   t.dia = t.dia && dias.includes(t.dia) ? t.dia : (dias.includes(hoy()) ? hoy() : dias[0]);
   diaSel.value = t.dia;
 
-  // Sesiones de la semana, agrupadas por dia, cada dia con su total.
-  const lista = sesionesDeLaSemana(t.semana);
+  // Sesiones de la semana, agrupadas por dia, cada dia con su total. El orden es el de `dias`,
+  // que lleva HOY primero: la sesion actual (y su dia) encabezan la lista.
+  const orden = {};
+  dias.forEach((f, i) => { orden[f] = i; });
+  const lista = sesionesDeLaSemana(t.semana)
+    .sort((a, b) => (orden[a.fecha] - orden[b.fecha]) || (a.hora || '').localeCompare(b.hora || ''));
   let html = '';
   let diaActual = null, totDia = 0;
   lista.forEach(x => {
@@ -504,7 +521,7 @@ function pintarRecordatorios(){
       const dias = (r.dias || []).map(d => nombres[d]).join(' ');
       detalle = 'programado · ' + (r.horas || []).join(', ') + ' · ' + dias;
     }
-    const sonido = r.sonido === 'sistema' ? 'sonido del navegador'
+    const sonido = r.sonido === 'sistema' ? 'pitido'
       : r.sonido === 'subida' ? 'timbre propio' : 'alarma de mimo';
     return '<div class="rec-item">' +
       '<span class="rec-hora">' + esc((r.horas || []).join(', ') || r.hora) + '</span>' +
@@ -561,14 +578,22 @@ function enlazarRecordatorios(){
   const agr = document.getElementById('rec-agregar');
   if (agr) agr.onclick = agregarRecordatorio;
 
-  // Sonido: tres botones en vez del select. El elegido se marca y el valor se guarda en E.tiempo.recSonido.
+}
+
+/* El sonido y el aviso del sistema se enlazan SIEMPRE al pintar Tiempo. Antes vivian dentro de
+   enlazarRecordatorios(), que solo se llama en el modo recordatorios: por eso los botones del panel
+   de ajustes no respondian si no estabas en ese modo. */
+function enlazarSonido(){
   let sonActual = E.tiempo.recSonido || 'propia';
+  const raizSon = document.getElementById('p-ajustes') || document;
   const pintarSon = () => {
-    document.querySelectorAll('.rec-son-btn').forEach(b => b.classList.toggle('on', b.dataset.sonido === sonActual));
+    raizSon.querySelectorAll('.rec-son-btn').forEach(b => b.classList.toggle('on', b.dataset.sonido === sonActual));
     const campoArchivo = document.getElementById('rec-campo-archivo');
-    if (campoArchivo) campoArchivo.hidden = sonActual !== 'subida';
+    if (campoArchivo) campoArchivo.hidden = sonActual !== 'archivo';
+    const nom = document.getElementById('rec-archivo-nom');
+    if (nom && !E.tiempo.recTimbre && typeof window.t === 'function') nom.textContent = window.t('tiempo.sin.archivo');
   };
-  document.querySelectorAll('.rec-son-btn').forEach(b => b.onclick = () => {
+  raizSon.querySelectorAll('.rec-son-btn').forEach(b => b.onclick = () => {
     sonActual = b.dataset.sonido;
     E.tiempo.recSonido = sonActual;
     guardar('Sonido del aviso cambiado'); pintarSon();
@@ -577,18 +602,44 @@ function enlazarRecordatorios(){
   // El boton circular de doble corchea abre el selector de archivo nativo (oculto).
   const bt = document.getElementById('rec-bitacora');
   const arch = document.getElementById('rec-archivo');
-  if (bt && arch) bt.onclick = () => arch.click();
-  if (arch) arch.onchange = () => {
-    if (arch.files && arch.files[0]){
-      const f = arch.files[0];
-      const url = URL.createObjectURL(f);
-      E.tiempo.recTimbre = url;
-      guardar('Timbre propio guardado');
-      const nom = document.getElementById('rec-archivo-nom');
-      if (nom) nom.textContent = f.name;
-    }
-  };
+  if (bt && arch && !arch.__mimoEnlazado) {
+    arch.__mimoEnlazado = true;
+    bt.onclick = () => arch.click();
+    arch.onchange = () => {
+      if (arch.files && arch.files[0]){
+        const f = arch.files[0];
+        E.tiempo.recTimbre = URL.createObjectURL(f);
+        guardar('Timbre propio guardado');
+        const nom = document.getElementById('rec-archivo-nom');
+        if (nom) nom.textContent = f.name;
+      }
+    };
+  }
   pintarSon();
+  pintarNotificacion();
+}
+
+/* Pinta el estado del aviso del sistema en el panel de Tiempo. NO pide permiso aqui: solo informa
+   (pedirlo sin un clic del usuario lo bloquean los navegadores). El permiso lo pide el boton. */
+function pintarNotificacion(){
+  const est = document.getElementById('aj-notif-estado');
+  const btn = document.getElementById('aj-notif-pedir');
+  if (!est || !btn) return;
+  const soporta = ('Notification' in window);
+  const permiso = soporta ? window.Notification.permission : 'no';
+  const clave = !soporta ? 'ajustes.notif.nosoporte'
+    : permiso === 'granted' ? 'ajustes.notif.concedido'
+    : permiso === 'denied' ? 'ajustes.notif.denegado'
+    : 'ajustes.notif.explica';
+  est.setAttribute('data-i18n', clave);
+  if (typeof window.t === 'function') est.textContent = window.t(clave);
+  btn.hidden = !soporta || permiso === 'granted' || permiso === 'denied';
+  btn.onclick = () => {
+    try {
+      const r = window.Notification.requestPermission(pintarNotificacion);
+      if (r && r.then) r.then(pintarNotificacion);
+    } catch (e) { /* peticion antigua con callback: ya se paso pintarNotificacion */ }
+  };
 }
 
 function revisarRecordatorios(){
@@ -639,7 +690,7 @@ function sonarRecordatorio(r){
         o.frequency.value = 880; g.gain.value = 0.4;
         o.start(); o.stop(ctx.currentTime + 0.6);
       }
-    } else if (fuente === 'subida' && E.tiempo.recTimbre){
+    } else if (fuente === 'archivo' && E.tiempo.recTimbre){
       const a = document.getElementById('audio-rec-subida') || (() => {
         const el = document.createElement('audio'); el.id = 'audio-rec-subida';
         document.body.appendChild(el); return el;

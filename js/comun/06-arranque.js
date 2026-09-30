@@ -150,6 +150,13 @@ document.getElementById('malla-reordenar').onclick = modalReordenarMalla;
 document.getElementById('malla-exportar').onclick = exportarMalla;
 document.getElementById('malla-simular').onclick = modalSimular;
 document.getElementById('malla-importar').onclick = modalImportarMalla;
+// Si se cambia de idioma con la ventana de importar abierta, se rehace su contenido.
+document.addEventListener('mimo:idioma', () => {
+  const caja = document.getElementById('modal-caja');
+  if (!caja || !caja.classList.contains('imp-caja')) return;
+  const m = document.getElementById('modal');
+  if (m && m.classList.contains('on')) modalImportarMalla();
+});
 document.getElementById('cl-nuevo').onclick = nuevaTarea;
 document.getElementById('btn-nuevo-sem').onclick = modalNuevoSemestre;
 document.getElementById('btn-edit-sem').onclick = modalEditarSemestre;
@@ -207,9 +214,31 @@ function respaldoActual(){
 }
 
 function descargarRespaldo(nombre){
+  const texto = JSON.stringify(respaldoActual(), null, 1);
+  const nom = nombre || ('respaldo-mimo-' + new Date().toISOString().slice(0, 10) + '.json');
+  // EN LA APP DE ESCRITORIO (Tauri) el enlace de descarga NO sirve: el webview de Linux
+  // (WebKitGTK) no guarda el archivo, y en macOS tampoco (esta reportado en el propio Tauri).
+  // Se usa el DIALOGO del sistema para preguntar DONDE guardar y se escribe con su plugin.
+  // El dialogo anade esa ruta al permiso, asi que la escritura no necesita nada mas.
+  if (enTauri()){
+    (async function(){
+      try {
+        const destino = await window[TAURI].dialog.save({
+          defaultPath: nom,
+          filters: [{ name: 'Respaldo de Mimo', extensions: ['json'] }],
+        });
+        if (!destino) return;   // cancelo: no es un error
+        await window[TAURI].fs.writeTextFile(destino, texto);
+        mostrarAviso('Respaldo guardado');
+      } catch (e) {
+        mostrarAviso('No se pudo guardar el respaldo');
+      }
+    })();
+    return;
+  }
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(respaldoActual(), null, 1)], {type:'application/json'}));
-  a.download = nombre || ('respaldo-mimo-' + new Date().toISOString().slice(0, 10) + '.json');
+  a.href = URL.createObjectURL(new Blob([texto], {type:'application/json'}));
+  a.download = nom;
   a.click();
 }
 
@@ -301,7 +330,7 @@ document.getElementById('archivo').onchange = ev => {
         // nuevos; quedan con su valor de fabrica y el usuario solo llena lo que le falte.
         E.ajustes = Object.assign(estadoInicial().ajustes, datos.estado.ajustes || {});
         E.tiempo = Object.assign(estadoInicial().tiempo, datos.estado.tiempo || {});
-        E.asistencia = Object.assign({pesoParcial:{}, minimo:{}, clases:{}, reglas:{}, horario:{}}, datos.estado.asistencia || {});
+        // (la asistencia se retiro del esquema 2026-09-30; el respaldo viejo puede traerla y se ignora)
         migrarTiempo(E);   // pone el tiempo viejo (raiz) en crono/temp, si el respaldo es anterior
         // 2. la malla (catalogo y niveles) que el respaldo traiga: entra por E.catalogo, porque
         //    D es la capa fija que trae el HTML y no se puede reescribir. CAT() ya combina ambas.
@@ -340,12 +369,69 @@ document.getElementById('archivo').onchange = ev => {
   };
   lector.readAsText(f);
 };
-document.getElementById('estado-guardado').textContent = 'Guardado en este navegador como "' + CLAVE + '".';
+// Al abrir la ventana se dice QUE se guarda y que el respaldo es del equipo. Antes ponia el
+// nombre interno de la clave ('mimo-limpio-v1'), que no es el archivo real y confundia.
+document.getElementById('estado-guardado').textContent =
+  'Guardado en este equipo. El respaldo es un archivo .json que puedes llevar a otro equipo.';
 document.getElementById('banner-recargar').onclick = () => location.reload();
 document.getElementById('banner-cerrar').onclick = () =>
   document.getElementById('banner-remoto').classList.remove('on');
 let tResize = null;
 window.addEventListener('resize', () => { clearTimeout(tResize); tResize = setTimeout(renderPuntos, 200); });
+
+/* ============================================================================
+   ATAJOS DE SECCION (Navegación)
+   Ctrl+1..7 viajan entre las siete secciones. Los valores los pone el usuario en la ventana de
+   Navegación; aquí solo se LEE la configuración y se actúa. El mismo motor sirve para la lista
+   que se pinta en esa ventana (window.mimoAtajos), y así la captura de una tecla nueva valida
+   con las MISMAS reglas que el motor.
+   ============================================================================ */
+var ATAJOS_FIJOS = {'ctrl+t':1, 'ctrl+w':1, 'ctrl+n':1, 'ctrl+shift+t':1, 'ctrl+shift+w':1, 'f5':1,
+                    'f11':1, 'f12':1, 'ctrl+r':1, 'ctrl+p':1, 'ctrl+s':1, 'ctrl+o':1, 'ctrl+d':1};
+function normalizarTecla(ev){
+  var partes = [];
+  if (ev.ctrlKey) partes.push('ctrl');
+  if (ev.altKey) partes.push('alt');
+  if (ev.shiftKey) partes.push('shift');
+  var k = ev.key;
+  if (!k || ['Control','Alt','Shift','Meta','CapsLock','Dead'].indexOf(k) >= 0) return '';
+  if (k === ' ') k = 'espacio';
+  if (k.length === 1) { if (!/[a-z0-9]/i.test(k)) return ''; k = k.toLowerCase(); }
+  partes.push(k);
+  return partes.join('+');
+}
+function atajosVigentes(){
+  try { return (typeof av === 'function' && av().atajos) ? av().atajos : {}; } catch (e) { return {}; }
+}
+function atajosEncendidos(){
+  try { return (typeof av === 'function') ? (av().atajosOn !== false) : true; } catch (e) { return true; }
+}
+/* Que seccion, si la hay, corresponde a esta combinacion. */
+function seccionParaTecla(comb){
+  if (!comb) return null;
+  const map = atajosVigentes();
+  for (const sec in map) if (map[sec] === comb) return sec;
+  return null;
+}
+function enlazarAtajosSeccion(){
+  document.addEventListener('keydown', function (ev) {
+    if (!atajosEncendidos()) return;
+    // 1) no molestar mientras se escribe en un campo (ni con Ctrl: Ctrl+C/V/A son de copiar/pegar)
+    const t = ev.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+    // 2) no pisar una ventana abierta (sus propias teclas mandan)
+    if (document.querySelector('.aj-velo.on')) return;
+    const comb = normalizarTecla(ev);
+    if (!comb) return;
+    const sec = seccionParaTecla(comb);
+    if (!sec || SECCIONES.indexOf(sec) === -1) return;
+    ev.preventDefault();
+    mostrarSeccion(sec, true);
+  });
+}
+// La ventana de Navegación (08-g2-puente.js) y el motor comparten estas funciones.
+window.mimoAtajos = { normalizar: normalizarTecla, seccion: seccionParaTecla, vigentes: atajosVigentes,
+                      encendidos: atajosEncendidos, fijos: ATAJOS_FIJOS, fabrica: AV_ATAJOS_FABRICA };
 
 /* ---------------------------------------------------------------- barras extraibles
    El <details> no anima el cierre: al quitarle 'open' el navegador esconde el contenido en el mismo
@@ -406,3 +492,4 @@ inicializarBarras();             // y las barras extraibles quedan animando en l
 enlazarCalendario();             // los controles Mes/Año/Semestre y la navegación del calendario
 renderCalendario();              // pinta la vista de calendario activa (por defecto, el mes)
 conectarServidor();              // y si esto viene del servidor local, manda lo suyo al responder
+enlazarAtajosSeccion();          // Ctrl+1..7 para viajar entre secciones (personalizables en Navegación)

@@ -97,9 +97,8 @@ async function elegirCarpetaRespaldo(){
     // Aqui se dice POR QUE y COMO (es el mismo criterio del apartado de Ajustes, que ya no
     // se oculta en silencio). Medido: en Brave el boton no hacia nada visible.
     mostrarAviso('Aqui no se puede elegir carpeta: Brave trae desactivada esa funcion. ' +
-      'Tus datos siguen guardados en este navegador, y puedes usar "Descargar mis datos". ' +
-      'Para tener la copia automatica, usa Chromium (./abrir.sh --navegador chromium) o la ' +
-      'version de escritorio, donde la carpeta la pide el sistema.');
+      'Tus datos siguen guardados en este equipo, y puedes usar "Descargar mis datos". ' +
+      'Para tener la copia automatica, usa Chromium (./abrir.sh --navegador chromium).');
     return;
   }
   // En Tauri la carpeta se elige con el dialogo del sistema; el handle que se obtiene tiene la
@@ -181,7 +180,41 @@ async function quitarCarpetaRespaldo(){
   mostrarAviso('Se dejo de respaldar en la carpeta');
 }
 
+/* La RUTA (o el nombre) de la carpeta de respaldo elegida, para el distintivo de estado.
+   En Tauri es la ruta completa; en el navegador, el nombre de la carpeta (el handle no expone
+   la ruta por privacidad). Devuelve null si no hay ninguna elegida. */
+function respaldarEstado(){
+  if (CARPETA_TAURI.ruta) return CARPETA_TAURI.ruta;
+  if (RESPALDO.handle && RESPALDO.handle.name) return RESPALDO.handle.name;
+  return null;
+}
+
+/* Pinta el ESTADO del respaldo en la ficha de Ajustes y en su ventana:
+   sin carpeta -> «pendiente» (dorado); con carpeta -> «sincronizado en <ruta>» (verde).
+   Va con el icono: alerta en «pendiente», visto bueno en «sincronizado». */
+function pintarEstadoRespaldo(){
+  const ruta = respaldarEstado();
+  const decir = typeof t === 'function' ? t : (k) => k;
+  [['resp-estado-ficha','resp-estado-txt','resp-estado-ic'],
+   ['resp-estado','resp-estado-txt2','resp-estado-ic2']].forEach(function(par){
+    const caja = document.getElementById(par[0]);
+    const txt  = document.getElementById(par[1]);
+    const ic   = document.getElementById(par[2]);
+    if (!caja || !txt) return;
+    if (ruta){
+      caja.classList.remove('pendiente'); caja.classList.add('sync');
+      txt.textContent = decir('ajustes.respaldo.sync', { ruta: ruta });
+      if (ic) ic.setAttribute('href', '#EST-02');
+    } else {
+      caja.classList.remove('sync'); caja.classList.add('pendiente');
+      txt.textContent = decir('ajustes.respaldo.pendiente');
+      if (ic) ic.setAttribute('href', '#EST-03');
+    }
+  });
+}
+
 function pintarRespaldo(){
+  pintarEstadoRespaldo();
   const caja = document.getElementById('plegable-respaldo-carpeta');
   if (!caja) return;
   const aviso = document.getElementById('resp-carpeta-aviso');
@@ -191,12 +224,13 @@ function pintarRespaldo(){
     caja.hidden = false;
     if (aviso){
       // En Tauri la carpeta SI se puede: el dialogo lo pone el sistema. Se dice tal cual.
-      aviso.textContent = 'Tu navegador no permite elegir la carpeta (es una funcion de la ' +
+      // Este aviso es SOLO para el navegador: en la aplicacion de escritorio (Tauri) la carpeta
+    // se elige con el dialogo del sistema y esto nunca se alcanza.
+    aviso.textContent = 'Este navegador no permite elegir la carpeta (es una funcion de la ' +
         'familia de Chrome/Chromium que algunos navegadores desactivan por privacidad, como Brave). ' +
         'Mientras tanto, usa "Descargar mis datos" para guardar una copia a mano. Si quieres el ' +
         'respaldo automatico en Brave, activa el interruptor "File System Access API" en ' +
-        'brave://flags y reinicia el navegador. En la version de escritorio de Mimo (Tauri) ' +
-        'esta funcion SI esta disponible, porque la carpeta la pide el sistema.';
+        'brave://flags y reinicia el navegador.';
     }
     const e2 = document.getElementById('resp-carpeta-estado');
     if (e2) e2.textContent = '';
@@ -210,7 +244,7 @@ function pintarRespaldo(){
   const btnElegir = document.getElementById('resp-carpeta-elegir');
   if (!est) return;
   if (!RESPALDO.handle){
-    est.textContent = 'Todavia no has elegido una carpeta. Tus datos se guardan solo en este navegador.';
+    est.textContent = 'Todavia no has elegido una carpeta. Tus datos se guardan solo en este equipo.';
     if (btnAhora) btnAhora.disabled = true;
     if (btnQuitar) btnQuitar.disabled = true;
     if (btnElegir) btnElegir.disabled = false;
@@ -267,5 +301,8 @@ async function initRespaldoCarpeta(){
   if (elegir) elegir.onclick = elegirCarpetaRespaldo;
   if (ahora) ahora.onclick = () => respaldarAhora(true);
   if (quitar) quitar.onclick = quitarCarpetaRespaldo;
+  // El texto del estado es un dato montado (la ruta): no lo cubre aplicarIdioma, asi que se
+  // vuelve a pintar al cambiar de idioma.
+  document.addEventListener('mimo:idioma', pintarEstadoRespaldo);
   initRespaldoCarpeta();
 })();

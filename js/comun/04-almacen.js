@@ -1,5 +1,5 @@
 /* ------------------------------- dónde viven los datos -------------------------------
-   Archivo suelto: en el navegador de este aparato.
+   Archivo suelto: en el aparato (almacenamiento local de la aplicacion).
    Con el servidor local: en un archivo del disco, compartido por todos los aparatos de la red. */
 const SERVIDOR = {activo:false, version:'', caido:false, ultimo:0};
 let tGuardar = null, tMirar = null;
@@ -12,7 +12,7 @@ async function guardarEnServidor(){
     const j = await r.json();
     if (j && j.version) SERVIDOR.version = j.version;
     SERVIDOR.caido = false;
-  } catch (err) { SERVIDOR.caido = true; }   // igual quedó guardado en este navegador
+  } catch (err) { SERVIDOR.caido = true; }   // igual quedo guardado en este aparato
   pintarGuardado();
 }
 
@@ -22,7 +22,7 @@ function pintarGuardado(){
   if (ALMACEN.fallo) {
     el.textContent = '¡No se pudo guardar aquí!';
     el.className = 'guardado mal';
-    el.title = 'Este navegador no deja guardar en este aparato (' + ALMACEN.fallo + '): ' +
+    el.title = 'No se puede guardar en este aparato (' + ALMACEN.fallo + '): ' +
                'puede ser almacenamiento lleno o modo privado. Los cambios se perderán al ' +
                'cerrar. Usa "Descargar mis datos" para conservarlos.';
     return;
@@ -30,12 +30,12 @@ function pintarGuardado(){
   if (!SERVIDOR.activo) {
     el.textContent = 'Guardado aquí';
     el.className = 'guardado';
-    el.title = 'Tus datos viven en este navegador. Para verlos desde otro aparato, abre el panel ' +
+    el.title = 'Tus datos viven en este equipo. Para verlos desde otro aparato, abre el panel ' +
                'con el servidor local (ABRIR.sh) o usa "Descargar mis datos".';
   } else if (SERVIDOR.caido) {
     el.textContent = 'Servidor sin respuesta';
     el.className = 'guardado mal';
-    el.title = 'Se perdió la conexión con el servidor. Tus cambios siguen guardados en este navegador ' +
+    el.title = 'Se perdió la conexión con el servidor. Tus cambios siguen guardados en este equipo ' +
                'y se enviarán cuando vuelva.';
   } else {
     el.textContent = 'Guardado en el servidor';

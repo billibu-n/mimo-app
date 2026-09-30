@@ -5,7 +5,7 @@
    navegador la pueda INSTALAR (PWA).
 
    ESTE FICHERO NO SE EDITA A MANO. Es la salida de `plantilla-sw.js`: lo escribe el armador
-   (mimo_config/construir/index.py), que sustituye 1.0.0-desktop por la version, d2cd468ffc por un
+   (mimo_config/construir/index.py), que sustituye 1.1.0-desktop por la version, 739ce4f1bb por un
    sello del contenido y [
   "./index.html",
   "./manifest.json",
@@ -36,6 +36,8 @@
   "./js/ajustes/06-actualizar.js",
   "./js/ajustes/07-ical.js",
   "./js/ajustes/08-g2-puente.js",
+  "./js/ajustes/09-paneles.js",
+  "./js/ajustes/10-colaborar.js",
   "./js/comun/00-cabecera.js",
   "./js/comun/01-utilidades.js",
   "./js/comun/02-estado.js",
@@ -50,6 +52,7 @@
   "./js/comun/10a-carpeta-tauri.js",
   "./js/comun/10b-migracion-tauri.js",
   "./js/comun/11-avisos.js",
+  "./js/comun/12-contexto.js",
   "./js/estudio/01-estudio.js",
   "./js/malla/01-importar.js",
   "./js/malla/02-editor-ramos.js",
@@ -63,6 +66,11 @@
   "./js/semestre/03-calendario.js",
   "./js/tareas/01-tareas.js",
   "./js/tiempo/01-tiempo.js",
+  "./js/idioma/00-motor.js",
+  "./js/idioma/01-inicio.js",
+  "./js/idioma/01-panel.js",
+  "./js/idioma/en.js",
+  "./js/idioma/es.js",
   "./sonido/alarma.mp3",
   "./vendor/pdf-motor.js",
   "./vendor/pdf.min.js",
@@ -89,8 +97,8 @@
    OJO: un service worker SOLO se registra en http(s), NUNCA en file:// (medido: "origin 'null'
    is not supported"). Al abrir el index.html con doble clic este fichero ni se usa.
  */
-const VERSION = '1.0.0-desktop';
-const HUELLA = 'd2cd468ffc';
+const VERSION = '1.1.0-desktop';
+const HUELLA = '739ce4f1bb';
 const CACHE = 'mimo-' + VERSION + '-' + HUELLA;
 
 // La aplicacion COMPLETA, la escribio el armador al construir.
@@ -124,6 +132,8 @@ const ARCHIVOS = [
   "./js/ajustes/06-actualizar.js",
   "./js/ajustes/07-ical.js",
   "./js/ajustes/08-g2-puente.js",
+  "./js/ajustes/09-paneles.js",
+  "./js/ajustes/10-colaborar.js",
   "./js/comun/00-cabecera.js",
   "./js/comun/01-utilidades.js",
   "./js/comun/02-estado.js",
@@ -138,6 +148,7 @@ const ARCHIVOS = [
   "./js/comun/10a-carpeta-tauri.js",
   "./js/comun/10b-migracion-tauri.js",
   "./js/comun/11-avisos.js",
+  "./js/comun/12-contexto.js",
   "./js/estudio/01-estudio.js",
   "./js/malla/01-importar.js",
   "./js/malla/02-editor-ramos.js",
@@ -151,6 +162,11 @@ const ARCHIVOS = [
   "./js/semestre/03-calendario.js",
   "./js/tareas/01-tareas.js",
   "./js/tiempo/01-tiempo.js",
+  "./js/idioma/00-motor.js",
+  "./js/idioma/01-inicio.js",
+  "./js/idioma/01-panel.js",
+  "./js/idioma/en.js",
+  "./js/idioma/es.js",
   "./sonido/alarma.mp3",
   "./vendor/pdf-motor.js",
   "./vendor/pdf.min.js",

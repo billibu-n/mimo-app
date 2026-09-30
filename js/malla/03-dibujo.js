@@ -405,7 +405,11 @@ function dibujarLineas(){
 function chipCurso(cod){
   const c = CAT()[cod] || {nombre:cod, creditos:null};
   const e = estados()[cod] || 'bloqueado';
-  return '<span class="pt-chip ' + e + '" data-ir="' + cod + '">' + cod + ' · ' + esc(c.nombre) + '</span>';
+  // El nombre se recorta con puntos si es muy largo: la pastilla no se estira sin fin ni se
+  // parte a media palabra. El nombre completo queda en el tooltip.
+  const nombre = resumirTitulo(c.nombre);
+  return '<span class="pt-chip ' + e + '" data-ir="' + cod + '" title="' + esc(cod + ' · ' + c.nombre) + '">' +
+    esc(cod + ' · ' + nombre) + '</span>';
 }
 function renderMallaDetalle(){
   const cont = document.getElementById('malla-detalle');
@@ -449,12 +453,14 @@ function renderMallaDetalle(){
         esc(c.equivalente) + (CAT()[c.equivalente] ? ' — ' + esc(CAT()[c.equivalente].nombre || '') : '') +
         '</p></div>' : ''}
 
-      <div class="fila" style="gap:8px;margin-top:10px">
+      <div class="fila" style="gap:8px;margin:16px 0">
         <button class="btn" id="md-editar">Editar este ramo</button>
       </div>
       <div class="bloque"><h4>Antes necesitas</h4>
         ${((c.requisitos || []).length || (c.requisitos_o || []).length)
-          ? (c.requisitos || []).map(chipCurso).join('') +
+          ? ((c.requisitos || []).length
+              ? '<div class="pt-chips">' + (c.requisitos || []).map(chipCurso).join('') + '</div>'
+              : '') +
             (c.requisitos_o || []).map(g => '<div class="uno-de">basta <b>uno</b> de:' +
               g.map(chipCurso).join('<span class="o">o</span>') + '</div>').join('')
           : '<span class="vacio">Ninguno: es de entrada.</span>'}
@@ -463,7 +469,8 @@ function renderMallaDetalle(){
       </div>
 
       <div class="bloque"><h4>Este ramo desbloquea</h4>
-        ${(c.desbloquea || []).length ? (c.desbloquea || []).map(chipCurso).join('')
+        ${(c.desbloquea || []).length
+          ? '<div class="pt-chips">' + (c.desbloquea || []).map(chipCurso).join('') + '</div>'
           : '<span class="vacio">No es prerrequisito de nada más.</span>'}
       </div>
 
