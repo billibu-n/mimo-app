@@ -208,6 +208,11 @@ function aplicarAvanzado(){
   // igual en el navegador y en la app de escritorio. Medido: el panel pasa de 560 a 728 px.
   var zoom = Number(a.fuente) || 1;
   document.documentElement.style.zoom = (zoom === 1 ? '' : String(zoom));
+  // El MISMO factor se publica como variable, para que el CSS pueda corregir las medidas atadas a
+  // la pantalla. El `zoom` agranda TAMBIEN `100vh`, y el armazon mide eso: sin esta correccion el
+  // armazon pasaba a medir mas que la ventana y la parte de abajo (el bloque de Semestre) se salia
+  // y quedaba cortada. Ver el comentario de .marco.g1 en general.css.
+  document.documentElement.style.setProperty('--zoom', String(zoom));
   // El modo de la barra lateral lo aplica el motor de la barra (comun/08-barra.js),
   // que vive en window.mimoBarra. Se le pasa el valor elegido en Ajustes.
   if (window.mimoBarra) {

@@ -63,18 +63,21 @@
     </button>
     <div class="marca"><img class="marca-ic" src="iconos/icon-64.png" alt="" width="30" height="30">Mimo Academics</div>
     <button class="tag-version" id="bv-tag" title="Comprobar si estás al día">v…</button>
-    <span class="guardado" id="chip-guardado">Guardado aquí</span>
+    <button class="btn-sync" id="btn-sync" type="button" title="Sincronizar ahora">
+      <span class="anillo" aria-hidden="true"></span>
+      <svg class="ic" aria-hidden="true"><use href="#ACC-07"></use></svg>
+    </button>
   </header>
 
   <aside class="lateral">
     <nav class="navs">
-      <button class="nav on" data-seccion="calendario"><svg class="ic" aria-hidden="true"><use href="#TIE-28"></use></svg>Calendario</button>
-      <button class="nav" data-seccion="estudio"><svg class="ic" aria-hidden="true"><use href="#EDI-03"></use></svg>Estudio</button>
-      <button class="nav" data-seccion="malla"><svg class="ic" aria-hidden="true"><use href="#INT-28"></use></svg>Malla</button>
-      <button class="nav" data-seccion="notas"><svg class="ic" aria-hidden="true"><use href="#EDI-02"></use></svg>Ramos</button>
-      <button class="nav" data-seccion="tiempo"><svg class="ic" aria-hidden="true"><use href="#TIE-03"></use></svg>Tiempo</button>
-      <button class="nav" data-seccion="tareas"><svg class="ic" aria-hidden="true"><use href="#INT-02"></use></svg>Tareas</button>
-      <button class="nav" data-seccion="ajustes"><svg class="ic" aria-hidden="true"><use href="#ACC-03"></use></svg>Ajustes</button>
+      <button class="nav on" data-seccion="calendario"><svg class="ic" aria-hidden="true"><use href="#TIE-28"></use></svg><span data-i18n="nav.calendario">Calendario</span></button>
+      <button class="nav" data-seccion="estudio"><svg class="ic" aria-hidden="true"><use href="#EDI-03"></use></svg><span data-i18n="nav.estudio">Estudio</span></button>
+      <button class="nav" data-seccion="malla"><svg class="ic" aria-hidden="true"><use href="#INT-28"></use></svg><span data-i18n="nav.malla">Malla</span></button>
+      <button class="nav" data-seccion="notas"><svg class="ic" aria-hidden="true"><use href="#EDI-02"></use></svg><span data-i18n="nav.notas">Ramos</span></button>
+      <button class="nav" data-seccion="tiempo"><svg class="ic" aria-hidden="true"><use href="#TIE-03"></use></svg><span data-i18n="nav.tiempo">Tiempo</span></button>
+      <button class="nav" data-seccion="tareas"><svg class="ic" aria-hidden="true"><use href="#INT-02"></use></svg><span data-i18n="nav.tareas">Tareas</span></button>
+      <button class="nav" data-seccion="ajustes"><svg class="ic" aria-hidden="true"><use href="#ACC-03"></use></svg><span data-i18n="nav.ajustes">Ajustes</span></button>
     </nav>
     <div class="acciones">
       <button class="btn acc primario" id="btn-nuevo-sem">+ Semestre</button>

@@ -215,6 +215,7 @@ function pintarEstadoRespaldo(){
 
 function pintarRespaldo(){
   pintarEstadoRespaldo();
+  if (typeof pintarSync === 'function') pintarSync();   // el boton de sync de la cabecera
   const caja = document.getElementById('plegable-respaldo-carpeta');
   if (!caja) return;
   const aviso = document.getElementById('resp-carpeta-aviso');

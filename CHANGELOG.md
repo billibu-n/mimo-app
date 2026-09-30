@@ -44,6 +44,38 @@ Fixes in the **Time** section, and the current day stands out.
 > motor lo corregia; ahora el armador escribe la version en ese hueco, y el respaldo del motor
 > es `0.0.0` (desconocida) en vez de un numero real que se leeria como *"ya estas al dia"*.
 
+### Added (header, panel and updates)
+
+- **The header now has a sync button**, in place of the static "Saved here" label, which said
+  little and could not be pressed. A round button says the state at a glance: **green** when it
+  synced less than a minute ago, **yellow** when it has been longer, **red** when the sync folder
+  has not been chosen yet, and it **spins a full turn** while it syncs. Pressing it syncs right
+  away, or opens the folder picker if there is none. The colour changes on its own as time passes,
+  so it does not depend on anyone pressing anything.
+
+- **The version chip now updates when you press it.** Before it only *checked* and left a note in
+  Settings; you had to go there to finish the job. Now the press does it: on **Windows** it
+  downloads the installer (one press, one file) and opens it so it installs over the old version;
+  on **Linux** — where the app cannot install privileged packages on its own — it opens the
+  release page; in the browser it opens the release page too. It also checks once at start-up, in
+  silence, so the chip already shows green (up to date) or yellow (outdated).
+
+### Fixed (header, panel and updates)
+
+- **A large font no longer hides the Semester block.** Choosing *Large* or *Very large* in
+  *Font size* scaled the whole app with `zoom`, and that `zoom` also enlarged the box that means
+  "one screen tall" (`100vh`): the frame grew taller than the window, and whatever sat at the
+  bottom — the Semester block — was pushed out and cut off. Measured in an 800 px window: with
+  *Large* the block sat at y = 733–771, already outside. The screen measure is now corrected by
+  the zoom factor, and the side panel scrolls inside itself if it still does not fit. Measured
+  after the fix: the frame measures the window (800 px) at every size, and the block stays
+  visible.
+
+- **The top menu and the header can be translated.** The section buttons (Calendar, Study,
+  Degree map, Courses, Time, Tasks, Settings) were written in Spanish by hand, with no
+  translation marker, so in English they stayed in Spanish. They now carry it, and the texts the
+  script paints (the sync button, the version chip) are repainted when the language changes.
+
 ## [1.1.0-desktop] — 2026-09-30
 
 Settings, section by section, now holds the settings that belong to each section, and the

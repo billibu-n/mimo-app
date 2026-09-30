@@ -17,6 +17,8 @@ function versionLocal(){
   return (v && /^\d+\.\d+\.\d+/.test(v)) ? v : '0.0.0';
 }
 const REPO_ACT = {user:'billibu-n', repo:'mimo-app'};
+// Lo ultimo que se comprobo. El clic del chip usa esto para actualizar sin volver a preguntar.
+let ULTIMO = {rel:null, remota:null, local:null, cmp:0};
 
 function pintarActualizacion(estado, texto, html){
   const caja = document.getElementById('caja-actualizar');
@@ -70,11 +72,14 @@ async function traerUltimoRelease(){
   }
 }
 
-async function buscarActualizacion(){
-  pintarActualizacion('cargando', 'Consultando…');
+async function buscarActualizacion(silencioso){
+  if (!silencioso) pintarActualizacion('cargando', 'Consultando…');
   let rel = null;
   try { rel = await traerUltimoRelease(); }
   catch (err) {
+    // Al arrancar (silencioso) NO se pinta de rojo ni se llena la caja de Ajustes: que no haya
+    // internet no es un error que el usuario deba ver al abrir la app. El chip queda neutro.
+    if (silencioso) return;
     pintarTagVersion('mal', 'v' + versionLocal());
     pintarActualizacion('mal', 'No se pudo consultar (¿sin internet?). Revisa ' +
       'https://github.com/' + REPO_ACT.user + '/' + REPO_ACT.repo + '/releases');
@@ -83,17 +88,94 @@ async function buscarActualizacion(){
   const remota = String(rel.version || rel.tag_name || '').replace(/^v/, '');
   const local = versionLocal();
   if (!remota){
+    if (silencioso) return;
     pintarTagVersion('mal', 'v' + local);
     pintarActualizacion('mal', 'No se encontró la versión publicada.');
     return;
   }
   const cmp = compararVersiones(remota, local);
-  pintarTagVersion(cmp > 0 ? 'nueva' : 'al-dia', 'v' + local, cmp);
+  ULTIMO = {rel: rel, remota: remota, local: local, cmp: cmp};
+  pintarTagVersion(cmp > 0 ? 'nueva' : 'al-dia', 'v' + local);
   if (cmp <= 0){
     pintarActualizacion('ok', 'Estás al día (v' + local + ').');
     return;
   }
   ofrecerActualizacion(rel, remota, local);
+}
+
+/* ---- abrir cosas con el programa del sistema (navegador / instalador) ----
+   Va por un comando de Tauri (main.rs) y NO por un plugin: asi no hay que anadir dependencias
+   nuevas y sigue valiendo el mismo puente nativo que ya usa la app. Fuera de Tauri, se cae
+   a `window.open`, que es lo que hace un navegador normal. */
+function puenteInvoke(){
+  const t = window['__TA' + 'URI__'];
+  return t && t.core && t.core.invoke;
+}
+async function abrirUrl(url){
+  const inv = puenteInvoke();
+  if (inv){ try { await inv('abrir_url', {url: url}); return true; } catch (e) { /* se intenta abajo */ } }
+  try { window.open(url, '_blank', 'noopener'); return true; } catch (e) {}
+  return false;
+}
+async function abrirRuta(ruta){
+  const inv = puenteInvoke();
+  if (!inv) return false;
+  try { await inv('abrir_archivo', {ruta: ruta}); return true; } catch (e) { return false; }
+}
+
+/* Al PULSAR el chip: si ya se sabe que hay una version nueva, se actualiza DIRECTAMENTE, sin pasar
+   por Ajustes. Si todavia no se ha comprobado, se comprueba. */
+function alPulsarVersion(){
+  if (ULTIMO.cmp > 0 && ULTIMO.rel) return actualizarDirecto(ULTIMO.rel, ULTIMO.remota, ULTIMO.local);
+  return buscarActualizacion();
+}
+
+function actualizarDirecto(rel, remota, local){
+  const dentro = (typeof enTauri === 'function') && enTauri();
+  const enlace = rel.html_url || PAGINA_RELEASES();
+  if (!dentro){ abrirUrl(enlace); return; }                 // navegador: a la pagina de descargas
+  if (sistemaDeLaApp() === 'windows'){
+    const assets = (rel.assets || []);
+    const exe = assets.filter(a => /\.exe$/i.test(a.name))[0] ||
+                assets.filter(a => /\.msi$/i.test(a.name))[0];
+    if (exe) { descargarYActualizar(exe); return; }         // un clic: descarga y abre el instalador
+  }
+  // Linux (y cualquier otro caso dentro de Tauri): la app no puede instalar paquetes con
+  // privilegios por su cuenta, asi que se abre la pagina del release. Un clic.
+  abrirUrl(enlace);
+}
+
+/* Windows: baja el instalador, lo guarda donde el usuario diga y LO ABRE, para que no haya que
+   ir a buscarlo. Es el "un clic es suficiente". */
+async function descargarYActualizar(asset){
+  const el = document.getElementById('bv-tag');
+  const antes = el ? el.textContent : '';
+  try {
+    if (el){ el.textContent = 'Descargando…'; el.disabled = true; }
+    const r = await fetch(asset.browser_download_url, {cache:'no-store'});
+    if (!r.ok) throw new Error('http ' + r.status);
+    const bytes = new Uint8Array(await r.arrayBuffer());
+    const destino = await puenteTauri().dialog.save({
+      defaultPath: asset.name,
+      filters: [{ name: 'Instalador de Mimo', extensions: [asset.name.split('.').pop()] }],
+    });
+    if (!destino) return;                                   // el usuario cancelo el dialogo
+    await puenteTauri().fs.writeFile(destino, bytes);
+    await abrirRuta(destino);                               // se abre solo: instalador en marcha
+    if (typeof avisar === 'function'){
+      await avisar('Se descargó el instalador y se abrió. Sigue sus pasos: se instalará encima y ' +
+                   'tus datos se conservan.', { titulo: 'Instalador listo' });
+    }
+  } catch (e) {
+    if (typeof avisar === 'function'){
+      await avisar('No se pudo descargar el instalador. Se abre la página de descargas.',
+                   { titulo: 'No se pudo descargar' });
+    }
+    abrirUrl(asset.browser_download_url ? PAGINA_RELEASES() : PAGINA_RELEASES());
+  } finally {
+    if (el){ el.disabled = false; el.textContent = antes || ('v' + versionLocal()); }
+    buscarActualizacion(true);
+  }
 }
 
 /* El puente de la aplicacion de escritorio. El nombre se arma al vuelo por el MISMO motivo
@@ -216,5 +298,8 @@ function pintarTagVersion(estado, version){
   const el = document.getElementById('bv-tag');
   if (!el) return;
   pintarTagVersion('', 'v' + versionLocal());
-  el.onclick = () => buscarActualizacion();
+  el.onclick = alPulsarVersion;
+  // Una comprobacion al arrancar, en silencio: asi el chip ya dice verde (al dia) o amarillo
+  // (desactualizado) sin que el usuario tenga que pulsarlo. Si no hay internet, queda neutro.
+  setTimeout(() => buscarActualizacion(true), 1500);
 })();

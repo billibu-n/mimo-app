@@ -5,7 +5,7 @@
    navegador la pueda INSTALAR (PWA).
 
    ESTE FICHERO NO SE EDITA A MANO. Es la salida de `plantilla-sw.js`: lo escribe el armador
-   (mimo_config/construir/index.py), que sustituye 1.1.1-desktop por la version, 409b64e95e por un
+   (mimo_config/construir/index.py), que sustituye 1.1.1-desktop por la version, 204654d6ab por un
    sello del contenido y [
   "./index.html",
   "./manifest.json",
@@ -74,11 +74,15 @@
   "./sonido/alarma.mp3",
   "./vendor/pdf-motor.js",
   "./vendor/pdf.min.js",
+  "./iconos/happy.png",
+  "./iconos/happy2.png",
   "./iconos/icon-16.png",
   "./iconos/icon-32.png",
   "./iconos/icon-512.png",
   "./iconos/icon-64.png",
-  "./iconos/iconos.svg"
+  "./iconos/iconos.svg",
+  "./iconos/indiferent.png",
+  "./iconos/mimo2.png"
 ] por la lista COMPLETA de archivos.
 
    DOS REGLAS QUE IMPORTAN (las dos costaron un fallo real)
@@ -98,7 +102,7 @@
    is not supported"). Al abrir el index.html con doble clic este fichero ni se usa.
  */
 const VERSION = '1.1.1-desktop';
-const HUELLA = '409b64e95e';
+const HUELLA = '204654d6ab';
 const CACHE = 'mimo-' + VERSION + '-' + HUELLA;
 
 // La aplicacion COMPLETA, la escribio el armador al construir.
@@ -170,11 +174,15 @@ const ARCHIVOS = [
   "./sonido/alarma.mp3",
   "./vendor/pdf-motor.js",
   "./vendor/pdf.min.js",
+  "./iconos/happy.png",
+  "./iconos/happy2.png",
   "./iconos/icon-16.png",
   "./iconos/icon-32.png",
   "./iconos/icon-512.png",
   "./iconos/icon-64.png",
-  "./iconos/iconos.svg"
+  "./iconos/iconos.svg",
+  "./iconos/indiferent.png",
+  "./iconos/mimo2.png"
 ];
 
 // Lo que NUNCA se sirve de la cache: el propio service worker y el HTML.

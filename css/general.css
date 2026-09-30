@@ -1019,7 +1019,12 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
   grid-template-columns:var(--ancho-barra,176px) minmax(0,1fr);
   grid-template-rows:auto 1fr;
   grid-template-areas:"cabecera cabecera" "lateral contenido";
-  height:100vh;
+  /* La medida de la ventana, corregida por el zoom de "Tamaño de la fuente" (02-avanzados.js pone
+     --zoom). El `zoom` agranda TAMBIEN `100vh`, asi que a secas medía `alto_real * zoom`: el
+     armazon pasaba a ser mas alto que la ventana y lo de abajo (el bloque de Semestre) se salia y
+     quedaba cortado. Dividiendo por el factor, vuelve a medir la ventana de verdad. El valor de
+     reserva es 1, para que sin el JS siga midiendo una pantalla. */
+  height:calc(100vh / var(--zoom, 1));
   overflow:hidden;
   transition:grid-template-columns 220ms cubic-bezier(.22,1,.36,1);
 }
@@ -1032,15 +1037,39 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
   padding:11px 20px;border-bottom:1px solid var(--line);background:var(--sup);
   color:var(--fg);
 }
-.g1 .b1 .guardado{margin-left:auto;color:var(--muted)}
+/* ---- boton de SINCRONIZACION de la cabecera (sustituye al texto "Guardado aqui") ----
+   Un circulito con el icono de refrescar. El color dice el estado y el icono gira mientras
+   sincroniza. Ocupa el sitio del texto viejo: se va a la derecha con margin-left:auto. */
+.g1 .b1 .btn-sync{margin-left:auto;position:relative;width:30px;height:30px;border-radius:50%;
+  padding:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  border:1px solid var(--line2);background:var(--sup2);color:var(--muted);
+  transition:color 140ms ease-out,border-color 140ms ease-out}
+.g1 .b1 .btn-sync .ic{width:16px;height:16px}
+.g1 .b1 .btn-sync .anillo{position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;
+  pointer-events:none}
+.g1 .b1 .btn-sync:hover{border-color:var(--ac-fuerte);color:var(--fg)}
+.g1 .b1 .btn-sync.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.g1 .b1 .btn-sync.ok .anillo{border-color:color-mix(in srgb,var(--ok) 28%,transparent)}
+.g1 .b1 .btn-sync.tarde{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,transparent)}
+.g1 .b1 .btn-sync.tarde .anillo{border-color:color-mix(in srgb,var(--warn) 32%,transparent)}
+.g1 .b1 .btn-sync.falta{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 50%,transparent)}
+.g1 .b1 .btn-sync.falta .anillo{border-color:color-mix(in srgb,var(--bad) 32%,transparent);
+  border-style:dashed}
+/* Mientras sincroniza: una vuelta COMPLETA de 360 sobre su propio centro. */
+.g1 .b1 .btn-sync.girando .ic{animation:mimo-vuelta 900ms linear infinite}
+@keyframes mimo-vuelta{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.g1 .b1 .btn-sync.girando .ic{animation:none}}
 .marca{display:flex;align-items:center;font-weight:650;font-size:.95rem;letter-spacing:-.01em}
 .tag-version{font-size:.7rem;font-weight:650;border-radius:999px;padding:2px 10px;cursor:pointer;
   border:1px solid var(--line2);background:var(--sup2);color:var(--muted);white-space:nowrap;
   transition:background 140ms ease-out,color 140ms ease-out,border-color 140ms ease-out}
 .tag-version:hover{border-color:var(--ac-fuerte);color:var(--fg)}
-.tag-version.al-dia{color:var(--ok);border-color:var(--malla-aprobado, var(--ok))}
-.tag-version.nueva{color:var(--warn);border-color:var(--warn)}
+.tag-version.al-dia{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent);
+  background:color-mix(in srgb,var(--ok) 10%,var(--sup))}
+.tag-version.nueva{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,transparent);
+  background:color-mix(in srgb,var(--warn) 10%,var(--sup))}
 .tag-version.mal{color:var(--bad);border-color:var(--bad)}
+.tag-version[disabled]{opacity:.7;cursor:progress}
 
 /* ---- la barra lateral y sus botones ---------------------------------------- */
 .g1 .lateral{
@@ -1057,6 +1086,12 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
      ultimas acciones quedaban cortadas. Siendo hija de la fila 1fr, basta con
      llenar su fila: 'height:auto' (y el estirado por defecto de la rejilla). */
   height:auto;
+  /* Si aun asi no cupiera (fuente muy grande y ventana baja), el panel se desplaza DENTRO de si
+     mismo y el bloque de Semestre sigue siendo alcanzable. Antes era `overflow:hidden`: lo que
+     sobraba se cortaba y desaparecia. `min-height:0` deja que la rejilla lo encoja. */
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
 }
 .g1.replegada .lateral{transform:translateX(-100%)}
 .g1 .navs{display:flex;flex-direction:column;gap:2px}
