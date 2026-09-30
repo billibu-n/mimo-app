@@ -5,7 +5,7 @@
    navegador la pueda INSTALAR (PWA).
 
    ESTE FICHERO NO SE EDITA A MANO. Es la salida de `plantilla-sw.js`: lo escribe el armador
-   (mimo_config/construir/index.py), que sustituye 1.1.1-desktop por la version, ab1e9350fe por un
+   (mimo_config/construir/index.py), que sustituye 1.1.2-desktop por la version, 44367a46f7 por un
    sello del contenido y [
   "./index.html",
   "./manifest.json",
@@ -110,8 +110,8 @@
    OJO: un service worker SOLO se registra en http(s), NUNCA en file:// (medido: "origin 'null'
    is not supported"). Al abrir el index.html con doble clic este fichero ni se usa.
  */
-const VERSION = '1.1.1-desktop';
-const HUELLA = 'ab1e9350fe';
+const VERSION = '1.1.2-desktop';
+const HUELLA = '44367a46f7';
 const CACHE = 'mimo-' + VERSION + '-' + HUELLA;
 
 // La aplicacion COMPLETA, la escribio el armador al construir.

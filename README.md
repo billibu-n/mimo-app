@@ -8,21 +8,35 @@
 study time and timer into one application, and **it does not send your data anywhere**: it stays
 on your machine.
 
-## Installation
+## Download
 
-Start here: **[the latest release](https://github.com/billibu-n/mimo-app/releases/latest)**. Its
-files are under a collapsible section called **Assets** — if you only see a long text and no
-files, click *Assets* to unfold them.
+<h3 align="center">
+  <a href="https://github.com/billibu-n/mimo-app/releases/latest">
+    <img alt="Download the latest version" src="https://img.shields.io/badge/Download_the_latest_version-16a34a?style=for-the-badge&logo=github&logoColor=white">
+  </a>
+</h3>
 
-Pick the file for your system:
+<p align="center"><b>Download → install → open.</b> That is all it takes.<br>
+No account, no sign-up, and nothing is uploaded: your data stays on your computer.</p>
+
+**How to install it, in three steps:**
+
+1. **Download.** Click the button above (or open the [latest release](https://github.com/billibu-n/mimo-app/releases/latest)). On that page, the files are inside a collapsible section called **Assets** — if you only see a long text and no files, click *Assets* to unfold it.
+2. **Pick your file** using the table below and download it.
+3. **Install and open.** Double-click it on Windows, or run the one-line command from the table on Linux.
+
+> **Windows tip:** the installer is not digitally signed (a certificate costs money every year), so
+> Windows shows a SmartScreen warning. Click *More info*, then *Run anyway*. [Why is it safe?](#windows)
+
+Here is the file for each system:
 
 | Your system | Download this file | Then |
 |---|---|---|
-| **Fedora**, openSUSE, RHEL | `mimo-academics-1.1.1-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
-| **Debian**, Ubuntu, Mint | `mimo-academics_1.1.1-desktop_amd64.deb` | `sudo apt install ./<file>` |
-| **Any Linux**, no install | `mimo-academics_1.1.1-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
-| **Windows 10 / 11** | `mimo-academics_1.1.1-desktop_x64-setup.exe` | double-click it |
-| **Any system**, web version | `mimo-v1.1.1-desktop.zip` | unzip and open `mimo/index.html` |
+| **Fedora**, openSUSE, RHEL | `mimo-academics-1.1.2-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
+| **Debian**, Ubuntu, Mint | `mimo-academics_1.1.2-desktop_amd64.deb` | `sudo apt install ./<file>` |
+| **Any Linux**, no install | `mimo-academics_1.1.2-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
+| **Windows 10 / 11** | `mimo-academics_1.1.2-desktop_x64-setup.exe` | double-click it |
+| **Any system**, web version | `mimo-v1.1.2-desktop.zip` | unzip and open `mimo/index.html` |
 
 **Your data is kept on your machine** in every case, and you can take it with you using the backup
 in **Settings**. Nothing is uploaded anywhere.
@@ -36,10 +50,10 @@ The desktop version is tested on **Fedora**, and works on any distribution with 
 
 ```bash
 # Fedora, openSUSE and derivatives
-sudo dnf install mimo-academics-1.1.1-desktop-1.x86_64.rpm
+sudo dnf install mimo-academics-1.1.2-desktop-1.x86_64.rpm
 
 # Debian, Ubuntu and derivatives
-sudo apt install ./mimo-academics_1.1.1-desktop_amd64.deb
+sudo apt install ./mimo-academics_1.1.2-desktop_amd64.deb
 ```
 
 If the app does not show up in the menu right away, log out and back in: the menu is cached.
@@ -47,8 +61,8 @@ If the app does not show up in the menu right away, log out and back in: the men
 **Without installing anything** (the AppImage):
 
 ```bash
-chmod +x mimo-academics_1.1.1-desktop_amd64.AppImage
-./mimo-academics_1.1.1-desktop_amd64.AppImage
+chmod +x mimo-academics_1.1.2-desktop_amd64.AppImage
+./mimo-academics_1.1.2-desktop_amd64.AppImage
 ```
 
 The AppImage is about **100 MB** (it carries its own runtime) against about **4 MB** for the
@@ -62,7 +76,7 @@ The AppImage is about **100 MB** (it carries its own runtime) against about **4 
 
 ### Windows
 
-Download **`mimo-academics_1.1.1-desktop_x64-setup.exe`** and double-click it. It installs for
+Download **`mimo-academics_1.1.2-desktop_x64-setup.exe`** and double-click it. It installs for
 your user and creates a Start Menu entry, so you do not need administrator rights.
 
 > **Windows will warn you** that the publisher is unknown (SmartScreen), because the installer
@@ -141,7 +155,7 @@ Use *Settings -> Backup* to take your data to another machine.
 
 ## Project status
 
-Version 1.1.1-desktop. The desktop application is **usable and stable**, and it keeps growing:
+Version 1.1.2-desktop. The desktop application is **usable and stable**, and it keeps growing:
 synchronisation, mobile and the rest of the translations are still on the list (the top menu and
 the header already speak Spanish and English). **Bug reports and ideas are welcome** — see
 [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -180,7 +194,7 @@ before trusting it with your grades.
 
 ## Version
 
-1.1.1-desktop — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
+1.1.2-desktop — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Credits
 
