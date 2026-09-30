@@ -63,6 +63,13 @@ function diasDeLaSemana(lunes){
   for (let k = 0; k < 7; k++) out.push(sumaDias(lunes, k));
   return out;
 }
+// Los mismos 7 dias, pero con el de HOY primero (si cae en la semana): la semana se lee de hoy
+// hacia adelante y luego lo que queda. Es lo que hace que "la sesion actual se vea primero" y que
+// la semana se muestre, por ejemplo, de martes a lunes en vez de lunes a domingo.
+function diasConHoyPrimero(dias){
+  const i = dias.indexOf(hoy());
+  return i <= 0 ? dias.slice() : dias.slice(i).concat(dias.slice(0, i));
+}
 // Las sesiones que caen dentro de la semana seleccionada, ordenadas por fecha y hora.
 function sesionesDeLaSemana(lunes){
   const dias = diasDeLaSemana(lunes);
@@ -177,18 +184,27 @@ function renderTiempo(){
       '<p class="ayuda">Crea un semestre para empezar a registrar tus sesiones.</p>';
     return;
   }
-  // Los 7 dias de la semana elegida, para el selector de dia y para agrupar las sesiones.
-  const dias = diasDeLaSemana(t.semana);
-  if (diaSel.options.length !== dias.length) {
+  // Los 7 dias de la semana elegida, para el selector de dia y para agrupar las sesiones. Van con
+  // HOY primero: lo actual arriba, y el resto detras.
+  const dias = diasConHoyPrimero(diasDeLaSemana(t.semana));
+  // El selector de dia se rehace cuando cambia la semana (o su orden). Antes se comparaba solo el
+  // NUMERO de opciones, que siempre es 7: al cambiar de semana las etiquetas se quedaban viejas.
+  const firma = dias.join('|');
+  if (diaSel.dataset.dias !== firma) {
     diaSel.innerHTML = dias.map(f => '<option value="' + f + '">' + esc(etiquetaDia(f)) + '</option>').join('');
+    diaSel.dataset.dias = firma;
   }
   // El dia por defecto es HOY si cae dentro de la semana; si no, el lunes. El valor efectivo se
   // persiste en registrarMinutos() (cuando de verdad se registra) para no guardar a cada render.
   t.dia = t.dia && dias.includes(t.dia) ? t.dia : (dias.includes(hoy()) ? hoy() : dias[0]);
   diaSel.value = t.dia;
 
-  // Sesiones de la semana, agrupadas por dia, cada dia con su total.
-  const lista = sesionesDeLaSemana(t.semana);
+  // Sesiones de la semana, agrupadas por dia, cada dia con su total. El orden es el de `dias`,
+  // que lleva HOY primero: la sesion actual (y su dia) encabezan la lista.
+  const orden = {};
+  dias.forEach((f, i) => { orden[f] = i; });
+  const lista = sesionesDeLaSemana(t.semana)
+    .sort((a, b) => (orden[a.fecha] - orden[b.fecha]) || (a.hora || '').localeCompare(b.hora || ''));
   let html = '';
   let diaActual = null, totDia = 0;
   lista.forEach(x => {

@@ -55,6 +55,23 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 ### Changed
 
+- **Your current session now comes first.** In *Time*, the sessions of the week are grouped by day;
+  the week used to be read from Monday to Sunday, always. Now the **day it is today** heads the
+  list and the week is read **from today onwards** (today Wednesday: Wednesday, Thursday, Friday,
+  Saturday, Sunday, Monday, Tuesday). The day picker follows the same order and starts with today
+  as well. When today does not fall inside the week you are looking at, nothing changes. Confirmed
+  in the application with sessions: today's group sits at the top of the list.
+- **The day picker no longer lies when you change week.** It used to be rebuilt only when the
+  *number* of days changed — which is always seven — so switching weeks kept the **old labels** on
+  screen while the dates behind them were the new ones. It is now rebuilt from the real dates.
+- **The "Nuevo evento" button no longer hides at the bottom of the column.** In *Semestre* the
+  button lived at the end of the left column, after the whole list of events. Since that column is
+  stuck to the window, a long list pushed the button **out of view with no way to reach it** —
+  exactly the bother described. The button now sits **at the top of the column**, and the column
+  never grows taller than the window: it keeps its own scroll. Measured with a 600 px-high window:
+  the column was 682 px tall and the button ended up 162 px below the screen; now the column fits
+  the window and the button is reachable.
+
 - **The *Import* window (Plan) now says only what it has to say, and looks like the rest.** It used
   to be a wall of text — four paragraphs plus a box with the CSV and JSON examples — and it showed
   the browser's own file button. Now it carries the **same face as the Settings windows**: an icon
