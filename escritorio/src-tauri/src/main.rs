@@ -428,24 +428,66 @@ fn abrir_con_el_sistema(objetivo: &str) -> bool {
     }
 }
 
+/// ¿El equipo usa el driver PROPRIETARIO de NVIDIA? Se mira `/sys/class/drm`, que existe en
+/// cualquier Linux con tarjeta de video, y no depende de herramientas externas. De cada tarjeta
+/// se sigue el enlace `device/driver` y se ve si apunta a un driver llamado `nvidia`.
+/// Es la MISMA comprobacion que usan las cajas de Tauri para este mismo problema.
+#[cfg(target_os = "linux")]
+fn usa_driver_nvidia() -> bool {
+    if let Ok(tarjetas) = std::fs::read_dir("/sys/class/drm") {
+        for t in tarjetas.flatten() {
+            let enlace = t.path().join("device").join("driver");
+            if let Ok(destino) = std::fs::read_link(&enlace) {
+                if destino.to_string_lossy().contains("nvidia") {
+                    return true;
+                }
+            }
+        }
+    }
+    false
+}
+
 fn main() {
-    // Parche de RENDIMIENTO/PESTANEO para Linux con WebKitGTK (el webview de Tauri en Linux).
-    // Documentado por Tauri (https://v2.tauri.app/develop/debug/linux-graphics/): el renderizador
-    // DMA-BUF de WebKitGTK y los drivers de GPU (sobre todo NVIDIA) no se ponen de acuerdo, y
-    // salen pantallas en blanco, pestaneo (sobre todo al animar o redimensionar) o cierres con
-    // "Error 71" en Wayland. La solucion ordenada, de menos a mas agresiva:
-    //   1. nvidia_drm.modeset=1 (es del sistema, no se toca aqui)
-    //   2. __NV_DISABLE_EXPLICIT_SYNC=1  -> arregla el Error 71 de Wayland SIN perder rendimiento
-    //   3. WEBKIT_DISABLE_DMABUF_RENDERER=1 -> arregla el pestaneo, a cambio de la via mas rapida
-    //   4. WEBKIT_DISABLE_COMPOSITING_MODE=1 -> ultimo recurso (desactiva la composicion acelerada)
-    // Aqui se pone la 2, que es la que arregla el pestaneo sin coste de rendimiento. A PROPOSITO
-    // NO se fuerza la 3 ni la 4: la propia Tauri avisa de que desactivarian la via rapida para
-    // TODO EL MUNDO, tambien para quien no tiene el problema. Si en algun equipo hace falta mas,
-    // se arranca con la variable puesta a mano; ver docs/comun/plan-mimo.md.
+    // Ajustes de RENDIMIENTO para Linux con WebKitGTK (el motor de la ventana de Tauri en Linux).
+    // Documentado por Tauri (https://v2.tauri.app/develop/debug/linux-graphics/): WebKitGTK y los
+    // drivers de GPU, sobre todo el de NVIDIA, no se ponen de acuerdo, y salen pantallas en blanco,
+    // pestaneo, tirones al animar o redimensionar, y cierres con "Error 71" en Wayland. La guia
+    // ordena los remedios de menos a mas agresivo. Aqui se aplican DOS, y se decide al ARRANCAR,
+    // antes de crear la ventana (despues ya no surten efecto).
     #[cfg(target_os = "linux")]
     {
+        // --- Sincronizacion explicita de NVIDIA ---
+        // Arregla el Error 71 de Wayland SIN quitar la via rapida de dibujo, asi que se pone
+        // siempre. Es la unica de las tres que no tiene coste.
         if std::env::var_os("__NV_DISABLE_EXPLICIT_SYNC").is_none() {
             std::env::set_var("__NV_DISABLE_EXPLICIT_SYNC", "1");
+        }
+
+        // --- Composicion acelerada de WebKitGTK: la causa del "va mas lento que en el navegador" ---
+        // Medido y documentado por Tauri: WebKitGTK con el driver de NVIDIA no acelera bien, y a
+        // veces cae en un camino lento EN SILENCIO (el aviso es literal: "el mismo codigo es
+        // rapido en un navegador normal", con latencia alta y pocos cuadros por segundo). Con la
+        // composicion acelerada APAGADA, WebKitGTK deja de pelear con el driver y el movimiento
+        // queda estable. El precio es pintar sin la GPU, que para esta aplicacion (paneles, texto,
+        // iconos) no se nota; lo que SI se notaba eran los tirones.
+        //
+        // POR QUE NO SE APAGA EN CUALQUIER EQUIPO: se apaga solo cuando el driver es NVIDIA, que
+        // es donde el problema esta MEDIDO, y hay salida de escape:
+        //   MIMO_ACELERAR=1  -> vuelve a encender la aceleracion (para una GPU que si acelere bien)
+        //   MIMO_ACELERAR=0  -> la apaga a mano
+        // Se decide al arrancar, ANTES de crear la ventana: despues ya no surte efecto.
+        if std::env::var_os("WEBKIT_DISABLE_COMPOSITING_MODE").is_none() {
+            let dicho_por_el_usuario = match std::env::var("MIMO_ACELERAR") {
+                Ok(v) => {
+                    let apagar = matches!(v.trim(), "0" | "no" | "false" | "off");
+                    std::env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", if apagar { "1" } else { "0" });
+                    true
+                }
+                Err(_) => false,
+            };
+            if !dicho_por_el_usuario && usa_driver_nvidia() {
+                std::env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
+            }
         }
     }
 
