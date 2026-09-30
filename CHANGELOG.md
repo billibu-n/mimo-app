@@ -139,6 +139,18 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 - The **version/update block left the Appearance window** — it has nothing to do with looks. Its
   controls stay for the app to work, and the version notice lives in the header tag.
 
+### Changed
+
+- **The per-section cards no longer carry a tag or the old explanatory band.** The *section
+  settings* cards (Calendario, Ramos, Tareas, Estudio, Malla, Tiempo) are now a plain card, like
+  the rest: **icon, bold title and a short line**. The little tag they carried (*format of hours*,
+  *accents · titles*, *what is done*…) and the band that said these settings *"are not general:
+  they belong to a single section…"* are gone. The section card is opened from Settings, but the
+  settings themselves live in their own section.
+- **Each section card says what it is about**: Calendario *hours, events and dates*; **Ramos**
+  *assessments and courses* (was labelled *Notas*); Tareas *to-dos and commitments*; Estudio
+  *study time log*; Malla *degree courses*; Tiempo *stopwatches, timer and more*.
+
 ### Fixed
 
 - **The panel no longer flickers as much on Linux, where the app runs on WebKitGTK.** The desktop

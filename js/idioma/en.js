@@ -2,11 +2,22 @@
 registrarIdioma('en', {
   'ajustes.tituloApp': 'Application settings',
   'ajustes.subApp': 'What applies to the whole application.',
-  'ajustes.notaSecciones': { parts: [
-    'These settings are ', ['b', 'not general'],
-    ': they belong to a single section and are opened from its own screen. This is the main change from the current mix.'
-  ] },
 
+  // --- per-section cards ---
+  'ajustes.calendario': 'Calendar',
+  'ajustes.calendario.d': 'Hours, events and dates.',
+  'ajustes.ramos': 'Courses',
+  'ajustes.ramos.d': 'Assessments and courses.',
+  'ajustes.tareas': 'Tasks',
+  'ajustes.tareas.d': 'To-dos and commitments.',
+  'ajustes.estudio': 'Study',
+  'ajustes.estudio.d': 'Study time log.',
+  'ajustes.malla': 'Curriculum',
+  'ajustes.malla.d': 'Degree courses.',
+  'ajustes.tiempo': 'Time',
+  'ajustes.tiempo.d': 'Stopwatches, timer and more.',
+
+  // --- application cards ---
   'ajustes.apariencia': 'Appearance',
   'ajustes.apariencia.d': 'Theme and colour.',
   'ajustes.general': 'General',

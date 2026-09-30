@@ -4,10 +4,21 @@ registrarIdioma('es', {
   // --- cabecera de la pantalla de Ajustes (piloto del motor de idiomas) ---
   'ajustes.tituloApp': 'Ajustes de la aplicación',
   'ajustes.subApp': 'Lo que vale para toda la aplicación.',
-  'ajustes.notaSecciones': { parts: [
-    'Estos ajustes ', ['b', 'no son generales'],
-    ': pertenecen a una sola sección y se abren desde su propia pantalla. Es el cambio principal frente a la mezcla actual.'
-  ] },
+
+  // --- las tarjetas de la aplicación ---
+  // --- las tarjetas de CADA SECCION ---
+  'ajustes.calendario': 'Calendario',
+  'ajustes.calendario.d': 'Horas, eventos y fechas.',
+  'ajustes.ramos': 'Ramos',
+  'ajustes.ramos.d': 'Evaluaciones y cursos.',
+  'ajustes.tareas': 'Tareas',
+  'ajustes.tareas.d': 'Pendientes y compromisos.',
+  'ajustes.estudio': 'Estudio',
+  'ajustes.estudio.d': 'Registro de tiempo estudiado.',
+  'ajustes.malla': 'Malla',
+  'ajustes.malla.d': 'Cursos de la carrera.',
+  'ajustes.tiempo': 'Tiempo',
+  'ajustes.tiempo.d': 'Cronómetros, temporizador y otros.',
 
   // --- las tarjetas de la aplicación ---
   'ajustes.apariencia': 'Apariencia',
