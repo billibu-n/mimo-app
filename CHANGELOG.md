@@ -7,6 +7,38 @@ This document describes **what changed**, in words. Downloads are in
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Downloadable
 versions start at 1.0.2; 1.0.0 is the first official release, with the desktop application.
 
+## [1.1.2-desktop] — 2026-09-30
+
+Fixes in **interaction**, a **steadier desktop app on NVIDIA**, and a **more direct README**.
+
+### Fixed
+
+- **Web links are no longer dead** (in *Collaborate*). They were `<a href="https://...">`, and
+  inside the desktop app Tauri cancels that navigation, so the click did nothing. The click now
+  asks the system's browser to open the link.
+- **The warning is no longer hidden behind the Settings panel.** It had a lower layer (z-index
+  50) than the panel's veil (60), so *Reset everything* asked **behind** the panel: you saw the
+  background dim and no question. Reordered: veil 60 < warning 70 < toast 75.
+- **The folder button is no longer dead.** With a folder already chosen it was **disabled**:
+  pressing it did nothing **and said nothing**. Now it lets you change it (it reads *Change
+  folder…*) and the messages say where the copy landed and why it failed.
+- **`abrir_url` / `abrir_archivo`** now report whether they actually opened, instead of failing
+  in silence.
+
+### Changed
+
+- **Steadier desktop app on Linux with an NVIDIA card.** The app draws with **WebKitGTK**, which
+  with the NVIDIA driver can silently fall into a slow path (documented by Tauri: *the same code
+  is fast in a regular browser*). Hardware compositing is now turned off **only when the driver
+  is NVIDIA**, on start-up; `MIMO_ACELERAR=1` re-enables it and `MIMO_ACELERAR=0` forces it off.
+- **A more direct README**: a download button, three steps, and a **direct link** to each file.
+- **A monitor to measure it**: `herramientas/monitor.js` reports network use, smoothness (frames)
+  and CPU, so problems are not guessed at.
+
+> **About internet use.** Measured with that monitor: in a regular browser the app runs at **60
+> fps** and makes **one** internet request (5 KB, the version check). The reported heavy internet
+> use does not come from the app.
+
 ## [Unreleased]
 
 (nothing yet)

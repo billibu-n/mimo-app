@@ -22,7 +22,8 @@ No account, no sign-up, and nothing is uploaded: your data stays on your compute
 **How to install it, in three steps:**
 
 1. **Download.** Click the button above (or open the [latest release](https://github.com/billibu-n/mimo-app/releases/latest)). On that page, the files are inside a collapsible section called **Assets** — if you only see a long text and no files, click *Assets* to unfold it.
-2. **Pick your file** using the table below and download it.
+2. **Pick your file** in the table below: each name is a **direct link** that starts the
+   download at once, without hunting for it under *Assets*.
 3. **Install and open.** Double-click it on Windows, or run the one-line command from the table on Linux.
 
 > **Windows tip:** the installer is not digitally signed (a certificate costs money every year), so
@@ -32,11 +33,11 @@ Here is the file for each system:
 
 | Your system | Download this file | Then |
 |---|---|---|
-| **Fedora**, openSUSE, RHEL | `mimo-academics-1.1.2-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
-| **Debian**, Ubuntu, Mint | `mimo-academics_1.1.2-desktop_amd64.deb` | `sudo apt install ./<file>` |
-| **Any Linux**, no install | `mimo-academics_1.1.2-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
-| **Windows 10 / 11** | `mimo-academics_1.1.2-desktop_x64-setup.exe` | double-click it |
-| **Any system**, web version | `mimo-v1.1.2-desktop.zip` | unzip and open `mimo/index.html` |
+| **Fedora**, openSUSE, RHEL | **[mimo-academics-1.1.2-desktop-1.x86_64.rpm](https://github.com/billibu-n/mimo-app/releases/latest/download/mimo-academics-1.1.2-desktop-1.x86_64.rpm)** | `sudo dnf install <file>` |
+| **Debian**, Ubuntu, Mint | **[mimo-academics_1.1.2-desktop_amd64.deb](https://github.com/billibu-n/mimo-app/releases/latest/download/mimo-academics_1.1.2-desktop_amd64.deb)** | `sudo apt install ./<file>` |
+| **Any Linux**, no install | **[mimo-academics_1.1.2-desktop_amd64.AppImage](https://github.com/billibu-n/mimo-app/releases/latest/download/mimo-academics_1.1.2-desktop_amd64.AppImage)** | `chmod +x <file>` and open it |
+| **Windows 10 / 11** | **[mimo-academics_1.1.2-desktop_x64-setup.exe](https://github.com/billibu-n/mimo-app/releases/latest/download/mimo-academics_1.1.2-desktop_x64-setup.exe)** | double-click it |
+| **Any system**, web version | **[mimo-v1.1.2-desktop.zip](https://github.com/billibu-n/mimo-app/releases/latest/download/mimo-v1.1.2-desktop.zip)** | unzip and open `mimo/index.html` |
 
 **Your data is kept on your machine** in every case, and you can take it with you using the backup
 in **Settings**. Nothing is uploaded anywhere.
@@ -83,7 +84,7 @@ your user and creates a Start Menu entry, so you do not need administrator right
 > **is not digitally signed**: signing costs money every year, so... To continue: click *More info* and
 > then *Run anyway*. It's clearly safe btw -_-
 
-> **The `.exe` is built after the Linux files.** A Tauri application links against the system's
+> **The Windows file appears a few minutes late.** A Tauri application links against the system's
 > graphics libraries, so a Windows installer **cannot be built from Linux**: GitHub Actions builds
 > it on a real Windows machine when the release is published, and attaches it here a few minutes
 > later. Compiling it takes around ten minutes. If you only see the Linux files, reload the page
