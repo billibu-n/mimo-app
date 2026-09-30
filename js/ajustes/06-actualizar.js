@@ -9,11 +9,12 @@
 
 // Donde vive el proyecto en GitHub y de donde se saca la version mas nueva.
 function versionLocal(){
-  // La version local la escribe el armador en #datos-version[data-local]; si no
-  // existe (o no coincide con el formato x.y.z), se cae a un valor seguro.
+  // La version local la escribe el armador en #datos-version[data-local]. Si no existe (o no
+  // trae un x.y.z), se devuelve 0.0.0, que dice "desconocida" y funciona con cualquiera que
+  // venga: nunca un numero de version REAL, porque uno viejo se leeria como "ya estas al dia".
   const el = document.getElementById('datos-version');
   const v = el && el.getAttribute('data-local');
-  return (v && /^\d+\.\d+\.\d+/.test(v)) ? v : '1.0.0';
+  return (v && /^\d+\.\d+\.\d+/.test(v)) ? v : '0.0.0';
 }
 const REPO_ACT = {user:'billibu-n', repo:'mimo-app'};
 

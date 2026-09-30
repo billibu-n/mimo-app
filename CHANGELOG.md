@@ -11,6 +11,11 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
 
 (nothing yet)
 
+> **Nota (2026-09-30):** la version visible de la aplicacion dejo de estar escrita a mano. El
+> ajuste *Actualizacion* mostraba `v1.0.0` —un numero viejo escrito en el HTML— hasta que el
+> motor lo corregia; ahora el armador escribe la version en ese hueco, y el respaldo del motor
+> es `0.0.0` (desconocida) en vez de un numero real que se leeria como *"ya estas al dia"*.
+
 ## [1.1.0-desktop] — 2026-09-30
 
 Settings, section by section, now holds the settings that belong to each section, and the
