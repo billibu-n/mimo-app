@@ -214,9 +214,31 @@ function respaldoActual(){
 }
 
 function descargarRespaldo(nombre){
+  const texto = JSON.stringify(respaldoActual(), null, 1);
+  const nom = nombre || ('respaldo-mimo-' + new Date().toISOString().slice(0, 10) + '.json');
+  // EN LA APP DE ESCRITORIO (Tauri) el enlace de descarga NO sirve: el webview de Linux
+  // (WebKitGTK) no guarda el archivo, y en macOS tampoco (esta reportado en el propio Tauri).
+  // Se usa el DIALOGO del sistema para preguntar DONDE guardar y se escribe con su plugin.
+  // El dialogo anade esa ruta al permiso, asi que la escritura no necesita nada mas.
+  if (enTauri()){
+    (async function(){
+      try {
+        const destino = await window[TAURI].dialog.save({
+          defaultPath: nom,
+          filters: [{ name: 'Respaldo de Mimo', extensions: ['json'] }],
+        });
+        if (!destino) return;   // cancelo: no es un error
+        await window[TAURI].fs.writeTextFile(destino, texto);
+        mostrarAviso('Respaldo guardado');
+      } catch (e) {
+        mostrarAviso('No se pudo guardar el respaldo');
+      }
+    })();
+    return;
+  }
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(respaldoActual(), null, 1)], {type:'application/json'}));
-  a.download = nombre || ('respaldo-mimo-' + new Date().toISOString().slice(0, 10) + '.json');
+  a.href = URL.createObjectURL(new Blob([texto], {type:'application/json'}));
+  a.download = nom;
   a.click();
 }
 
@@ -347,7 +369,10 @@ document.getElementById('archivo').onchange = ev => {
   };
   lector.readAsText(f);
 };
-document.getElementById('estado-guardado').textContent = 'Guardado en este navegador como "' + CLAVE + '".';
+// Al abrir la ventana se dice QUE se guarda y que el respaldo es del equipo. Antes ponia el
+// nombre interno de la clave ('mimo-limpio-v1'), que no es el archivo real y confundia.
+document.getElementById('estado-guardado').textContent =
+  'Guardado en este equipo. El respaldo es un archivo .json que puedes llevar a otro equipo.';
 document.getElementById('banner-recargar').onclick = () => location.reload();
 document.getElementById('banner-cerrar').onclick = () =>
   document.getElementById('banner-remoto').classList.remove('on');

@@ -520,7 +520,7 @@ function pintarRecordatorios(){
       const dias = (r.dias || []).map(d => nombres[d]).join(' ');
       detalle = 'programado · ' + (r.horas || []).join(', ') + ' · ' + dias;
     }
-    const sonido = r.sonido === 'sistema' ? 'sonido del navegador'
+    const sonido = r.sonido === 'sistema' ? 'pitido'
       : r.sonido === 'subida' ? 'timbre propio' : 'alarma de mimo';
     return '<div class="rec-item">' +
       '<span class="rec-hora">' + esc((r.horas || []).join(', ') || r.hora) + '</span>' +

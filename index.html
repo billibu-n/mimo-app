@@ -1489,7 +1489,7 @@
           <div class="campo"><span>Sonido del aviso</span>
             <div class="rec-sonido">
               <button class="mini rec-son-btn on" data-sonido="propia">Alarma de mimo</button>
-              <button class="mini rec-son-btn" data-sonido="sistema">Del navegador</button>
+              <button class="mini rec-son-btn" data-sonido="sistema">Pitido</button>
               <button class="mini rec-son-btn" data-sonido="subida">Timbre propio</button>
             </div></div>
 
@@ -1596,7 +1596,7 @@
 
       <div class="encabezado">
         <h1>Ajustes</h1>
-        <span class="apoyo">lo que cambies acá se guarda solo, en este navegador</span>
+        <span class="apoyo">lo que cambies acá se guarda solo, en este equipo</span>
       </div>
 
       <!-- ==================================================================
@@ -1632,11 +1632,14 @@
       </div>
 
       <!-- ==================================================================
-           EL IMPORTANTE: Respaldo, con su propia fila, a lo ancho y con tilde
+           EL IMPORTANTE: Respaldo, con su propia fila, a lo ancho, centrado y con su estado
            ================================================================== -->
       <div class="rejilla" style="margin-top:14px">
         <section class="grupo ancho" role="button" tabindex="0" aria-haspopup="dialog" data-abrir="resp-panel">
-          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#ARQ-10"></use></svg></span>          <div class="g-txt"><h2 class="g-tit" data-i18n="ajustes.respaldo">Respaldo</h2><div class="g-des" data-i18n="ajustes.respaldo.d">Tus datos viven en este navegador: esto es lo que los pone a salvo. Descárgalos, cárgalos en otro equipo o vuelve al principio.</div></div><div class="tilde"><svg class="ic"><use href="#EST-02"></use></svg><span data-i18n="ajustes.respaldoTilde">lo más importante</span></div></div>
+          <div class="g-cab"><span class="t-ic"><svg class="ic"><use href="#ARQ-10"></use></svg></span>
+            <div class="g-txt"><h2 class="g-tit" data-i18n="ajustes.respaldo">Respaldo</h2></div>
+            <span class="estado-resp pendiente" id="resp-estado-ficha"><svg class="ic"><use id="resp-estado-ic" href="#EST-03"></use></svg><span class="txt" id="resp-estado-txt" data-i18n="ajustes.respaldo.pendiente">pendiente</span></span>
+          </div>
         </section>
       </div>
 
@@ -1766,7 +1769,7 @@
                 <button type="button" class="mini" id="bv-buscar">Buscar</button>
               </div>
             </div>
-            <div id="aj-version-aviso" style="display:none"></div>
+            <div id="aj-version-aviso" style="display:none;text-align:left"></div>
 
             <!-- APARCADO: controles que FUNCIONAN pero se mudan (Por hacer -> Calendario;
                  Sonido -> Tiempo). Se retiran de la vista pero su motor sigue vivo, porque
@@ -1953,14 +1956,15 @@
 
         <!-- ---------- RESPALDO (el importante) ---------- -->
         <div class="aj-panel" id="resp-panel" role="dialog" aria-modal="true" aria-labelledby="resp-titulo">
-          <div class="aj-cab">
+          <div class="aj-cab centrada">
             <span class="t-ic"><svg class="ic"><use href="#ARQ-10"></use></svg></span>
             <div><h2 id="resp-titulo">Respaldo</h2>
               <div class="sub">Tus datos, a salvo.</div></div>
           </div>
           <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
-            <p class="ayuda">Todo se guarda en este navegador, no en un servidor. Usa estos botones
+            <p class="ayuda" style="text-align:center;margin-bottom:12px"><span class="estado-resp pendiente" id="resp-estado"><svg class="ic"><use id="resp-estado-ic2" href="#EST-03"></use></svg><span class="txt" id="resp-estado-txt2" data-i18n="ajustes.respaldo.pendiente">pendiente</span></span></p>
+            <p class="ayuda">Todo se guarda en este equipo, no en un servidor. Usa estos botones
               para respaldar o para llevar tus datos a otro computador.</p>
             <div class="filtros apilados" style="padding-top:12px">
               <button class="btn" id="exportar">Descargar mis datos (.json)</button>

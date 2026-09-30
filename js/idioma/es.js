@@ -23,7 +23,9 @@ registrarIdioma('es', {
   'ajustes.semestre': 'Semestre',
   'ajustes.semestre.d': 'Los semestres guardados y sus metas.',
   'ajustes.respaldo': 'Respaldo',
-  'ajustes.respaldo.d': 'Tus datos viven en este navegador: esto es lo que los pone a salvo. Descárgalos, cárgalos en otro equipo o vuelve al principio.',
+  'ajustes.respaldo.d': 'Tus datos viven en este equipo: esto es lo que los pone a salvo. Descárgalos, cárgalos en otro equipo o vuelve al principio.',
+  'ajustes.respaldo.pendiente': 'pendiente',
+  'ajustes.respaldo.sync': 'sincronizado en {ruta}',
   'ajustes.respaldoTilde': 'lo más importante',
 
   // --- el panel de Idioma ---
@@ -37,7 +39,7 @@ registrarIdioma('es', {
   // --- la ventana de Colaborar (SOLO GitHub; aqui no se publica ningún correo) ---
   'colab.intro': { parts: [
     'Mimo es ', ['b', 'gratis y sin anuncios'],
-    '. Si te sirve, puedes ayudar así (todo se abre en GitHub, en tu navegador):'
+    '. Si te sirve, puedes ayudar así (todo se abre en GitHub):'
   ] },
   'colab.fallo': 'Contar un fallo',
   'colab.fallo.d': 'Algo que no funciona o se ve mal.',
@@ -56,12 +58,12 @@ registrarIdioma('es', {
   'colab.p2': '¿Necesito cuenta de GitHub?',
   'colab.r2': 'Solo para contar un fallo o proponer una idea: GitHub pide cuenta para publicar (es gratis). Para compartir la aplicación, no hace falta.',
   'colab.p3': '¿Se ven mis datos si reporto?',
-  'colab.r3': 'No. El informe solo lleva la versión, el sistema y el navegador; nunca tus ramos, notas ni tu respaldo. Si pones una captura, tapa antes lo tuyo.',
+  'colab.r3': 'No. El informe solo lleva la versión de Mimo y tu sistema; nunca tus ramos, notas ni tu respaldo. Si pones una captura, tapa antes lo tuyo.',
   'colab.p4': '¿A dónde va lo que aportas?',
   'colab.r4': 'A mantener el proyecto: el tiempo de quien lo hace y lo que cuesta tenerlo en línea.',
   'colab.p5': '¿Puedo ayudar de otra forma?',
   'colab.r5': 'Sí: las tres de arriba ayudan tanto o más que el café.',
-  'colab.fallo.cuerpo': 'Qué pasó:\n\n\nQué esperabas que pasara:\n\n\nCómo reproducirlo:\n1. \n2. \n3. \n\n— Datos del equipo (se rellenan solos) —\nVersión de Mimo: {version}\nNavegador y sistema: {navegador} · {sistema}\n\nSi añades capturas, tapa antes tus datos.',
+  'colab.fallo.cuerpo': 'Qué pasó:\n\n\nQué esperabas que pasara:\n\n\nCómo reproducirlo:\n1. \n2. \n3. \n\n— Datos del equipo (se rellenan solos) —\nVersión de Mimo: {version}\nSistema: {sistema}\n\nSi añades capturas, tapa antes tus datos.',
 
   // --- la ventana de Importar (Malla) ---
   'malla.importar.titulo': 'Importar',

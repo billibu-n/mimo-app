@@ -459,7 +459,7 @@
       if (!comb) return;                                  // solo modificadores: sigue esperando
       if (window.mimoAtajos && window.mimoAtajos.fijos[comb]) {
         terminar();
-        if (typeof avisar === 'function') avisar('Esa combinación la usa el navegador (Ctrl + T, Ctrl + W…). Elige otra.');
+        if (typeof avisar === 'function') avisar('Esa combinación puede usarla el sistema o el navegador (Ctrl + T, Ctrl + W…). Elige otra.');
         boton.textContent = antes; return;
       }
       const mapa = atajosDeVista();

@@ -1412,19 +1412,37 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
 /* rotulo de grupo dentro de la rejilla de temas (modo "segun el sistema") */
 .temas-lb { grid-column: 1 / -1; font-size: .72rem; font-weight: 700; letter-spacing: .05em;
   text-transform: uppercase; color: var(--muted); margin: 6px 2px 0; }
-/* el recuadro destacado (Respaldo): ocupa la fila entera y tiene MAS aire, pero la MISMA
-   forma que los demas (icono a la izquierda; titulo y descripcion a su lado). */
-.grupo.ancho { border-width: 2px; }
-.grupo.ancho .g-cab { padding: 16px 18px; gap: 14px; }
-.grupo.ancho .tilde { margin-left: 6px; }
+/* el recuadro destacado (Respaldo): ocupa la fila entera, va CENTRADO (icono, titulo y estado)
+   y se marca con el BORDE de acento, para que la vista caiga en el sin buscarlo. */
+.grupo.ancho { border-width: 2px; border-color: var(--ac); box-shadow: 0 2px 12px rgba(37,99,235,.12); }
+.grupo.ancho .g-cab { flex-direction: column; align-items: center; text-align: center; gap: 9px; padding: 20px; }
+.grupo.ancho .t-ic { width: 48px; height: 48px; border-radius: 13px; background: var(--ac); color: var(--ac-txt); }
+.grupo.ancho .g-cab .ic { width: 26px; height: 26px; }
+.grupo.ancho .g-tit { font-size: 1.08rem; font-weight: 700; }
+/* la ficha destacada NO lleva descripcion: el detalle vive dentro de su ventana */
+.grupo.ancho .g-des { display: none; }
+/* la pastilla «lo mas importante» sigue viva: la usan otras fichas de Ajustes */
 .tilde { display: inline-flex; align-items: center; gap: 5px; font-size: .72rem; font-weight: 700;
   color: var(--pill-ok-fg); background: var(--pill-ok-bg); border: 1px solid var(--line);
   border-radius: 999px; padding: 2px 9px; white-space: nowrap; margin-left: 4px; }
-/* el icono de la tilde es pequeño: esta regla va MAS especifica que la generica
-   `.grupo .g-cab .ic`, que si no lo dejaba a 22px (medido). */
 .grupo .g-cab .tilde .ic { width: 13px; height: 13px; color: var(--pill-ok-fg); }
 
+/* --- el distintivo de ESTADO del respaldo (sustituye a «lo mas importante») ------------
+   No es una etiqueta fija: dice COMO esta el respaldo. Sin carpeta, «pendiente» en dorado;
+   con carpeta, «sincronizado en <ruta>» en verde. Se pinta desde pintarRespaldo() (10-...js). */
+.estado-resp { display: inline-flex; align-items: center; gap: 6px; font-size: .72rem; font-weight: 700;
+  border-radius: 999px; padding: 3px 11px; white-space: nowrap; max-width: 100%; }
+.estado-resp .ic { width: 13px; height: 13px; }
+.estado-resp .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.estado-resp.pendiente { color: var(--pill-warn-fg); background: var(--pill-warn-bg); border: 1px solid var(--warn); }
+.estado-resp.sync { color: var(--pill-ok-fg); background: var(--pill-ok-bg); border: 1px solid var(--ok); }
+
 /* --- rotulos de bloque (entre rejillas) --------------------------------- */
+/* --- el recuadro del COMANDO de actualizacion (Linux: se copia y se pega) --- */
+.act-cmd { font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.78rem;
+  background:var(--sup3); border:1px solid var(--line); border-radius:var(--r-sm);
+  padding:8px 10px; margin:8px 0 8px; white-space:pre-wrap; word-break:break-all; user-select:all;
+  text-align:left; }
 .grupo-tit { display: flex; align-items: baseline; gap: 9px; margin: 24px 2px 10px;
   font-weight: 700; font-size: .98rem; }
 
@@ -1443,6 +1461,11 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
   color: var(--ac); display: grid; place-items: center; flex: none; }
 .aj-panel .aj-cab h2 { margin: 0; font-size: 1.1rem; }
 .aj-panel .aj-cab .sub { font-size: .8rem; color: var(--muted); margin-top: 2px; }
+/* la misma cabecera, CENTRADA: icono, titulo y subtitulo en columna (la usan las ventanas que
+   se abren en columna, como Respaldo). Mismos tamanos que la de fila. */
+.aj-panel .aj-cab.centrada { flex-direction: column; align-items: center; text-align: center;
+  padding-right: 0; gap: 7px; margin-bottom: 10px; }
+.aj-panel .aj-cab.centrada .t-ic { width: 40px; height: 40px; border-radius: 11px; }
 /* la X, anclada a la esquina: respeta el margen del panel y no pisa el titulo */
 .aj-x { position: absolute; top: 13px; right: 13px; width: 32px; height: 32px; display: grid;
   place-items: center; border: 0; background: transparent; border-radius: 8px; cursor: pointer;

@@ -20,7 +20,9 @@ registrarIdioma('en', {
   'ajustes.semestre': 'Term',
   'ajustes.semestre.d': 'Saved terms and their goals.',
   'ajustes.respaldo': 'Backup',
-  'ajustes.respaldo.d': 'Your data lives in this browser: this is what keeps it safe. Download it, load it on another device, or start over.',
+  'ajustes.respaldo.d': 'Your data lives on this device: this is what keeps it safe. Download it, load it on another device, or start over.',
+  'ajustes.respaldo.pendiente': 'pending',
+  'ajustes.respaldo.sync': 'synced to {ruta}',
   'ajustes.respaldoTilde': 'the most important',
 
   // --- the Language panel ---
@@ -34,7 +36,7 @@ registrarIdioma('en', {
   // --- the Support window (GitHub ONLY; no email address is published here) ---
   'colab.intro': { parts: [
     'Mimo is ', ['b', 'free and ad-free'],
-    '. If it is useful to you, you can help like this (everything opens on GitHub, in your browser):'
+    '. If it is useful to you, you can help like this (everything opens on GitHub):'
   ] },
   'colab.fallo': 'Report a bug',
   'colab.fallo.d': 'Something that does not work or looks wrong.',
@@ -53,12 +55,12 @@ registrarIdioma('en', {
   'colab.p2': 'Do I need a GitHub account?',
   'colab.r2': 'Only to report a bug or suggest an idea: GitHub asks for an account to post (it is free). To share the app, you do not need one.',
   'colab.p3': 'Will my data be visible if I report?',
-  'colab.r3': 'No. The report only carries the version, the system and the browser; never your courses, notes or backup. If you add a screenshot, cover your own data first.',
+  'colab.r3': 'No. The report only carries the Mimo version and your system; never your courses, notes or backup. If you add a screenshot, cover your own data first.',
   'colab.p4': 'Where does what you contribute go?',
   'colab.r4': 'To keeping the project alive: the time of whoever makes it and what it costs to keep it online.',
   'colab.p5': 'Can I help in another way?',
   'colab.r5': 'Yes: the three above help as much or more than the coffee.',
-  'colab.fallo.cuerpo': 'What happened:\n\n\nWhat you expected to happen:\n\n\nHow to reproduce it:\n1. \n2. \n3. \n\n— Device details (filled in for you) —\nMimo version: {version}\nBrowser and system: {navegador} · {sistema}\n\nIf you add screenshots, cover your own data first.',
+  'colab.fallo.cuerpo': 'What happened:\n\n\nWhat you expected to happen:\n\n\nHow to reproduce it:\n1. \n2. \n3. \n\n— Device details (filled in for you) —\nMimo version: {version}\nSystem: {sistema}\n\nIf you add screenshots, cover your own data first.',
 
   // --- the Import window (Plan) ---
   'malla.importar.titulo': 'Import',

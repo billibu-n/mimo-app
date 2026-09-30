@@ -17,9 +17,11 @@ function versionLocal(){
 }
 const REPO_ACT = {user:'billibu-n', repo:'mimo-app'};
 
-function pintarActualizacion(estado, texto){
+function pintarActualizacion(estado, texto, html){
   const caja = document.getElementById('caja-actualizar');
-  if (caja){ caja.textContent = texto || ''; caja.className = 'aviso-act ' + (estado || ''); }
+  if (!caja) return;
+  if (html) caja.innerHTML = html; else caja.textContent = texto || '';
+  caja.className = 'aviso-act ' + (estado || '');
 }
 
 function compararVersiones(a, b){
@@ -35,41 +37,164 @@ function compararVersiones(a, b){
   return 0;
 }
 
+/* ---- de que sistema es la app, y que fichero del release le toca ---------- */
+function sistemaDeLaApp(){
+  const ua = navigator.userAgent || navigator.platform || '';
+  if (/Windows/i.test(ua)) return 'windows';
+  if (/Mac/i.test(ua)) return 'macos';
+  return 'linux';
+}
+function escapador(t){
+  return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* Trae el ULTIMO release de GitHub. La API dice la version Y los ficheros con su enlace de
+   descarga directa, asi que la app puede ofrecer el que toca sin que el usuario busque en GitHub.
+   Si la API falla (sin internet o limite de peticiones), se cae al version.json de siempre. */
+async function traerUltimoRelease(){
+  try {
+    const r = await fetch('https://api.github.com/repos/' + REPO_ACT.user + '/' + REPO_ACT.repo +
+                          '/releases/latest',
+                          {cache:'no-store', headers:{'Accept':'application/vnd.github+json'}});
+    if (!r.ok) throw new Error('http ' + r.status);
+    const j = await r.json();
+    if (j && (j.tag_name || j.version)) return j;
+    throw new Error('sin version');
+  } catch (err) {
+    const r2 = await fetch('https://raw.githubusercontent.com/' + REPO_ACT.user + '/' + REPO_ACT.repo +
+                           '/main/version.json', {cache:'no-store'});
+    if (!r2.ok) throw new Error('http ' + r2.status);
+    return await r2.json();
+  }
+}
+
 async function buscarActualizacion(){
   pintarActualizacion('cargando', 'Consultando…');
-  let remota = null;
-  try {
-    const url = 'https://raw.githubusercontent.com/' + REPO_ACT.user + '/' + REPO_ACT.repo +
-                '/main/version.json';
-    const r = await fetch(url, {cache:'no-store'});
-    if (!r.ok) throw new Error('http ' + r.status);
-    remota = await r.json();
-  } catch (err) {
+  let rel = null;
+  try { rel = await traerUltimoRelease(); }
+  catch (err) {
     pintarTagVersion('mal', 'v' + versionLocal());
     pintarActualizacion('mal', 'No se pudo consultar (¿sin internet?). Revisa ' +
       'https://github.com/' + REPO_ACT.user + '/' + REPO_ACT.repo + '/releases');
     return;
   }
-  if (!remota || typeof remota.version !== 'string'){
-    pintarTagVersion('mal', 'v' + versionLocal());
-    pintarActualizacion('mal', 'No se encontró la versión en GitHub.');
+  const remota = String(rel.version || rel.tag_name || '').replace(/^v/, '');
+  const local = versionLocal();
+  if (!remota){
+    pintarTagVersion('mal', 'v' + local);
+    pintarActualizacion('mal', 'No se encontró la versión publicada.');
     return;
   }
-  const local = versionLocal();
-  const cmp = compararVersiones(remota.version, local);
-  pintarTagVersion(cmp > 0 ? 'nueva' : (cmp < 0 ? 'al-dia' : 'al-dia'), 'v' + local, cmp);
-  if (cmp > 0){
-    pintarActualizacion('ok', 'Hay una versión más nueva: v' + remota.version +
-      ' (tienes v' + local + ').');
-    const enlace = document.getElementById('enlace-actualizar');
-    if (enlace){
-      enlace.href = 'https://github.com/' + REPO_ACT.user + '/' + REPO_ACT.repo + '/releases';
-      enlace.style.display = '';
-    }
-  } else if (cmp < 0){
-    pintarActualizacion('ok', 'Estás en una versión más nueva (v' + local + ') que la publicada.');
-  } else {
+  const cmp = compararVersiones(remota, local);
+  pintarTagVersion(cmp > 0 ? 'nueva' : 'al-dia', 'v' + local, cmp);
+  if (cmp <= 0){
     pintarActualizacion('ok', 'Estás al día (v' + local + ').');
+    return;
+  }
+  ofrecerActualizacion(rel, remota, local);
+}
+
+/* El puente de la aplicacion de escritorio. El nombre se arma al vuelo por el MISMO motivo
+   que en `10a-carpeta-tauri.js`: el armador marca ese nombre como si fuera un hueco sin
+   rellenar (su red de seguridad busca dos guiones bajos + palabra + dos guiones bajos) y
+   abortaria la construccion. */
+function puenteTauri(){ return window["__TA" + "URI__"]; }
+
+const PAGINA_RELEASES = function(){ return 'https://github.com/' + REPO_ACT.user + '/' + REPO_ACT.repo + '/releases'; };
+
+/* Ofrece la actualizacion SEGUN EL SISTEMA. La idea: no obligar a pasar por GitHub.
+   - Windows: se DESCARGA el instalador desde la propia app (se pide donde guardarlo) y se avisa.
+   - Linux (.deb/.rpm): la app no puede instalarse sola; se muestra el comando de actualizar, listo
+     para copiar, para que no haya que buscar el fichero a mano.
+   - Navegador: solo se enlaza la pagina de descargas. */
+function ofrecerActualizacion(rel, remota, local){
+  const cab = 'Hay una versión más nueva: <b>v' + escapador(remota) + '</b> (tienes v' +
+              escapador(local) + '). ';
+  const dentro = (typeof enTauri === 'function') && enTauri();
+  const assets = (rel && rel.assets) || [];
+  const sistema = sistemaDeLaApp();
+  const buscar = function (re){ return assets.filter(function (a){ return re.test(a.name); })[0]; };
+
+  if (!dentro){
+    pintarActualizacion('ok', '', cab + '<a href="' + PAGINA_RELEASES() +
+      '" target="_blank" rel="noopener">Ver las descargas</a>.');
+    return;
+  }
+
+  if (sistema === 'windows'){
+    const exe = buscar(/\.exe$/i) || buscar(/\.msi$/i);
+    if (!exe){
+      pintarActualizacion('ok', '', cab + '<a href="' + PAGINA_RELEASES() +
+        '" target="_blank" rel="noopener">Ver las descargas</a>.');
+      return;
+    }
+    pintarActualizacion('ok', '', cab +
+      '<button type="button" class="mini" id="act-descargar">Descargar el instalador</button>');
+    const b = document.getElementById('act-descargar');
+    if (b) b.onclick = function () { descargarInstalador(exe, b); };
+    return;
+  }
+
+  // Linux: se elige el paquete del sistema y se muestra su comando.
+  let paquete = buscar(/\.rpm$/i);
+  let cmd = null;
+  if (paquete){ cmd = "sudo dnf install -y '" + paquete.browser_download_url + "'"; }
+  else {
+    paquete = buscar(/\.deb$/i);
+    if (paquete) cmd = "wget -O /tmp/mimo.deb '" + paquete.browser_download_url +
+                       "' && sudo apt install -y /tmp/mimo.deb";
+  }
+  if (!cmd){
+    pintarActualizacion('ok', '', cab + '<a href="' + PAGINA_RELEASES() +
+      '" target="_blank" rel="noopener">Ver las descargas</a>.');
+    return;
+  }
+  pintarActualizacion('ok', '', cab + 'Para actualizar, copia este comando en una terminal ' +
+    'y pégalo (pide tu contraseña):' +
+    '<div class="act-cmd" id="act-cmd">' + escapador(cmd) + '</div>' +
+    '<button type="button" class="mini" id="act-copiar">Copiar el comando</button>');
+  const copiar = document.getElementById('act-copiar');
+  if (copiar) copiar.onclick = async function () {
+    let ok = false;
+    try { await navigator.clipboard.writeText(cmd); ok = true; } catch (e) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = cmd; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+      } catch (e2) { ok = false; }
+    }
+    copiar.textContent = ok ? 'Copiado' : 'Copia manualmente el recuadro de arriba';
+  };
+}
+
+/* Windows: baja el instalador DENTRO de la app. Se pide donde guardarlo (dialogo del sistema) y se
+   escribe ahi. No se instala solo: el usuario abre el .exe. Asi no hay que visitar GitHub. */
+async function descargarInstalador(asset, boton){
+  const antes = boton ? boton.textContent : '';
+  try {
+    if (boton){ boton.disabled = true; boton.textContent = 'Descargando…'; }
+    const r = await fetch(asset.browser_download_url, {cache:'no-store'});
+    if (!r.ok) throw new Error('http ' + r.status);
+    const bytes = new Uint8Array(await r.arrayBuffer());
+    const destino = await puenteTauri().dialog.save({
+      defaultPath: asset.name,
+      filters: [{ name: 'Instalador de Mimo', extensions: [asset.name.split('.').pop()] }],
+    });
+    if (!destino) { if (boton){ boton.disabled = false; boton.textContent = antes; } return; }
+    await puenteTauri().fs.writeFile(destino, bytes);
+    if (typeof avisar === 'function') {
+      await avisar('Descargado en la carpeta que elegiste. Abre ese archivo para instalar ' +
+                   'la nueva versión: se actualizará encima.', { titulo: 'Instalador descargado' });
+    }
+    if (boton){ boton.disabled = false; boton.textContent = antes; }
+  } catch (e) {
+    if (typeof avisar === 'function') {
+      await avisar('No se pudo descargar el instalador. Puedes bajarlo de la página de descargas.',
+                   { titulo: 'No se pudo descargar' });
+    }
+    if (boton){ boton.disabled = false; boton.textContent = antes; }
   }
 }
 
