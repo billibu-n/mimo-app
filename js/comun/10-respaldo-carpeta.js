@@ -114,9 +114,11 @@ async function elegirCarpetaRespaldo(){
       CARPETA_TAURI.ruta = ruta;
       recordarCarpetaTauri(ruta);
       await respaldarAhora(true);
-      mostrarAviso('Carpeta de respaldo lista');
+      mostrarAviso('Listo: tus copias se guardan en ' + ruta, 6000);
     } catch (e) {
-      mostrarAviso('No se pudo usar esa carpeta');
+      // Antes decia solo "No se pudo usar esa carpeta" y el usuario se quedaba igual. Se anade el
+      // motivo real (por ejemplo, que el sistema no tenga el dialogo de carpetas disponible).
+      mostrarAviso('No se pudo usar esa carpeta: ' + ((e && e.message) || e), 7000);
     }
     pintarRespaldo();
     return;
@@ -154,7 +156,10 @@ async function respaldarAhora(manual){
     const texto = JSON.stringify(respaldoActual(), null, 1);
     await escribirEnCarpeta(RESPALDO.handle, texto);
     RESPALDO.ultimo = { ok: true, cuando: new Date() };
-    if (manual) mostrarAviso('Copia guardada en tu carpeta');
+    if (manual) {
+      const donde = respaldarEstado();
+      mostrarAviso(donde ? 'Copia guardada en ' + donde : 'Copia guardada');
+    }
   } catch (e) {
     RESPALDO.ultimo = { ok: false, error: (e && e.name) || 'Error' };
     if (manual) mostrarAviso('No se pudo guardar la copia');
@@ -248,10 +253,14 @@ function pintarRespaldo(){
     est.textContent = 'Todavia no has elegido una carpeta. Tus datos se guardan solo en este equipo.';
     if (btnAhora) btnAhora.disabled = true;
     if (btnQuitar) btnQuitar.disabled = true;
-    if (btnElegir) btnElegir.disabled = false;
+    if (btnElegir) { btnElegir.disabled = false; btnElegir.textContent = 'Elegir carpeta…'; }
     return;
   }
-  if (btnElegir) btnElegir.disabled = true;
+  // Con carpeta ya puesta, el boton lo dice: no es "elegir" otra vez, es "cambiar".
+  if (btnElegir) btnElegir.textContent = 'Cambiar carpeta…';
+  // El boton de elegir NO se apaga aunque ya haya carpeta: asi se puede CAMBIAR. Antes quedaba
+  // deshabilitado y pulsarlo no hacia nada, sin un solo aviso (lo reporto el dueno).
+  if (btnElegir) btnElegir.disabled = false;
   if (btnQuitar) btnQuitar.disabled = false;
   if (RESPALDO.ultimo && RESPALDO.ultimo.ok){
     const h = RESPALDO.ultimo.cuando;
@@ -262,7 +271,9 @@ function pintarRespaldo(){
     est.textContent = 'Falta dar permiso a la carpeta. Pulsa "Guardar copia ahora" y aceptalo.';
     if (btnAhora) btnAhora.disabled = false;
   } else {
-    est.textContent = 'Carpeta lista. Se guardara una copia con cada cambio.';
+    const donde = respaldarEstado();
+    est.textContent = 'Carpeta: ' + (donde || 'elegida') + '. Se guarda una copia con cada cambio. ' +
+      'Si quieres usar otra, pulsa "Elegir carpeta...".';
     if (btnAhora) btnAhora.disabled = false;
   }
 }

@@ -112,15 +112,27 @@ function puenteInvoke(){
   return t && t.core && t.core.invoke;
 }
 async function abrirUrl(url){
+  // Dentro de la aplicacion de escritorio NO vale un <a href>: Tauri cancela la navegacion fuera
+  // de su ventana, asi que el enlace parece muerto (lo reporto el dueno). Por eso se le pide al
+  // programa del sistema que abra el navegador, y el comando dice si pudo. Solo si no hay
+  // aplicacion (o el comando falla) se cae a window.open, que es lo que hace un navegador normal.
   const inv = puenteInvoke();
-  if (inv){ try { await inv('abrir_url', {url: url}); return true; } catch (e) { /* se intenta abajo */ } }
-  try { window.open(url, '_blank', 'noopener'); return true; } catch (e) {}
+  if (inv){
+    try {
+      const ok = await inv('abrir_url', { url: url });
+      if (ok !== false) return true;
+    } catch (e) { /* se intenta abajo */ }
+  }
+  try {
+    const v = window.open(url, '_blank', 'noopener');
+    if (v) return true;
+  } catch (e) {}
   return false;
 }
 async function abrirRuta(ruta){
   const inv = puenteInvoke();
   if (!inv) return false;
-  try { await inv('abrir_archivo', {ruta: ruta}); return true; } catch (e) { return false; }
+  try { return (await inv('abrir_archivo', { ruta: ruta })) !== false; } catch (e) { return false; }
 }
 
 /* Al PULSAR el chip: si ya se sabe que hay una version nueva, se actualiza DIRECTAMENTE, sin pasar

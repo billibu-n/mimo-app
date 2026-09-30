@@ -385,21 +385,21 @@ const GUION_SONDA: &str = r#"
 /// pagina del release. Solo se admite http/https: la pagina es la nuestra, pero no cuesta nada
 /// cerrar la puerta a que alguien pida abrir otra cosa.
 #[tauri::command]
-fn abrir_url(url: String) {
+fn abrir_url(url: String) -> bool {
     if !(url.starts_with("https://") || url.starts_with("http://")) {
-        return;
+        return false;
     }
-    abrir_con_el_sistema(&url);
+    abrir_con_el_sistema(&url)
 }
 
 /// Abre un fichero con el programa que le toque. En Windows es lo que hace que el instalador
 /// recien bajado se ejecute sin que el usuario tenga que ir a buscarlo a la carpeta.
 #[tauri::command]
-fn abrir_archivo(ruta: String) {
+fn abrir_archivo(ruta: String) -> bool {
     if !std::path::Path::new(&ruta).is_file() {
-        return;
+        return false;
     }
-    abrir_con_el_sistema(&ruta);
+    abrir_con_el_sistema(&ruta)
 }
 
 /// Lanza el programa del sistema que abre `objetivo`, que puede ser una URL o una ruta.
@@ -407,20 +407,24 @@ fn abrir_archivo(ruta: String) {
 ///              sin ellas, `start` se comeria la ruta como titulo si lleva espacios)
 ///   macOS   -> `open`
 ///   Linux   -> `xdg-open`
-fn abrir_con_el_sistema(objetivo: &str) {
+fn abrir_con_el_sistema(objetivo: &str) -> bool {
+    // Devuelve `true` solo si el lanzador del sistema arranco de verdad. Antes se ignoraba el
+    // resultado, asi que un fallo (por ejemplo, no haber `xdg-open`) quedaba INVISIBLE: la pagina
+    // no se abria y el usuario no sabia por que. El dato sube a la pagina, que puede avisar.
     #[cfg(target_os = "windows")]
     {
-        let _ = std::process::Command::new("cmd")
+        return std::process::Command::new("cmd")
             .args(["/C", "start", "", objetivo])
-            .spawn();
+            .spawn()
+            .is_ok();
     }
     #[cfg(target_os = "macos")]
     {
-        let _ = std::process::Command::new("open").arg(objetivo).spawn();
+        return std::process::Command::new("open").arg(objetivo).spawn().is_ok();
     }
     #[cfg(all(unix, not(target_os = "macos")))]
     {
-        let _ = std::process::Command::new("xdg-open").arg(objetivo).spawn();
+        return std::process::Command::new("xdg-open").arg(objetivo).spawn().is_ok();
     }
 }
 

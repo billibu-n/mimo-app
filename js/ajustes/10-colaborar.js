@@ -45,6 +45,19 @@ function enlaceCafe() {
   return 'https://www.buymeacoffee.com/billibu';
 }
 
+/* Un <a href="https://..."> NO abre el navegador dentro de la aplicacion de escritorio: Tauri
+   cancela la navegacion fuera de su ventana y el boton queda muerto (lo reporto el dueno con esas
+   palabras). Se intercepta el clic y se abre por el comando del sistema. En un navegador de
+   verdad, abrirUrl acaba en un window.open, o sea el mismo comportamiento de siempre. */
+function enlazarExterno(a, url) {
+  if (!a || a.dataset.ext) return;
+  a.dataset.ext = '1';
+  a.addEventListener('click', function (ev) {
+    ev.preventDefault();
+    abrirUrl(typeof url === 'function' ? url() : a.href);
+  });
+}
+
 /* Compartir: en un computador de escritorio casi nunca hay navigator.share, asi que la salida
    de verdad (y la unica honesta) es copiar la direccion del proyecto. */
 function compartirColaborar() {
@@ -89,11 +102,11 @@ function pintarPreguntasColaborar() {
 function pintarColaborar() {
   pintarPreguntasColaborar();
   const f = document.getElementById('colab-enlace-fallo');
-  if (f) f.href = enlaceFallo();
+  if (f) { f.href = enlaceFallo(); enlazarExterno(f, enlaceFallo); }
   const i = document.getElementById('colab-enlace-idea');
-  if (i) i.href = enlaceIdea();
+  if (i) { i.href = enlaceIdea(); enlazarExterno(i, enlaceIdea); }
   const c = document.getElementById('colab-enlace-cafe');
-  if (c) c.href = enlaceCafe();
+  if (c) { c.href = enlaceCafe(); enlazarExterno(c, enlaceCafe); }
   const b = document.getElementById('colab-compartir');
   if (b && !b.dataset.listo) {
     b.dataset.listo = '1';

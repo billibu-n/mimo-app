@@ -5,7 +5,7 @@
    navegador la pueda INSTALAR (PWA).
 
    ESTE FICHERO NO SE EDITA A MANO. Es la salida de `plantilla-sw.js`: lo escribe el armador
-   (mimo_config/construir/index.py), que sustituye 1.1.1-desktop por la version, a353223e26 por un
+   (mimo_config/construir/index.py), que sustituye 1.1.1-desktop por la version, ab1e9350fe por un
    sello del contenido y [
   "./index.html",
   "./manifest.json",
@@ -111,7 +111,7 @@
    is not supported"). Al abrir el index.html con doble clic este fichero ni se usa.
  */
 const VERSION = '1.1.1-desktop';
-const HUELLA = 'a353223e26';
+const HUELLA = 'ab1e9350fe';
 const CACHE = 'mimo-' + VERSION + '-' + HUELLA;
 
 // La aplicacion COMPLETA, la escribio el armador al construir.
