@@ -151,6 +151,20 @@ versions start at 1.0.2; 1.0.0 is the first official release, with the desktop a
   *assessments and courses* (was labelled *Notas*); Tareas *to-dos and commitments*; Estudio
   *study time log*; Malla *degree courses*; Tiempo *stopwatches, timer and more*.
 
+### Added
+
+- **The Time section now has its real settings, and they work.** The *Time* panel in Settings used
+  to be a description with invented labels (*yes*, *no*, *1h 30m*). It now holds the controls that
+  actually drive the app: **alerts when the timer ends** (formerly parked in *General*), the
+  **system notification** (asks for permission once, and says whether it is allowed or blocked),
+  and the **ringtone**.
+- **The ringtone can be your own file.** *Time → Ringtone* offers the **Mimo alarm**, a **device
+  beep** or an **audio file of your own**; picking the last one reveals a picker (double-quaver
+  button) that shows the chosen file's name.
+- **Time format notice.** The panel says plainly that **the time format is global**: it is changed
+  in *General* and applies to every section, so it is not repeated as if it belonged to one section
+  only.
+
 ### Fixed
 
 - **The panel no longer flickers as much on Linux, where the app runs on WebKitGTK.** The desktop

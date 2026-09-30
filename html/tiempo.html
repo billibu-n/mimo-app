@@ -89,23 +89,18 @@
           <div class="campo"><span>Qué recuerdo</span>
             <input type="text" id="rec-texto" placeholder="ej. tomar el remedio"></div>
 
-          <div class="campo"><span>Sonido del aviso</span>
+          <div class="campo"><span data-i18n="tiempo.sonido">Sonido del aviso</span>
             <div class="rec-sonido">
-              <button class="mini rec-son-btn on" data-sonido="propia">Alarma de mimo</button>
-              <button class="mini rec-son-btn" data-sonido="sistema">Pitido</button>
-              <button class="mini rec-son-btn" data-sonido="subida">Timbre propio</button>
+              <button class="mini rec-son-btn on" data-sonido="propia" data-i18n="tiempo.son.propia">Alarma de mimo</button>
+              <button class="mini rec-son-btn" data-sonido="sistema" data-i18n="tiempo.son.pitido">Pitido</button>
+              <button class="mini rec-son-btn" data-sonido="archivo" data-i18n="tiempo.son.archivo">Timbre propio</button>
             </div></div>
 
-          <div class="campo rec-campo-archivo" id="rec-campo-archivo" hidden>
-            <span>Tu timbre (un archivo de audio)</span>
-            <div class="rec-archivo-fila">
-              <button class="rec-bitacora" id="rec-bitacora" title="Importar una alarma propia">
-                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-              </button>
-              <span class="rec-archivo-nom" id="rec-archivo-nom">Ningún archivo elegido</span>
-            </div>
-            <input type="file" id="rec-archivo" accept="audio/*" style="display:none">
-          </div>
+          <!-- FUENTE UNICA del timbre propio: el <input type=file> no se puede mover a otra
+               seccion (el navegador exige que este en el DOM de origen), asi que vive aqui,
+               oculto. El boton de doble corchea del panel de ajustes lo abre; la etiqueta
+               #rec-archivo-nom del panel muestra el nombre elegido. -->
+          <input type="file" id="rec-archivo" accept="audio/*" style="display:none">
 
           <button class="btn rec-agregar" id="rec-agregar">+ Agregar recordatorio</button>
           <div class="rec-lista" id="rec-lista"></div>

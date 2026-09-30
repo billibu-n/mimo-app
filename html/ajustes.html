@@ -188,14 +188,12 @@
             </div>
             <div id="aj-version-aviso" style="display:none;text-align:left"></div>
 
-            <!-- APARCADO: controles que FUNCIONAN pero se mudan (Por hacer -> Calendario;
-                 Sonido -> Tiempo). Se retiran de la vista pero su motor sigue vivo, porque
-                 renderAjustes y 06-arranque los buscan por id. Ver PENDIENTES-GENERAL.md. -->
+            <!-- APARCADO: control que FUNCIONA pero se MUDA (Por hacer -> Calendario). Su motor
+                 sigue vivo (renderAjustes y 06-arranque lo buscan por id). El sonido YA se mudo:
+                 vive en el panel de la seccion Tiempo. Ver PENDIENTES-GENERAL.md. -->
             <div hidden>
               <input type="checkbox" id="aj-ver-hechas">
-              <input type="checkbox" id="aj-sonido">
               <button type="button" id="aj-hechas-pastilla"></button>
-              <button type="button" id="aj-sonido-pastilla"></button>
             </div>
 
             <!-- El motor de la VERSION (leido por 06-actualizar.js y 06-arranque.js). El semaforo
@@ -528,12 +526,43 @@
           </div>
           <button class="aj-x" type="button" data-cerrar aria-label="Cerrar">&times;</button>
           <div class="g-cuerpo">
-            <div class="g-ficha">
-            <div class="lin"><svg class="ic"><use href="#INT-11"></use></svg><div class="txt"><b>Sonido al terminar</b> · Suena cuando el temporizador llega a cero.</div><span class="chip">Sí</span></div>
-            <div class="lin"><svg class="ic"><use href="#TIE-03"></use></svg><div class="txt"><b>Formato de las horas</b> · También en Calendario.</div><span class="chip">1h 30m</span></div>
+            <!-- Cada apartado es un bloque .ren (el mismo formato que General). Los controles
+                 #aj-sonido y #av-timbre son los REALES: los lee js/tiempo/01-tiempo.js. -->
+            <div class="ren">
+              <div class="ren-txt"><div class="ren-tit"><span data-i18n="ajustes.avisos">Avisos al terminar</span></div>
+                <div class="ren-nota"><span data-i18n="ajustes.avisos.d">Suena y sale un aviso en pantalla cuando el temporizador llega a cero.</span></div></div>
+              <button type="button" class="pastilla" id="aj-avisos-pastilla" aria-pressed="true"><span class="bola"></span><span><span data-i18n="ajustes.si">Sí</span></span></button>
             </div>
+            <div class="oculto-para-el-motor"><input type="checkbox" id="aj-sonido" checked></div>
+
+            <div class="ren">
+              <div class="ren-txt"><div class="ren-tit"><span data-i18n="ajustes.notificar">Notificación del sistema</span></div>
+                <div class="ren-nota" id="aj-notif-estado" data-i18n="ajustes.notif.explica">Pulsa «Activar» y el sistema te pedirá permiso una vez.</div></div>
+              <button type="button" class="mini" id="aj-notif-pedir"><span data-i18n="ajustes.notif.activar">Activar</span></button>
+            </div>
+
+            <div class="ren">
+              <div class="ren-txt"><div class="ren-tit"><span data-i18n="ajustes.timbre">Timbre al sonar</span></div>
+                <div class="ren-nota"><span data-i18n="ajustes.timbre.d">La alarma de Mimo, un pitido del equipo o tu propio archivo de audio.</span></div></div>
+            </div>
+            <div class="rec-sonido">
+              <button class="mini rec-son-btn on" data-sonido="propia"><span data-i18n="tiempo.son.propia">Alarma de Mimo</span></button>
+              <button class="mini rec-son-btn" data-sonido="sistema"><span data-i18n="tiempo.son.pitido">Pitido del equipo</span></button>
+              <button class="mini rec-son-btn" data-sonido="archivo"><span data-i18n="tiempo.son.archivo">Archivo propio</span></button>
+            </div>
+            <div class="rec-campo-archivo" id="rec-campo-archivo" hidden>
+              <div class="rec-archivo-fila">
+                <button type="button" class="rec-bitacora" id="rec-bitacora" title="Elegir un archivo de audio" data-i18n-att="title:tiempo.timbre.titulo">
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                </button>
+                <span class="rec-archivo-nom" id="rec-archivo-nom" data-i18n="tiempo.sin.archivo">Ningún archivo elegido</span>
+              </div>
+              <input type="file" id="rec-archivo" accept="audio/*" style="display:none">
+            </div>
+
+            <p class="ayuda" style="margin-top:12px"><span data-i18n="tiempo.formato.nota">El formato de las horas es general: se cambia en «General», y vale para todas las secciones.</span></p>
           </div>
-          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Entendido</button></div>
+          <div class="aj-pie"><button class="btn suave" type="button" data-cerrar>Cerrar</button></div>
         </div>
 
         <!-- ---------- MALLA (los ajustes de forma y color de la malla) ---------- -->

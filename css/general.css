@@ -501,6 +501,19 @@ table.cat input[type=color]:focus{outline:none;border-color:var(--ac);box-shadow
 .rec-item .rec-quitar{background:var(--sup);border:1px solid var(--line);border-radius:var(--r-sm);
   width:26px;height:26px;color:var(--bad);font-weight:700;cursor:pointer}
 
+/* El MISMO sonido, ahora en el panel de la seccion Tiempo (antes solo existia dentro de
+   .recordatorios y no se pintaba en Ajustes). Reutiliza las clases; el panel manda. */
+.aj-panel .rec-sonido{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.aj-panel .rec-son-btn{padding:6px 12px}
+.aj-panel .rec-son-btn.on{background:var(--ac);color:var(--ac-txt);border-color:var(--ac)}
+.aj-panel .rec-campo-archivo{margin-top:10px}
+.aj-panel .rec-archivo-fila{display:flex;align-items:center;gap:10px}
+.aj-panel .rec-bitacora{width:44px;height:44px;flex:0 0 auto;border-radius:999px;cursor:pointer;
+  display:grid;place-items:center;background:var(--sup2);border:1px solid var(--line);
+  color:var(--ac-fuerte, var(--ac));transition:border-color .14s, transform .14s}
+.aj-panel .rec-bitacora:hover{border-color:var(--ac);transform:scale(1.05)}
+.aj-panel .rec-archivo-nom{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 .sesiones h3{margin:0 0 10px;font-size:.95rem}
 .sesion{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--line2);
         font-size:.83rem}

@@ -22,10 +22,11 @@
   /* ---- una pastilla por cada casilla que el motor maneja ------------------ */
   // [id de la pastilla visible, id de la casilla real]
   const PASTILLAS = [
-    // 'aj-hechas' y 'aj-sonido' siguen aqui porque FUNCIONAN, pero se MUDAN (Por hacer -> Calendario;
-    // Sonido -> Tiempo). Mientras no se muevan, su pastilla esta oculta. Ver PENDIENTES-GENERAL.md.
+    // 'aj-hechas' sigue aqui porque FUNCIONA pero se MUDA (Por hacer -> Calendario). Mientras no
+    // se mueva, su pastilla esta oculta. Ver PENDIENTES-GENERAL.md.
     ['aj-hechas-pastilla',   'aj-ver-hechas'],
-    ['aj-sonido-pastilla',   'aj-sonido'],
+    // El sonido del temporizador YA vive en su seccion (Tiempo), con su propia pastilla visible.
+    ['aj-avisos-pastilla',   'aj-sonido'],
     ['aj-recordar-pastilla', 'aj-recordar'],
   ];
 
@@ -37,7 +38,7 @@
     const on = !!c.checked;
     p.setAttribute('aria-pressed', on ? 'true' : 'false');
     const texto = p.lastElementChild;
-    if (texto) texto.textContent = on ? 'Sí' : 'No';
+    if (texto) texto.textContent = (typeof window.t === 'function') ? window.t(on ? 'ajustes.si' : 'ajustes.no') : (on ? 'Sí' : 'No');
     // un clic en la pastilla mueve la casilla y avisa al motor por su via de siempre
     p.onclick = () => {
       c.checked = !c.checked;
@@ -48,6 +49,7 @@
 
   function sincronizarTodo() {
     PASTILLAS.forEach(par => sincronizar(par[0], par[1]));
+    if (typeof pintarNotificacion === 'function') pintarNotificacion();
     pintarModos();
     pintarTitulos();
     pintarEjemplo();

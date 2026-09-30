@@ -65,12 +65,14 @@ function renderAjustes(){
     guardar('Forma de mostrar las horas cambiada'); renderTodo(); renderAjustes();
   });
   const son = document.getElementById('aj-sonido');
-  son.checked = E.ajustes.sonido !== false;
-  son.onchange = () => {
-    E.ajustes.sonido = son.checked;
-    guardar(son.checked ? 'Sonido del temporizador encendido' : 'Sonido del temporizador apagado');
-    renderAjustes();
-  };
+  if (son) {
+    son.checked = E.ajustes.sonido !== false;
+    son.onchange = () => {
+      E.ajustes.sonido = son.checked;
+      guardar(son.checked ? 'Sonido del temporizador encendido' : 'Sonido del temporizador apagado');
+      renderAjustes();
+    };
+  }
   // Las explicaciones de cada ajuste se recogen en un boton "?".
   convertirPistas();
 
