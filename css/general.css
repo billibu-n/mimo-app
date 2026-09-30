@@ -361,6 +361,21 @@ table.cat select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px 
         font-size:.8rem;padding:4px 9px;transition:background-color var(--t) var(--curva),color var(--t) var(--curva)}
 .quitar:hover{background:var(--bad);color:var(--bg)}
 .vacio{color:var(--muted);font-size:.8rem;padding:6px 0}
+/* Pastillas de ramo del detalle de la malla (Antes necesitas / Este ramo desbloquea).
+   No tenian regla propia: se dibujaban en linea, una pegada a la otra (medido: 0 px entre
+   pastillas), y los codigos se leian como una sola palabra. Ahora son pastillas separadas y
+   llevan el color del estado del ramo, el mismo que el nodo en la malla. */
+.pt-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pt-chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;
+         border:1px solid var(--line);background:var(--sup2);font-size:.8rem;line-height:1.3;
+         cursor:pointer;white-space:nowrap;transition:filter var(--t) var(--curva)}
+.pt-chip:hover{filter:brightness(.95)}
+.pt-chip.aprobado{background:var(--malla-aprobado-bg);border-color:var(--malla-aprobado-bd);color:var(--malla-aprobado-fg)}
+.pt-chip.curso{background:var(--malla-curso-bg);border-color:var(--malla-curso-bd);color:var(--malla-curso-fg)}
+.pt-chip.disponible{background:var(--malla-disponible-bg);border-color:var(--malla-disponible-bd);color:var(--malla-disponible-fg)}
+.pt-chip.bloqueado{background:var(--malla-bloqueado-bg);border-color:var(--malla-bloqueado-bd);color:var(--malla-bloqueado-fg)}
+/* La fila de botones del detalle no debe tocar el ultimo apartado (medido: quedaban al ras, 0 px). */
+#malla-detalle .bloque + .fila{margin-top:14px}
 .uno-de{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-top:6px;
   font-size:.74rem;color:var(--muted)}
 .uno-de .o{font-weight:700;padding:0 2px}
@@ -1721,3 +1736,24 @@ table.cat .sel-propio{display:inline-block;min-width:120px}
   width:4px;height:4px;border-radius:50%;background:var(--ac)}
 @media (max-width:980px){ #cl-anio{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){ #cl-anio{grid-template-columns:1fr} }
+
+/* Secciones de la carrera: antes era UNA fila sin rotulos donde el nombre se estiraba a lo ancho
+   y la sigla quedaba en 76 px (su propio texto salia cortado). Con etiqueta sobre cada campo y
+   anchos proporcionales, cada cosa se lee y se entiende. Los campos no se cortan a media palabra:
+   el nombre ajusta y, si no cabe, se recorta con puntos (ellipsis), nunca a la mitad. */
+.campo-sec{display:grid;grid-template-columns:minmax(0,1fr) 110px 96px 130px auto;
+           gap:8px 12px;align-items:end;padding:10px 0;border-bottom:1px solid var(--line2)}
+.campo-sec:last-child{border-bottom:0}
+.campo-sec label{display:flex;flex-direction:column;gap:5px;min-width:0;
+                 font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted2)}
+.campo-sec .cs-nombre{min-width:0}
+.campo-sec .sec-nombre{width:100%}
+.campo-sec .sec-sigla{width:100%;text-align:center;text-transform:uppercase;letter-spacing:.06em}
+.campo-sec .sec-color{width:100%;height:38px;padding:2px;cursor:pointer}
+.campo-sec .sec-rango{display:block;line-height:38px;font-size:.82rem;color:var(--muted);
+                      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.campo-sec.nueva{margin-top:12px}
+@media (max-width:720px){
+  .campo-sec{grid-template-columns:1fr}
+  .campo-sec .sec-rango{line-height:1.4}
+}

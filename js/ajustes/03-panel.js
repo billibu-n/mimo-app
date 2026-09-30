@@ -167,15 +167,20 @@ function renderSecciones(){
 
   const filasSec = secs.length
     ? secs.map((s, i) =>
-        '<div class="campo">' +
-          '<div class="fila" style="gap:8px;flex-wrap:nowrap">' +
-            '<span class="pt-seccion" style="background:' + esc(s.color) + '"></span>' +
-            '<input type="text" class="entrada sec-sigla" value="' + esc(s.sigla) + '" maxlength="3" title="Sigla (2-3 letras)" style="width:76px;min-width:76px;text-align:center;text-transform:uppercase">' +
-            '<input type="text" class="entrada sec-nombre" value="' + esc(s.nombre) + '" placeholder="Nombre" style="flex:1;min-width:120px">' +
-            '<span class="sec-rango" style="font-size:.74rem;color:var(--muted);white-space:nowrap">' + esc(secsRangoTxt(s)) + '</span>' +
-            '<button class="btn chico peligro sec-quitar" title="Quitar sección">×</button>' +
-          '</div>' +
-          '<input type="color" class="entrada sec-color" value="' + esc(s.color) + '" title="Color" style="width:100%">' +
+        '<div class="campo-sec">' +
+          '<label class="cs-nombre">Nombre' +
+            '<input type="text" class="entrada sec-nombre" value="' + esc(s.nombre) + '" ' +
+                   'placeholder="Nombre" title="' + esc(s.nombre) + '"></label>' +
+          '<label>Sigla' +
+            '<input type="text" class="entrada sec-sigla" value="' + esc(s.sigla) + '" ' +
+                   'maxlength="3" title="Sigla (2-3 letras)"></label>' +
+          '<label>Color' +
+            '<input type="color" class="entrada sec-color" value="' + esc(s.color) + '" ' +
+                   'title="Color de la sección"></label>' +
+          '<label>Rango' +
+            '<span class="sec-rango" title="' + esc(secsRangoTxt(s)) + '">' +
+              esc(secsRangoTxt(s)) + '</span></label>' +
+          '<button class="btn chico peligro sec-quitar" title="Quitar sección">×</button>' +
         '</div>').join('')
     : '<p class="ayuda" style="margin:0">Todavía no hay secciones. Crea la primera abajo.</p>';
 
@@ -196,15 +201,20 @@ function renderSecciones(){
 
   caja.innerHTML =
     filasSec +
-    '<div class="fila" style="gap:8px;margin-top:12px">' +
-      '<input type="text" id="sec-nueva-nombre" class="entrada" placeholder="Nombre (ej. Plan común)" style="flex:1">' +
-      '<input type="text" id="sec-nueva-sigla" class="entrada" placeholder="Sigla (ej. PC)" maxlength="3" style="width:76px;min-width:76px;text-transform:uppercase">' +
+    '<div class="campo-sec nueva">' +
+      '<label class="cs-nombre">Nombre' +
+        '<input type="text" id="sec-nueva-nombre" class="entrada" ' +
+               'placeholder="Nombre (ej. Plan común)"></label>' +
+      '<label>Sigla' +
+        '<input type="text" id="sec-nueva-sigla" class="entrada" ' +
+               'placeholder="Sigla (ej. PC)" maxlength="3"></label>' +
+      '<span></span><span></span>' +
       '<button class="btn acento" id="sec-nueva-agregar">Agregar sección</button>' +
     '</div>' +
     asignador;
 
   // guardar cambios de sigla / nombre / color en vivo
-  caja.querySelectorAll('.campo').forEach((fila, i) => {
+  caja.querySelectorAll('.campo-sec:not(.nueva)').forEach((fila, i) => {
     const s = secs[i];
     fila.querySelector('.sec-nombre').onchange = ev => { s.nombre = ev.target.value.trim() || s.nombre; guardar('Sección renombrada'); renderSecciones(); renderMalla(); };
     fila.querySelector('.sec-sigla').onchange = ev => { s.sigla = ev.target.value.trim().toUpperCase().slice(0,3); guardar('Sigla de la sección cambiada'); renderSecciones(); renderMalla(); };

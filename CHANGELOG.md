@@ -220,6 +220,27 @@ texts stopped pretending. See the entries below (they were the *Unreleased* bloc
   controls**, so you see the change before saving. The preview sits below the rows on purpose: in a
   side column it fought the labels for the width and broke on narrow screens.
 
+### Fixed (Malla: the card detail and the sections)
+
+- **The course pills are separated and readable.** In *Malla*, the *Before you need* and *This
+  course unlocks* blocks listed the courses with no space at all between them: they ran together
+  into one line (measured: 0 px between pills), so two codes read as a single word. They did not
+  even have a rule of their own. They are now pills, **8 px apart**, that wrap onto the next line,
+  each painted with the colour of that course's state — the same colour as its node in the grid —
+  and a long name is **cut with an ellipsis** instead of stretching the pill forever. The full name
+  stays in the tooltip.
+- **The buttons no longer touch the block above them.** At the foot of the card detail, the row of
+  buttons sat flush against the last block (measured: 0 px). It now has separation, and so does the
+  *Edit this course* button, which no longer sticks to the *Equivalent course* block above it.
+- **The course sections are readable fields, each one labelled.** In *Settings → Malla → Course
+  sections*, creating a section was **one unlabelled row**: the name field stretched across the
+  whole width (measured: **877 px**) while *Sigla* was squeezed into 76 px, **cutting its own
+  text**, and it was not clear which box was which, nor what the colour was for. Now each field
+  **has its label** — *Nombre*, *Sigla*, *Color*, *Rango* — over it, with proportional widths
+  (sigla 110 px, colour 96 px, range 130 px), and nothing is cut. The same layout is used both for
+  the sections that already exist and for the one being created, so the row does not jump when you
+  add one.
+
 ### Added (right-click menu)
 
 - **Right-clicking a card now offers what you can do with it.** One menu for the whole app
