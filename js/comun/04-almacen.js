@@ -1,5 +1,5 @@
 /* ------------------------------- dónde viven los datos -------------------------------
-   Archivo suelto: en el navegador de este aparato.
+   Archivo suelto: en el aparato (almacenamiento local de la aplicacion).
    Con el servidor local: en un archivo del disco, compartido por todos los aparatos de la red. */
 const SERVIDOR = {activo:false, version:'', caido:false, ultimo:0};
 let tGuardar = null, tMirar = null;
@@ -12,38 +12,90 @@ async function guardarEnServidor(){
     const j = await r.json();
     if (j && j.version) SERVIDOR.version = j.version;
     SERVIDOR.caido = false;
-  } catch (err) { SERVIDOR.caido = true; }   // igual quedó guardado en este navegador
+  } catch (err) { SERVIDOR.caido = true; }   // igual quedo guardado en este aparato
   pintarGuardado();
 }
 
-function pintarGuardado(){
-  const el = document.getElementById('chip-guardado');
+/* El boton de SINCRONIZACION de la cabecera. Sustituye al viejo texto estatico "Guardado aqui",
+   que no decia nada util ni se podia pulsar.
+
+   Cuatro estados:
+     verde    -> sincronizo hace MENOS de un minuto
+     amarillo -> paso MAS de un minuto desde la ultima sincronizacion (o falta el permiso)
+     rojo     -> todavia NO hay carpeta de sincronizacion elegida
+     girando  -> mientras sincroniza: el icono da una vuelta de 360 sobre su centro
+
+   Al pulsarlo: si hay carpeta, sincroniza ahora; si no la hay, abre el dialogo para elegirla.
+   El color se refresca SOLO cada pocos segundos, para que pase de verde a amarillo con el tiempo
+   sin que nadie pulse nada. */
+const SYNC = {girando: false};
+const SYNC_TARDE = 60000;   // un minuto: a partir de ahi, amarillo
+
+// Hay carpeta de sincronizacion cuando el respaldo sabe su ruta o su nombre.
+function syncSinCarpeta(){
+  try { return (typeof respaldarEstado !== 'function') || !respaldarEstado(); }
+  catch (e) { return true; }
+}
+
+// Traduce si el motor de idioma esta cargado; si no, devuelve el espanol tal cual.
+function syncTexto(clave){
+  return (typeof t === 'function') ? t(clave) : clave;
+}
+
+function pintarSync(){
+  const el = document.getElementById('btn-sync');
   if (!el) return;
-  if (ALMACEN.fallo) {
-    el.textContent = '¡No se pudo guardar aquí!';
-    el.className = 'guardado mal';
-    el.title = 'Este navegador no deja guardar en este aparato (' + ALMACEN.fallo + '): ' +
-               'puede ser almacenamiento lleno o modo privado. Los cambios se perderán al ' +
-               'cerrar. Usa "Descargar mis datos" para conservarlos.';
+  el.classList.toggle('girando', SYNC.girando);
+  let color = 'falta';
+  let ttl = syncTexto('sync.elegir');
+  if (SYNC.girando){
+    ttl = syncTexto('sync.trabajando');
+  } else if (ALMACEN.fallo){
+    ttl = syncTexto('sync.noguardar');
+  } else if (!syncSinCarpeta()){
+    const u = (typeof RESPALDO !== 'undefined' && RESPALDO.ultimo) || null;
+    if (u && u.ok && (Date.now() - u.cuando.getTime()) < SYNC_TARDE){
+      color = 'ok';
+      ttl = syncTexto('sync.reciente');
+    } else if (u && u.error === 'permiso'){
+      color = 'tarde';
+      ttl = syncTexto('sync.permiso');
+    } else if (u && u.ok){
+      color = 'tarde';
+      ttl = syncTexto('sync.tarde');
+    } else {
+      color = 'tarde';
+      ttl = syncTexto('sync.lista');
+    }
+  }
+  el.classList.remove('ok', 'tarde', 'falta');
+  el.classList.add(color);
+  el.title = ttl;
+  el.setAttribute('aria-label', ttl);
+}
+
+async function sincronizarAhora(){
+  if (SYNC.girando) return;
+  if (syncSinCarpeta()){
+    // Sin carpeta no hay nada que sincronizar: el boton lleva a elegirla.
+    if (typeof elegirCarpetaRespaldo === 'function') return elegirCarpetaRespaldo();
     return;
   }
-  if (!SERVIDOR.activo) {
-    el.textContent = 'Guardado aquí';
-    el.className = 'guardado';
-    el.title = 'Tus datos viven en este navegador. Para verlos desde otro aparato, abre el panel ' +
-               'con el servidor local (ABRIR.sh) o usa "Descargar mis datos".';
-  } else if (SERVIDOR.caido) {
-    el.textContent = 'Servidor sin respuesta';
-    el.className = 'guardado mal';
-    el.title = 'Se perdió la conexión con el servidor. Tus cambios siguen guardados en este navegador ' +
-               'y se enviarán cuando vuelva.';
-  } else {
-    el.textContent = 'Guardado en el servidor';
-    el.className = 'guardado bien';
-    el.title = 'Tus datos están en el disco del computador donde corre el servidor, y los ve ' +
-               'cualquier aparato de la misma red.';
-  }
+  SYNC.girando = true; pintarSync();
+  try { await respaldarAhora(true); }
+  catch (e) { /* respaldarAhora ya deja el estado en RESPALDO.ultimo */ }
+  SYNC.girando = false; pintarSync();
 }
+
+(function conectarSync(){
+  const el = document.getElementById('btn-sync');
+  if (el) el.onclick = sincronizarAhora;
+  setInterval(pintarSync, 5000);                 // el color cambia con el tiempo, no solo al pulsar
+  document.addEventListener('mimo:idioma', pintarSync);
+})();
+
+// El repintado del boton (antes: el texto "Guardado aqui"). Se sigue llamando tras cada guardado.
+function pintarGuardado(){ pintarSync(); }
 
 async function conectarServidor(){
   if (location.protocol !== 'http:' && location.protocol !== 'https:') return;

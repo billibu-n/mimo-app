@@ -380,11 +380,75 @@ const GUION_SONDA: &str = r#"
 })();
 "#;
 
+/// Abre una URL con el navegador del sistema. La usa el boton de version: en Linux (donde la app
+/// no puede instalar paquetes con privilegios sola) y en la version de navegador, lleva a la
+/// pagina del release. Solo se admite http/https: la pagina es la nuestra, pero no cuesta nada
+/// cerrar la puerta a que alguien pida abrir otra cosa.
+#[tauri::command]
+fn abrir_url(url: String) {
+    if !(url.starts_with("https://") || url.starts_with("http://")) {
+        return;
+    }
+    abrir_con_el_sistema(&url);
+}
+
+/// Abre un fichero con el programa que le toque. En Windows es lo que hace que el instalador
+/// recien bajado se ejecute sin que el usuario tenga que ir a buscarlo a la carpeta.
+#[tauri::command]
+fn abrir_archivo(ruta: String) {
+    if !std::path::Path::new(&ruta).is_file() {
+        return;
+    }
+    abrir_con_el_sistema(&ruta);
+}
+
+/// Lanza el programa del sistema que abre `objetivo`, que puede ser una URL o una ruta.
+///   Windows -> `cmd /C start "" <objetivo>` (las comillas vacias son el titulo de la ventana;
+///              sin ellas, `start` se comeria la ruta como titulo si lleva espacios)
+///   macOS   -> `open`
+///   Linux   -> `xdg-open`
+fn abrir_con_el_sistema(objetivo: &str) {
+    #[cfg(target_os = "windows")]
+    {
+        let _ = std::process::Command::new("cmd")
+            .args(["/C", "start", "", objetivo])
+            .spawn();
+    }
+    #[cfg(target_os = "macos")]
+    {
+        let _ = std::process::Command::new("open").arg(objetivo).spawn();
+    }
+    #[cfg(all(unix, not(target_os = "macos")))]
+    {
+        let _ = std::process::Command::new("xdg-open").arg(objetivo).spawn();
+    }
+}
+
 fn main() {
+    // Parche de RENDIMIENTO/PESTANEO para Linux con WebKitGTK (el webview de Tauri en Linux).
+    // Documentado por Tauri (https://v2.tauri.app/develop/debug/linux-graphics/): el renderizador
+    // DMA-BUF de WebKitGTK y los drivers de GPU (sobre todo NVIDIA) no se ponen de acuerdo, y
+    // salen pantallas en blanco, pestaneo (sobre todo al animar o redimensionar) o cierres con
+    // "Error 71" en Wayland. La solucion ordenada, de menos a mas agresiva:
+    //   1. nvidia_drm.modeset=1 (es del sistema, no se toca aqui)
+    //   2. __NV_DISABLE_EXPLICIT_SYNC=1  -> arregla el Error 71 de Wayland SIN perder rendimiento
+    //   3. WEBKIT_DISABLE_DMABUF_RENDERER=1 -> arregla el pestaneo, a cambio de la via mas rapida
+    //   4. WEBKIT_DISABLE_COMPOSITING_MODE=1 -> ultimo recurso (desactiva la composicion acelerada)
+    // Aqui se pone la 2, que es la que arregla el pestaneo sin coste de rendimiento. A PROPOSITO
+    // NO se fuerza la 3 ni la 4: la propia Tauri avisa de que desactivarian la via rapida para
+    // TODO EL MUNDO, tambien para quien no tiene el problema. Si en algun equipo hace falta mas,
+    // se arranca con la variable puesta a mano; ver docs/comun/plan-mimo.md.
+    #[cfg(target_os = "linux")]
+    {
+        if std::env::var_os("__NV_DISABLE_EXPLICIT_SYNC").is_none() {
+            std::env::set_var("__NV_DISABLE_EXPLICIT_SYNC", "1");
+        }
+    }
+
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
-        .invoke_handler(tauri::generate_handler![migrar_desde_lanzador, sonda_informe])
+        .invoke_handler(tauri::generate_handler![migrar_desde_lanzador, sonda_informe, abrir_url, abrir_archivo])
         .setup(|app| {
             lanzar_sonda(app.handle());
             Ok(())

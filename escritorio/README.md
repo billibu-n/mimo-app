@@ -13,6 +13,7 @@ one in the browser.
 | `app/` | **GENERATED** by the script. It is in `.gitignore` |
 | `generar-iconos.py` | builds the icons for Tauri from `iconos/icon-512.png` |
 | `instalar-fedora.sh` | installs every dependency on Fedora, and checks the result |
+| `limpiar.sh` | deletes what is generated and can be regenerated (see *Weight* below) |
 
 `src-tauri/src/main.rs` is the only file with logic of its own, and it does two things:
 
@@ -28,6 +29,52 @@ one in the browser.
 The **backup folder** needs no Rust code: it is handled in `js/comun/10a-carpeta-tauri.js`, which
 gives the rest of the app an object shaped like a `FileSystemDirectoryHandle` but backed by
 Tauri's dialog and file APIs.
+
+## Weight: why it grows, and how to keep it down
+
+The app itself is about **12 MB**. When the folder shows several gigabytes, it is **not** app data
+and **not** anything you saved: it is the **Rust build cache** under `src-tauri/target/`.
+
+### Where the size comes from
+
+To build the shell, Cargo compiles **~431 packages** (Tauri, WebKitGTK bindings, serde, futures,
+tracing...). Each one is compiled to object files and, twice, to two profiles:
+
+| what | size (measured) | what it is |
+|---|---|---|
+| `target/debug/` | up to ~2.4 GB | the **development** profile |
+| `target/release/` | up to ~4.5 GB | the **optimized** profile (the one the installer comes from) |
+
+That is the honest answer to *"why does a small app weigh 4 GB?"*: it is not the app, it is the
+build tooling. A browser-like app (WebKitGTK + Tauri) simply drags a big dependency tree. **The app
+does not store repeated or stale data, and it does not record what you do.** Your data lives in the
+webview's `localStorage`, in your user folder, never in `target/`.
+
+### How to keep it down
+
+```bash
+sh ~/projects/mimo-app/escritorio/limpiar.sh          # borra todo el cache
+sh ~/projects/mimo-app/escritorio/limpiar.sh --dev    # borra SOLO target/debug y conserva el instalable
+```
+
+The first is the cheapest on disk; the second keeps the installer you just built (in
+`target/release`) and only pays recompiling the development mode.
+
+### Keeping the cache OUT of the project (the real fix)
+
+Cargo lets the cache live **outside** the project, so it never shows up in your folder. It is
+already what `cargo` itself recommends for big projects. On a machine, add the same block to
+`~/.cargo/config.toml`:
+
+```toml
+[build]
+target-dir = "/home/<tu-usuario>/.cache/mimo-target"
+```
+
+Then `target/` is no longer created inside `mimo-app`: everything goes to that one shared folder,
+out of the way and easy to delete when you want. **We do not check anything into the repository for
+this on purpose**, because a hardcoded home path would break on any other machine; it is a one-line
+setting per machine.
 
 ## Requirements (Fedora)
 

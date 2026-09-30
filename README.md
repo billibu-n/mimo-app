@@ -18,11 +18,11 @@ Pick the file for your system:
 
 | Your system | Download this file | Then |
 |---|---|---|
-| **Fedora**, openSUSE, RHEL | `mimo-academics-1.0.0-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
-| **Debian**, Ubuntu, Mint | `mimo-academics_1.0.0-desktop_amd64.deb` | `sudo apt install ./<file>` |
-| **Any Linux**, no install | `mimo-academics_1.0.0-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
-| **Windows 10 / 11** | `mimo-academics_1.0.0-desktop_x64-setup.exe` | double-click it |
-| **Any system**, web version | `mimo-v1.0.0-desktop.zip` | unzip and open `mimo/index.html` |
+| **Fedora**, openSUSE, RHEL | `mimo-academics-1.1.1-desktop-1.x86_64.rpm` | `sudo dnf install <file>` |
+| **Debian**, Ubuntu, Mint | `mimo-academics_1.1.1-desktop_amd64.deb` | `sudo apt install ./<file>` |
+| **Any Linux**, no install | `mimo-academics_1.1.1-desktop_amd64.AppImage` | `chmod +x <file>` and open it |
+| **Windows 10 / 11** | `mimo-academics_1.1.1-desktop_x64-setup.exe` | double-click it |
+| **Any system**, web version | `mimo-v1.1.1-desktop.zip` | unzip and open `mimo/index.html` |
 
 **Your data is kept on your machine** in every case, and you can take it with you using the backup
 in **Settings**. Nothing is uploaded anywhere.
@@ -36,10 +36,10 @@ The desktop version is tested on **Fedora**, and works on any distribution with 
 
 ```bash
 # Fedora, openSUSE and derivatives
-sudo dnf install mimo-academics-1.0.0-desktop-1.x86_64.rpm
+sudo dnf install mimo-academics-1.1.1-desktop-1.x86_64.rpm
 
 # Debian, Ubuntu and derivatives
-sudo apt install ./mimo-academics_1.0.0-desktop_amd64.deb
+sudo apt install ./mimo-academics_1.1.1-desktop_amd64.deb
 ```
 
 If the app does not show up in the menu right away, log out and back in: the menu is cached.
@@ -47,21 +47,22 @@ If the app does not show up in the menu right away, log out and back in: the men
 **Without installing anything** (the AppImage):
 
 ```bash
-chmod +x mimo-academics_1.0.0-desktop_amd64.AppImage
-./mimo-academics_1.0.0-desktop_amd64.AppImage
+chmod +x mimo-academics_1.1.1-desktop_amd64.AppImage
+./mimo-academics_1.1.1-desktop_amd64.AppImage
 ```
 
 The AppImage is about **100 MB** (it carries its own runtime) against about **4 MB** for the
 `.rpm` and `.deb`. It needs FUSE, which Fedora, Ubuntu and Debian include by default.
 
-> **About the file names.** They have no spaces, so nothing needs quoting. The `-desktop` suffix
+> **About the file names.** The version in the name is the one of the release you are
+> downloading. They have no spaces, so nothing needs quoting. The `-desktop` suffix
 > is not decoration: with the previous `1.0.0` the package managers answered *"already installed"*
 > even after the contents changed, because they compare numbers, not contents. With the suffix
 > they update properly.
 
 ### Windows
 
-Download **`mimo-academics_1.0.0-desktop_x64-setup.exe`** and double-click it. It installs for
+Download **`mimo-academics_1.1.1-desktop_x64-setup.exe`** and double-click it. It installs for
 your user and creates a Start Menu entry, so you do not need administrator rights.
 
 > **Windows will warn you** that the publisher is unknown (SmartScreen), because the installer
@@ -102,10 +103,11 @@ The web version needs nothing at all: open `index.html` by double-clicking it, o
 
 The application is a semester panel. The bar on the left has seven sections:
 
-- **Semester** — the calendar of the current semester: events, exams and deadlines.
+- **Calendar** — the calendar of the current semester: events, exams and deadlines.
 - **Study** — how many hours you study, week by week, against your goal.
-- **Courses** — your degree map: the courses, their credits and which ones are prerequisites.
-- **Grades** — what you need in each assessment to reach the grade you want.
+- **Degree map** — the courses, their credits and which ones are prerequisites.
+- **Courses** — your subjects and their grades: what you need in each assessment to reach the
+  grade you want.
 - **Time** — stopwatch, timer and pomodoro, with the time charged to a course.
 - **Tasks** — everything pending, joined to your courses and your calendar.
 - **Settings** — colour theme, backup folder, advanced options and updates.
@@ -121,16 +123,28 @@ Use *Settings -> Backup* to take your data to another machine.
 - **Grades by weighting.** It tells you what you need in the next assessment.
 - **Nine colour themes**, including a high-contrast one.
 - **Automatic backup** to a folder you choose, keeping the last three copies.
+- **A sync button in the header**, in place of the old static label: **green** when it synced less
+  than a minute ago, **yellow** when it has been longer, **red** when the sync folder has not been
+  set yet, and it **spins a full turn** while it syncs. Pressing it syncs right away.
+- **The version button updates on press.** If a newer version exists, it downloads and opens the
+  installer on Windows, or opens the release page on Linux and in the browser.
+- **The interface is translated** (Spanish and English), starting with the top menu and the
+  header.
+- **The header icon hides a small game**: press it **10 times in under 20 seconds** and see what
+  happens.
 - **Desktop application** with its own window and its own icon (Linux `.rpm`, `.deb` and
   AppImage; Windows `.exe`).
+- **Stopwatch, timer and pomodoro**, with the duration typed straight into the clock and the
+  day you are on set apart at the top of the session list.
 - **It asks before deleting.** Every destructive action opens an in-app confirmation that says
   what will be lost, and the focus starts on *Cancel*.
 
 ## Project status
 
-Version 1.0.0-desktop, and the first one with a **desktop application**. It is **usable and stable**, and
-it keeps growing: synchronisation, mobile and languages are on the list. **Bug reports and ideas
-are welcome** — see [CONTRIBUTING.md](CONTRIBUTING.md).
+Version 1.1.1-desktop. The desktop application is **usable and stable**, and it keeps growing:
+synchronisation, mobile and the rest of the translations are still on the list (the top menu and
+the header already speak Spanish and English). **Bug reports and ideas are welcome** — see
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Contributing
 
@@ -166,7 +180,7 @@ before trusting it with your grades.
 
 ## Version
 
-1.0.0-desktop — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
+1.1.1-desktop — the details of each version are in [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Credits
 
